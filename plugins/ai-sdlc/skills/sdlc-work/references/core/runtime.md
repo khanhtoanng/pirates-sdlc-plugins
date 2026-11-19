@@ -1,7 +1,7 @@
 # Coordinator runtime — state, transitions and evidence
 
 <identity>
-One Coordinator owns routing, state and explicit authority. `routing.md` owns Feature/Bug/Spike paths and modes. `roles.md` owns responsibility and role outputs. No file or native subagent per stage is required. Project instructions and current real tool permissions still apply.
+One Coordinator owns routing, state and explicit authority. routing.md classifies, modes.md selects rigor, workflows/ defines routes, roles/ defines responsibilities. human-gates.md is authoritative for Extended approval transitions; this runtime owns evidence checks. Project instructions and current real tool permissions still apply.
 </identity>
 
 <invariants>
@@ -9,8 +9,8 @@ One Coordinator owns routing, state and explicit authority. `routing.md` owns Fe
 - `OBSERVED` (from real inspection), `SOURCE_BACKED`, `OWNER_ACCEPTED` (with scope/revision), `PROPOSED`, `UNKNOWN`, `NOT RUN` and `NOT VERIFIED` are different. An agent may not self-grant approvals or report an unobserved test as passing.
 - Inspect appropriate current project instructions, request/ticket and change state before affecting files. Don't overwrite staged/unstaged/untracked user work. Re-check upon resuming or after edits; no assumed common HEAD across repositories.
 - Keep a single canonical accepted AC set for Feature, a single original symptom plus regression/evidence record for Bug, or a single bounded question/decision record for Spike. Do not force Feature ACs into other routes.
-- Prefer the existing ticket, PR or ADR as durable source. For multi-session work without a suitable persistent record, propose **one** short record with owner-approved location, not five per-role files; when not available label handoff `NOT DURABLE` and do not claim reliable cross-session continuation.
-- Ask the human only for genuinely consequential outstanding decisions, normally one at a time after gathering evidence. Accepted decisions are not asked again unless materially stale.
+- Prefer an existing ticket, PR or ADR. Quick/Standard avoid unnecessary files; Extended persists distinct stage outputs and state per human-gates.md. If persistence unavailable label handoff `NOT DURABLE`.
+- Quick/Standard ask only consequential outstanding decisions. Extended requires approval of every applicable stage, reusing existing accepted decisions as evidence without inventing new ones.
 </invariants>
 
 <state-contract>
@@ -47,7 +47,7 @@ Before advancing, Coordinator checks these entry, exit and block conditions. A `
 | Human handoff | Current verdict or documented limits | Changed/reviewed snapshot, evidence, outstanding risks, release order and separate next permissions | AI never authorizes merge/deploy |
 | Spike decision | Bounded question and sources | Evidence for/against, confidence, `PROCEED/CLARIFY/STOP`, explicit no-build termination | Insufficient evidence → `CLARIFY`, STOP |
 
-Quick may omit unnecessary role prose, not the safety/evidence gates. Standard/Extended increase thoroughness for actual risk. A spike does not enter Edit/Developer/Reviewer by default. A sandbox POC needs its own approval and can never be presented as reviewed product code.
+Quick may omit unnecessary role prose, not safety/evidence gates. Standard increases thoroughness. Extended splits combined rows into the exact stage IDs in human-gates.md and pauses after each; the table defines evidence, never permission to skip a human checkpoint. Spike does not enter Edit/Developer/Reviewer by default; an approved scratch POC is not reviewed product code.
 </transition-gates>
 
 <verify-and-converge>
@@ -59,5 +59,5 @@ Quick may omit unnecessary role prose, not the safety/evidence gates. Standard/E
 </verify-and-converge>
 
 <completion>
-Return one short outcome: route/mode and reason, authoritative expectation (AC revision / bug original symptom / spike question), roots and snapshots if applicable, what changed or researched, observed tests and missing evidence, reviewer independence/verdict when needed, decisions and human next action. Do not generate redundant stage reports.
+Return one short outcome: route/mode and reason, authoritative expectation (AC revision / bug original symptom / spike question), roots and snapshots if applicable, what changed or researched, observed tests and missing evidence, reviewer independence/verdict when needed, decisions and human next action. Extended returns the current review card instead of prematurely completing the whole route.
 </completion>

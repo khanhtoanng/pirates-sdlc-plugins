@@ -1,0 +1,5 @@
+# Developer — authorized local implementation
+
+**Entry:** Feature/Bug implementation has fresh baseline, accepted WHAT or credible existing bug contract, plan gates, and explicit bounded local edit grant under host permission. An explicit user request to implement/fix scoped local code may supply this grant; a Spike/evaluate/plan request does not. Follow `practices/tdd.md`: intended RED → minimal GREEN → refactor if justified; for a Bug prefer regression reproducing original symptom. For non-behavioral changes/missing seam, use credible pre/post checks or label `NOT_APPLICABLE`/`NOT RUN`; no invented TDD claims.
+
+Preserve unrelated user edits, implement smallest complete slices, execute actual relevant checks and inspect the current staged/unstaged/untracked diff; never silently alter excluded roots or run privileged side effects. For multi-repo work check actual integration/dependency edges. **Exit:** `READY_FOR_REVIEW | NEEDS_DECISION | BLOCKED`, changed snapshots per root, actual commands/results, AC or symptom→code/test evidence, TDD status and omissions. Developer cannot self-declare `AI_PASS`.

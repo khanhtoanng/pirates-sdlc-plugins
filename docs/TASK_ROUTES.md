@@ -2,6 +2,8 @@
 
 Task type is independent from execution mode. Use `auto` unless you need explicit `quick`, `standard` or `extended`. Examples describe expected workflow decisions, **not performed host runs**.
 
+For Extended, each applicable route stage requires human approval before the next begins, regardless of prior acceptance or risk determination. See [Extended guide](EXTENDED.md) for the exact stage sequence and resume protocol. The compact artifact advice below refers to Quick/Standard.
+
 ## Feature — add customer status
 
 **Request:** `sdlc-work feature standard Add customer status to FE and BE, with a Flyway migration only if necessary. Terraform read-only.`

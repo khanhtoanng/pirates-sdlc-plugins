@@ -11,7 +11,7 @@ argument-hint: "[claude|cursor|codex|all] [workspace roots]"
 2. Check workspace roots, actual permissions, trust/instruction loading, Git worktrees, unrelated local modifications and cross-root access.
 3. Find old `.claude/skills/sdlc-work`, `.cursor/skills/sdlc-work`, `.agents/skills/sdlc-work` and legacy reviewer definitions; propose a diff-based manual retirement plan, never silently delete them.
 4. Check whether a fresh independent reviewer can actually be invoked on an identifiable current snapshot. Non-editing prompt ≠ sandbox enforcement in Codex.
-5. Detect conflicting host/path rules, missing files, invalid relative references, unsupported config keys and optional dependency assumptions. Verify the installed `routing.md` exposes exactly `feature|bug|spike`, the `auto|quick|standard|extended` modes, and current stage gates, without confusing legacy `spike` alias with a risk mode.
+5. Detect conflicting host/path rules, missing files, invalid relative references, unsupported config keys and optional dependency assumptions. Verify the installed `core/routing.md` exposes exactly `feature|bug|spike`, `core/modes.md` defines modes, and `core/human-gates.md` requires every Extended checkpoint, without confusing legacy `spike` alias with a risk mode.
 6. If an optional workspace profile exists, check names and paths, schema and relationship hypotheses. Propose compatible corrections with an exact approval request before writing.
 </checks>
 

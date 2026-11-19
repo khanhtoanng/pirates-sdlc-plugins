@@ -1,5 +1,5 @@
 {
   "name": "ai-sdlc",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Local-first SDLC workflow: setup, work, doctor; independent reviewer."
 }

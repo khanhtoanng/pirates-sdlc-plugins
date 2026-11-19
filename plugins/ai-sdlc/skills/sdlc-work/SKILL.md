@@ -1,7 +1,7 @@
 ---
 name: sdlc-work
-description: Execute evidence-backed Feature delivery, Bug diagnosis/fix, or a bounded research Spike in one or multiple repositories. Choose quick, standard, or extended rigor without generating a project harness. Use for SDLC feature work, bug fixing, feasibility research, and scoped implementation.
-argument-hint: "[feature|bug|spike] [auto|quick|standard|extended] <request> [selected roots]"
+description: Coordinate SDLC feature delivery, bug diagnosis/fix, or bounded technical feasibility research in one or multiple repositories. Auto-select quick, standard, or extended (mandatory per-stage human review), or resume a pending SDLC task. Use for scoped engineering work and explicit SDLC requests, not unrelated explanations or general Q&A.
+argument-hint: "[feature|bug|spike] [auto|quick|standard|extended] <request> [selected roots] | resume <task-id or record>"
 ---
 
 # AI SDLC work — router and coordinator
@@ -11,17 +11,15 @@ Execute the SDLC from this installed plugin. Do not bootstrap or duplicate agent
 </purpose>
 
 <start>
-1. Read `references/routing.md` to classify the task and determine required route; choose `auto` (default), `quick`, `standard` or `extended` rigor independently. Legacy positional `spike` means task type `spike` with mode `auto`. Ask only if the ambiguity materially changes what is authorized or expected; otherwise infer from the request and state the choice.
-2. Read `references/runtime.md` for coordinator transitions, approvals and evidence states. Inspect relevant source, request, accepted decisions, effective repository rules and Git changes proportionately before implementation. In a research-only spike without a repository, code/Git inspection is optional.
-3. **Load on demand**, not all references upfront: `roles.md` when exercising a role; `coverage.md` for feature ACs and meaningful bug regression cases; `tdd.md` before executable changes; `workspace.md` for multiple roots or integration boundaries; `review.md` for human gates/handoffs; `delegation.md` for independent review; `hosts/{claude,cursor,codex}.md` only for actual host capabilities; `integrations.md` only for explicitly selected add-ons.
-4. Follow the selected route and stage exit checks in `runtime.md`. User-specified scoped implementation can authorize ordinary local edits under real host permissions; never interpret it as rights to edit excluded roots, commit/push/merge, apply migrations, mutate production, deploy, or perform external side effects.
+1. Read `references/core/routing.md`, `references/core/modes.md` and `references/core/runtime.md`. Inspect current request, sources, project rules, risk and Git state proportionately. Classify type and mode independently; legacy positional spike selects type spike/mode auto. State route, requested/effective mode, reason and scope. If resuming, reload state and pending approval instead of starting over.
+2. Read ONLY the selected workflow: `references/workflows/feature.md`, `references/workflows/bug.md`, or `references/workflows/spike.md`. Read `references/core/human-gates.md` for Extended (including escalation/resume). Extended: never advance to any next applicable stage until explicit approval of the exact current artifact revision; persist stage state, present review card and END TURN.
+3. Load on demand: `references/roles/shared.md` and relevant role in references/roles/ (intent, spec, architect, developer, reviewer, researcher); `references/practices/coverage.md` for ACs/regressions; `references/practices/tdd.md` before executable changes; `references/practices/workspace.md` for multi-root; `references/practices/review.md` for review/handoffs; `references/practices/delegation.md` for independent review; hosts/{claude,cursor,codex}.md only for actual host capabilities; `references/practices/integrations.md` for selected add-ons.
+4. Follow route and runtime evidence checks; re-evaluate risk each stage. User-specified scoped implementation may authorize ordinary local edits under real host permissions, but never bypass Extended checkpoints or grant excluded roots, commit/push/merge, applied migrations, production, deployment or external side effects.
 5. Return factual evidence and the route-specific outcome. If necessary permissions, decisions, access, or tests are missing, report the precise blocked or unverified state; do not fabricate approval or results.
 </start>
 
 <routes>
-- **Feature:** grounded Intent/Spec as needed → Architect/verification plan → scope gate → vertical-slice Developer → Verify & Converge → independent Reviewer for code changes → release-readiness handoff.
-- **Bug:** capture symptom and baseline → reproduce or establish credible failing evidence → investigate root cause → scoped fix/test plan → scope gate → regression-first Developer → verify original symptom and regressions → independent Reviewer → fix disposition.
-- **Spike:** bound question and investigation budget → research evidence for and against options, optional explicitly authorized disposable POC → recommendation with confidence and unresolved unknowns → **STOP**. It never silently becomes feature implementation.
+See the chosen workflow and mode policy; these references own the stage sequence and gates.
 </routes>
 
 <guardrails>

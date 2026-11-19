@@ -1,6 +1,8 @@
 # Human review and handoff — narrow, source-backed, snapshot-aware
 
-## Human decision ownership
+## Human decision ownership (Quick/Standard)
+
+Extended additionally requires mandatory stage-by-stage review and approval as specified in core/human-gates.md; the decision-based policy below cannot bypass those gates.
 
 | Transition | What AI prepares | When human action is necessary |
 |---|---|---|
@@ -25,7 +27,7 @@ Do not re-approve unchanged accepted sources; do not claim unobserved consent. N
 
 ## Durable continuation without document sprawl
 
-Use existing issue/PR/ticket/ADR when possible. Standard or Extended work spanning sessions must have a durable location for source/accepted revision, stage readiness/blocks, original evidence, exact edit authority, affected root snapshots, planned tests, actual results, reviewer findings and remaining decisions. If absent, propose **one** user-approved compact record; don't create five stage files. If record cannot be persisted, mark `HANDOFF: NOT DURABLE`, provide a pasteable summary and do not claim state will survive compaction/host change. On resume, inspect current source/permissions/Git state; revalidate stale decisions and tests rather than blindly replaying old status.
+Use existing issue/PR/ticket/ADR when possible. Standard work spanning sessions uses one compact record. Extended uses separate inspectable stage outputs and versioned state as defined in core/human-gates.md. If record cannot be persisted, mark `HANDOFF: NOT DURABLE`, provide a pasteable summary and do not claim reliable resumption. On resume, inspect current sources, permissions and Git state.
 
 ## End-state semantics
 
