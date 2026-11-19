@@ -1,4 +1,4 @@
-# Architecture decisions — AI SDLC v0.6.0
+# Architecture decisions — AI SDLC v0.7.0
 
 ## Single plugin, minimal host adapter
 
@@ -9,7 +9,7 @@ One `ai-sdlc` runtime holds three task routes and five logical role contracts. H
 - **Task type** (`routing.md`): `Feature` (new or intentionally changed observable behavior), `Bug` (repair proven violated behavior), `Spike` (bounded research/feasibility decision, no automatic implementation).
 - **Execution mode** (`auto`/`quick`/`standard`/`extended`): evidence and human-gate depth based on real risk; multi-repo count alone is not Extended. The old `spike` mode is now a supported legacy alias for the Spike task type.
 
-Each route has stage entry/exit evidence and explicit block conditions (`runtime.md`). Intent (WHY), Spec (WHAT), Architect (HOW), Developer (BUILD), Reviewer (independent VERIFY) are *logical* responsibilities; a Spike uses research/architecture reasoning without pretending production work ran. Reviewer dispatch uses an actual separate host context when required.
+Each route has stage entry/exit evidence and explicit block conditions (`core/runtime.md`). `core/routing.md` classifies, `core/modes.md` selects rigor, `workflows/` contains the routes, `roles/` specifies responsibilities, and `practices/` holds shared rules. Intent (WHY), Spec (WHAT), Architect (HOW), Developer (BUILD), Reviewer (independent VERIFY) are *logical* responsibilities. Reviewer dispatch uses a fresh independent context.
 
 ## Verify and converge, not just run a test
 
@@ -22,11 +22,11 @@ Each route has stage entry/exit evidence and explicit block conditions (`runtime
 
 A bounded user **implement/fix** request can authorize local source edits within that scope if host/project policy permits. Approval of new business behavior remains separate. A request to analyze/plan/spike does not grant source edits; any broadened paths or privileged/external operations need explicit permission. Nothing in prompt text overrides OS/host permission, protected environments or CI controls.
 
-Human sees concise changed decisions/AC mapping, not every brainstorming thought. An actual independent `AI_PASS` is not authorization to merge, deploy or run migrations. If reviewer isolation cannot be verified, report pending, not pass.
+Human sees concise changed decisions/AC mapping, not every brainstorming thought. Extended requires explicit approval after every applicable stage, even when there is no new material decision. `core/human-gates.md` owns mandatory pause/resume/revision invalidation; see [Extended](EXTENDED.md). An independent `AI_PASS` is not merge/deploy authority.
 
 ## Multi-repo and continuation
 
-Treat independent Git roots separately: `VISIBLE`, `RELEVANT`, `EDIT_APPROVED`, `EXCLUDED`. Share one accepted Feature AC set, maintain a per-root impact/test map and dependency-aware release order. Use an existing ticket/PR for continuity; for long tasks with no durable tracker request only one record. Resume always refreshes source, permissions and diff snapshots.
+Treat independent Git roots separately: `VISIBLE`, `RELEVANT`, `EDIT_APPROVED`, `EXCLUDED`. Share one accepted Feature AC set, maintain a per-root impact/test map and dependency-aware release order. Quick/Standard use concise records; Extended requires distinct stage artifacts and state in one authorized location or tracker. Resume refreshes source, permissions, approvals and snapshots.
 
 ## Upgrades
 

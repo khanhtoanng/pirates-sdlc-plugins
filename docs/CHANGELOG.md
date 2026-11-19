@@ -1,5 +1,12 @@
 # Local change notes
 
+## 0.7.0 — Extended human gates and executable evals
+
+- Separate routing, mode policy, runtime, human gates, workflows, roles and practices; preserve host adapters and optional integrations.
+- Mandatory revision-aware review at each applicable Extended stage, with durable state and explicit resume; dynamic risk escalation.
+- Opt-in host execution with independent file/state checks, trace retention, multi-turn checkpoint fixtures and offline grader unit tests.
+- Offline validation in GitHub Actions; no automatic paid model calls, hooks or MCPs.
+
 ## 0.6.0 — Feature / Bug / Spike routing and stage contracts
 
 - Separated task type (`feature | bug | spike`) from risk mode (`auto | quick | standard | extended`), preserving the positional `spike` alias.

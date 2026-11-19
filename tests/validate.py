@@ -8,7 +8,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 PLUGIN = ROOT / 'plugins' / 'ai-sdlc'
 REFS = PLUGIN / 'skills' / 'sdlc-work' / 'references'
-VERSION = '0.6.0'
+VERSION = '0.7.0'
 errors = []
 
 
@@ -50,7 +50,11 @@ for name in ('sdlc-work', 'sdlc-setup', 'sdlc-doctor'):
         check(bool(front) and f'name: {name}' in front, f'{name}: invalid frontmatter/name')
         check('description:' in front, f'{name}: missing description')
 
-for name in ('routing', 'runtime', 'roles', 'coverage', 'workspace', 'review', 'tdd', 'delegation', 'integrations'):
+for name in ('core/routing', 'core/runtime', 'core/modes', 'core/human-gates',
+             'workflows/feature', 'workflows/bug', 'workflows/spike',
+             'roles/shared', 'roles/intent', 'roles/spec', 'roles/architect', 'roles/developer',
+             'roles/reviewer', 'roles/researcher', 'practices/coverage', 'practices/workspace',
+             'practices/review', 'practices/tdd', 'practices/delegation', 'practices/integrations'):
     check((REFS / f'{name}.md').is_file(), f'missing reference {name}.md')
 for name in ('claude', 'cursor', 'codex'):
     check((REFS / 'hosts' / f'{name}.md').is_file(), f'missing host adapter {name}.md')
@@ -67,20 +71,25 @@ for cat, label in [('.claude-plugin/marketplace.json', 'Claude'), ('.agents/plug
         errors.append(f'{label} marketplace: {exc}')
 
 # Behavior and loading contracts must exist and remain distinct.
-router = (REFS / 'routing.md').read_text(encoding='utf-8')
-runtime = (REFS / 'runtime.md').read_text(encoding='utf-8')
+router = (REFS / 'core/routing.md').read_text(encoding='utf-8')
+runtime = (REFS / 'core/runtime.md').read_text(encoding='utf-8')
+modes = (REFS / 'core/modes.md').read_text(encoding='utf-8')
+gates = (REFS / 'core/human-gates.md').read_text(encoding='utf-8')
 skill = (PLUGIN / 'skills/sdlc-work/SKILL.md').read_text(encoding='utf-8')
 found_types = re.findall(r'^\| `(feature|bug|spike)` \|', router, flags=re.MULTILINE)
 check(found_types == ['feature', 'bug', 'spike'], f'expected exactly 3 task routing entries, got {found_types}')
 for mode in ('auto', 'quick', 'standard', 'extended'):
-    check(mode in router and mode in skill, f'missing mode {mode}')
+    check(mode in modes and mode in skill, f'missing mode {mode}')
 check('`spike` as a risk mode' in router, 'mode/type separation not explicit')
 for term in ('<transition-gates>', '<verify-and-converge>', 'changed_snapshot', 'NOT DURABLE', 'EDIT_APPROVED'):
     check(term in runtime, f'runtime missing contract {term}')
-for phrase in ('<feature-route>', '<bug-route>', '<spike-route>'):
-    check(phrase in router, f'route missing {phrase}')
-for phrase in ('references/routing.md', 'references/runtime.md'):
+for route in ('feature', 'bug', 'spike'):
+    check('Extended' in (REFS / f'workflows/{route}.md').read_text(), f'route missing Extended {route}')
+for phrase in ('references/core/routing.md', 'references/core/runtime.md', 'references/core/modes.md',
+               'references/core/human-gates.md'):
     check(phrase in skill, f'skill not loading {phrase}')
+for phrase in ('awaiting_human_approval', 'End the turn', 'revision', 'invalidate', 'NOT DURABLE'):
+    check(phrase in gates, f'Extended contract missing {phrase}')
 for rel in re.findall(r'`references/([\w./-]+\.md)`', skill):
     check((REFS / rel).is_file(), f'broken skill reference {rel}')
 
@@ -111,4 +120,4 @@ check((ROOT / 'docs/TASK_ROUTES.md').is_file(), 'human task routes missing')
 if errors:
     print('\n'.join('FAIL: ' + error for error in errors))
     sys.exit(1)
-print('PASS: v0.6.0 manifests, three routes, gates, progressive skill refs, eval schemas, no automatic hooks/MCP (static only)')
+print('PASS: v0.7.0 manifests, routes, Extended gates, progressive references, eval schemas (static only)')

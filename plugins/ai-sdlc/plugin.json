@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "ai-sdlc",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Local-first, risk-based AI SDLC workflow with single- and multi-repository coordination for Claude Code, Cursor and Codex.",
   "keywords": [
     "sdlc",

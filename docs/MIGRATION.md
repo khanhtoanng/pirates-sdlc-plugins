@@ -1,5 +1,12 @@
 # Migrating from v0.4/v0.5 to v0.6 runtime
 
+## From v0.6.0 to v0.7.0
+
+- Update/reload the plugin; invocation and host manifests remain compatible.
+- Extended now pauses at every applicable stage. Reuse prior evidence but never assume an earlier v0.6 record contains a human checkpoint approval.
+- Existing project rules remain yours; do not copy the new runtime into projects. Approve a task record location only when needed.
+- Run offline tests and the selected opt-in host evaluation scenarios before treating behavior as verified.
+
 The v0.4 package generated a standalone repo skill (`.claude/skills/sdlc-work` or `.cursor/skills/sdlc-work`) and possibly a reviewer agent. This version ships SDLC at plugin runtime. Installing it does NOT automatically delete or supersede old project files.
 
 1. Install v0.5 local plugin in one selected host; verify its `sdlc-work` skill without editing the project.

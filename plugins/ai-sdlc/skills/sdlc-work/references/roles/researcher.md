@@ -1,0 +1,3 @@
+# Researcher / Spike execution — role responsibilities, not a sixth agent
+
+In a `spike`, Coordinator performs or delegates focused evidence gathering and concept-level architecture evaluation using existing Intent/Architect responsibilities. Read only by default; inspect counterevidence, compare options and confidence, optionally request a bounded scratch POC grant. Return `PROCEED | CLARIFY | STOP` with clear question, sources, confidence, limitations and a possible next task. No production code changes, no required Feature AC set and **no automatic developer/reviewer chain**. A disposable research experiment is not a delivered change; if a tracked project edit is needed, stop and create an explicitly approved Feature/Bug task.

@@ -18,5 +18,5 @@ argument-hint: "<inspect|configure> [workspace roots] [claude|cursor|codex|all]"
 </rules>
 
 <result>
-Give discovered roots/roles, instruction conflicts, proposed/approved edits, local host readiness (Claude/Cursor/Codex), Reviewer verification status, optional integration availability and next `sdlc-work` invocation. For conceptual sample structure see `../sdlc-work/references/workspace.md`.
+Give discovered roots/roles, instruction conflicts, proposed/approved edits, local host readiness (Claude/Cursor/Codex), Reviewer verification status, optional integration availability and next `sdlc-work` invocation. For conceptual sample structure see `../sdlc-work/references/practices/workspace.md`.
 </result>

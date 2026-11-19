@@ -1,5 +1,32 @@
 # Behavioral eval suite — host execution REQUIRED for trustworthy results
 
+## Automated smoke suite (v0.7)
+
+`host_cases.json` contains executable fixture-based cases for Extended Feature approval/revision/resume, security escalation, Extended Spike, research-only, small Feature, and an unrelated query. The runner starts fresh isolated fixture repositories and sessions, captures JSONL, diffs, snapshots and stage artifacts, grades actual files/state and independent fixture behavior, and emits report.json. It does not infer approval from the tested model's claims alone.
+
+```bash
+python3 tests/evals/test_grade.py
+python3 tests/evals/run.py --host codex --case extended_feature_checkpoints --output eval-runs/codex-01
+python3 tests/evals/run.py --host claude --runs 3 --output eval-runs/claude-01
+python3 tests/evals/run.py --host cursor --runs 3 --output eval-runs/cursor-01
+```
+
+Run only in a disposable isolated OS sandbox/CI worker with authenticated host binaries, no production credentials/roots, and a budget. The fixture is not an OS security sandbox. Use normal host permissions; a denied edit or unsupported capability is a failed/unverified run, never a reason to bypass restrictions. Claude loads the native plugin with --plugin-dir; Codex/Cursor exercise project-local skill snapshots, not native plugin/reviewer discovery. Separately confirm real plugin discovery and independence using the broader scenarios below. The runner does not install global plugins or invoke model graders automatically.
+
+Compare candidate vs previous plugin with `--plugin /path/to/previous/plugins/ai-sdlc`; for no-plugin use `--no-plugin` in a clean profile without globally installed SDLC skills. Repeated runs cost real model calls. Compare pass rates and timing in report.json, review traces for genuine skill invocation, stage execution, approvals, test evidence and quality; output headers alone do not prove these. For qualitative criteria use blinded independent rubric review.
+
+Claude Code also supports native plugin evals (v2.1.269+):
+
+```bash
+cd plugins/ai-sdlc
+claude plugin eval init
+claude plugin eval . --no-publish
+```
+
+Design graders for correct/incorrect triggers, artifact existence, route, approval boundary and quality. See https://code.claude.com/docs/en/plugin-evals. Its case format differs from the shared JSON runner; do not confuse native execution with offline fixture tests. CI runs the offline tests on every PR; host suites are opt-in before release. Treat any observed approval/scope violation or fabricated evidence as release-blocking even if other scores are high.
+
+## Broader manual host scenarios
+
 `tests/evals/scenarios.json` defines 12 behavioral scenarios across **Feature, Bug, Spike**. Its checks cover routing, source-backed decisions, scope/permissions, regressions, convergence, cross-repo integration, snapshot freshness, reviewer independence, session resumption and POC boundaries.
 
 ## Gates

@@ -23,3 +23,12 @@ Product/host behavior changes; re-check actual installed version and host outcom
 - Cursor — hooks are a host-level enforcement option, not an automatic install: https://cursor.com/docs/hooks
 
 These sources informed design principles; this plugin does not claim identical functionality or guaranteed host capabilities.
+
+## Additional references for v0.7.0
+
+- Spec Kit's agentic SDLC and human handoffs: https://github.github.com/spec-kit/guides/agentic-sdlc.html
+- Superpowers workflow, TDD and independent review: https://github.com/obra/superpowers
+- OpenSpec change artifacts: https://github.com/Fission-AI/OpenSpec/blob/main/docs/concepts.md
+- Agent Skills evaluation: https://agentskills.io/skill-creation/evaluating-skills
+- Claude native plugin evals: https://code.claude.com/docs/en/plugin-evals
+- Cursor structured CLI output: https://cursor.com/docs/cli/using
