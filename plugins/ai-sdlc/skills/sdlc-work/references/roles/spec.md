@@ -1,52 +1,46 @@
-# Spec — observable WHAT and acceptance criteria
+# Spec — observable behavior and acceptance criteria
 
 ## Purpose
 
-Define exactly what observable behavior is required. Spec owns creation, classification, source mapping and consistency validation of Feature acceptance criteria (ACs). It does not choose technical implementation.
+Define the Feature's required behavior. Spec creates, classifies and source-maps acceptance criteria (ACs); it does not choose technical implementation.
 
 ## Entry conditions
 
-- The task is a Feature, or an existing Bug contract is discovered to be materially ambiguous/new and must be routed through Feature.
+- The task is a Feature, or a Bug reveals a materially ambiguous/new contract that must be routed through Feature.
 - Intent and existing accepted contracts have been inspected.
-- A separate Spec stage is needed because changed behavior lacks a complete, accepted AC set, or Extended requires the stage.
+- Accepted ACs are incomplete, or Extended requires the stage.
 
 ## Procedure
 
-1. **Inspect accepted intent and sources:** read the accepted Intent, original request, tickets, current behavior, API/UI contracts, documentation and relevant existing tests. Reuse accepted requirements.
-2. **Extract expected behavior:** identify externally observable outcomes and business rules. Do not derive new product behavior from implementation convenience.
-3. **Create ACs:** assign stable unique IDs (AC-01, AC-02, ...). Write each criterion in Given/When/Then or an equally testable form. Each AC must describe one meaningful observable rule.
-4. **Classify requirement candidates:** use practices/coverage.md to separate REQUIRED ACs from VERIFY examples, DECISION questions, DEFER items and REJECT speculation. Negative/boundary cases are normally VERIFY examples, not extra ACs.
-5. **Map every AC to its source:** record the originating accepted intent, ticket, authoritative contract or explicit owner decision. Distinguish an existing accepted rule from a proposed rule awaiting acceptance.
-6. **Check completeness:** ensure every part of the accepted outcome is represented and every material path, actor or state is covered where required. Avoid speculative permutations and document sprawl.
-7. **Check consistency and testability:** detect contradictions, ambiguity, unverifiable wording, missing preconditions, unsupported assumptions and accidental scope expansion.
-8. **Resolve material WHAT decisions:** send the Coordinator the single most consequential unresolved question at a time. Do not silently turn a proposal into an accepted requirement.
-9. **Create the AC coverage map:** show every AC ID, short meaning, authoritative source/decision and a pointer to the complete AC text. The human summary must not omit any AC.
-10. **Write the output:** Extended creates 02-spec.md; Standard adds a concise complete Spec/AC section to the agreed record; Quick reuses an existing accepted AC set and does not create a file.
-11. **Return to Coordinator:** report READY, NEEDS_DECISION or BLOCKED. Do not design architecture, implement code or start Developer.
+1. Inspect accepted Intent, request, ticket, API/UI contracts, documentation and relevant tests.
+2. Extract externally observable outcomes and business rules. Do not infer product behavior from implementation convenience.
+3. Create stable AC IDs (AC-01, AC-02, ...). Write each as Given/When/Then or an equally testable rule.
+4. Use practices/coverage.md to classify REQUIRED ACs, VERIFY examples, DECISION questions, DEFER items and REJECT speculation.
+5. Map every AC to an accepted source or explicit owner decision; distinguish accepted behavior from proposals.
+6. Check completeness, consistency, testability and scope. Avoid speculative permutations.
+7. Surface the single most consequential unresolved WHAT decision to the Coordinator. Do not silently accept a proposal.
+8. Create 02-spec.md in Extended, a concise complete Spec/AC section in Standard, or reuse accepted ACs in Quick.
+9. Return READY, NEEDS_DECISION or BLOCKED.
 
 ## Checklist
 
-- [ ] Accepted Intent, request and existing contracts inspected.
-- [ ] Every AC has a stable unique ID.
-- [ ] Each AC describes observable, testable behavior.
-- [ ] Every AC maps to an authoritative source or explicit owner decision.
-- [ ] Proposed behavior is distinguished from accepted behavior.
-- [ ] REQUIRED rules are separated from VERIFY examples.
-- [ ] DECISION, DEFER and REJECT candidates are handled explicitly.
-- [ ] ACs are complete for the accepted outcome without speculative scope.
-- [ ] ACs are mutually consistent and testable.
-- [ ] Material WHAT decisions are resolved or explicitly block readiness.
-- [ ] Human summary maps to every AC ID.
-- [ ] Full AC text and source/provenance are accessible.
+- [ ] Every AC has a stable ID and describes observable, testable behavior.
+- [ ] Every AC maps to an authoritative source or owner decision.
+- [ ] Accepted behavior is distinguished from proposals.
+- [ ] REQUIRED rules and VERIFY examples are separated.
+- [ ] DECISION, DEFER and REJECT candidates are handled.
+- [ ] ACs are complete, consistent and free of speculative scope.
+- [ ] The human summary maps to every AC ID and full AC text is accessible.
+- [ ] Consequential WHAT decisions are resolved or block readiness.
 
 ## Output
 
-02-spec.md (Extended) or a concise complete Spec section (Standard): revision, context, full AC list, source/provenance per AC, REQUIRED/VERIFY classification, decision log, non-goals, exclusions, consistency/testability checks and complete AC ID summary.
+Revision, context, full AC list, source per AC, REQUIRED/VERIFY classification, decisions, non-goals and a complete AC ID summary.
 
 ## Exit conditions
 
-- READY: complete, consistent, source-backed AC proposal is ready for owner acceptance/Architect.
-- NEEDS_DECISION: consequential expected behavior remains unresolved.
-- BLOCKED: sources or authority are insufficient to define safe expected behavior.
+- READY: source-backed ACs are complete and ready for owner acceptance/Architect.
+- NEEDS_DECISION: consequential expected behavior is unresolved.
+- BLOCKED: evidence or authority is insufficient.
 
-For new/consequential behavior, Extended approval of the exact Spec revision supplies the human acceptance checkpoint. Spec never chooses HOW or grants implementation permission.
+Extended approval of the exact Spec revision is the human acceptance checkpoint. Spec never chooses HOW or grants edit permission.

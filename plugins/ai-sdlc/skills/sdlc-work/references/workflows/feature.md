@@ -1,42 +1,43 @@
 # Feature workflow
 
-A Feature adds or intentionally changes observable product behavior. Normal responsibility order is Intent (when needed) → Spec (when needed) → Architect (when needed) → Developer (implementation + verification) → independent Reviewer.
+A Feature adds or intentionally changes observable product behavior. Normal order is Intent (when needed) → Spec (when needed) → Architect (when needed) → Developer → independent Reviewer.
 
-## Role sequence and mode applicability
+## Role sequence by mode
 
-| Order | Responsibility | Quick | Standard | Extended |
-|---|---|---|---|---|
-| 1 | Intent | Skip when problem/user/outcome/scope are clear | Run when WHY/WHO/outcome/scope need clarification | Always a distinct stage; summarize accepted evidence if already settled |
-| 2 | Spec | Reuse complete accepted ACs; stop if expected behavior is materially unknown | Run when changed behavior lacks a complete accepted AC set | Always a distinct stage; show every AC ID and exact full revision |
-| 3 | Architect | Skip separate stage for a small established pattern | Run for meaningful design, dependencies, or multi-component slicing | Always a distinct stage and plan artifact |
-| 4 | Developer | Implement + verify | Implement + verify | One gated implementation + verification stage |
-| 5 | Reviewer | Fresh independent review after code changes | Fresh independent review after code changes | Separate gated independent review |
+| Responsibility | Quick | Standard | Extended |
+|---|---|---|---|
+| Intent | Skip when problem and scope are clear | Run when WHY/WHO/outcome/scope needs definition | Always a stage; summarize accepted evidence if settled |
+| Spec | Reuse complete accepted ACs | Run when accepted ACs are incomplete | Always a stage; show every AC ID and full revision |
+| Architect | Skip for a small established pattern | Run for meaningful design/dependencies | Always a plan stage |
+| Developer | Implement and verify | Implement and verify | One gated build-and-verify stage |
+| Reviewer | Fresh independent review after code changes | Fresh independent review after code changes | Separate gated review stage |
 
-Quick is permitted only when requirements and approach are established and risk is low. Standard executes all applicable responsibilities in order without mandatory stage-by-stage approvals. Extended executes every listed Feature stage, produces one artifact per stage and pauses after each approval.
+Quick requires established behavior, an established approach and low risk. Standard runs applicable roles without per-stage approvals. Extended runs every listed stage and pauses after each artifact approval.
 
 ## Extended artifacts
 
-- Intent: 01-intent.md
-- Spec: 02-spec.md
-- Architect: 03-plan.md
-- Developer: 04-implementation.md (includes TDD and all verification evidence)
-- Reviewer: 05-review.md
+1. Intent — 01-intent.md
+2. Spec — 02-spec.md
+3. Architect — 03-plan.md
+4. Developer — 04-implementation.md (TDD and verification evidence)
+5. Reviewer — 05-review.md
 
-Use one authorized task directory with state.json or an existing revisioned ticket/PR record. Create only the current artifact. Do not create verification.md or a separate Verifier stage.
+Use one authorized task directory with state.json or an existing revisioned ticket/PR. Create only the current artifact.
 
-## Feature-specific handoffs
+## Handoffs
 
-1. Intent establishes WHY, WHO, outcome, scope and non-goals. It does not define ACs or technical design.
-2. Spec creates stable AC IDs, observable/testable rules, provenance, REQUIRED versus VERIFY classification, decisions and a complete AC map. Unresolved consequential WHAT blocks planning.
-3. Architect maps every accepted AC to minimal implementation slices, affected roots/interfaces, actual dependency order, test seams and relevant risks. It does not implement or claim tests ran.
-4. Developer follows the accepted scope and plan, performs TDD where applicable, implements in slice order, verifies each AC plus meaningful regressions/integrations, inspects the actual diff and records exact commands/results and per-root snapshots.
-5. Reviewer uses a fresh independent context to inspect the actual diff, all ACs and Developer evidence. A stale snapshot or missing independent context cannot receive AI_PASS.
-6. Coordinator reports READY_FOR_MERGE_REVIEW only when requirements, verification evidence and independent review support it. This does not authorize merge, production migration or deployment.
+- **Intent** establishes WHY, WHO, outcome, scope and non-goals.
+- **Spec** defines stable AC IDs, observable rules, provenance and a complete AC map. An unresolved consequential WHAT blocks planning.
+- **Architect** maps every accepted AC to minimal slices, affected roots/interfaces, dependency order, test seams and relevant risks.
+- **Developer** follows the accepted scope, uses TDD where applicable, verifies every AC and relevant regression/integration, and records exact commands/results and per-root snapshots.
+- **Reviewer** independently inspects the actual diff, AC coverage and Developer evidence. A stale snapshot or unverified independence cannot receive AI_PASS.
+
+The accepted AC revision is the canonical Feature expectation. Do not add behavior silently during implementation or review.
 
 ## Exit outcomes
 
 - READY_FOR_MERGE_REVIEW: accepted requirements, implementation, verification and independent review support human release review.
+- NEEDS_DECISION: a consequential product/technical decision remains.
 - BLOCKED: a required dependency, permission, decision, test or reviewer capability is missing.
-- NEEDS_DECISION: a consequential product or technical decision needs the owner.
 
-The accepted AC revision is the single canonical Feature expectation. Do not silently add behavior during implementation or review.
+READY_FOR_MERGE_REVIEW does not authorize merge, production migration or deployment.

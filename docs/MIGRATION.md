@@ -1,20 +1,19 @@
 # Migration guide
 
-## From v0.7.0 to consolidated mode/role layout
+## From 0.7.0 to 0.8.0
 
-This change simplifies workflow ownership without changing host packaging or requiring project-level harness files.
+This release consolidates mode policy and role ownership without changing host packaging.
 
-- Extended approval, pause/resume, revision and invalidation rules move from core/human-gates.md into core/modes.md.
-- Generic role rules move out of roles/shared.md. Each role file becomes self-contained with its own purpose, entry conditions, numbered procedure, checklist, output and exit conditions.
-- Feature Extended changes from six artifacts to five: 01-intent.md, 02-spec.md, 03-plan.md, 04-implementation.md, 05-review.md. Developer's artifact includes verification evidence; verification.md and the standalone Verification stage are removed.
-- Bug uses Architect's 01-diagnosis-plan.md, Developer's 02-implementation.md (fix + verification), then Reviewer 03-review.md.
-- Spike retains Researcher-owned scope, research, optional scratch experiment plan/experiment and decision.
-- No Verifier role is introduced. Developer verifies; Reviewer independently inspects code and evidence.
+- Extended approval, pause/resume, revision and invalidation policy is consolidated in core/modes.md.
+- Each role instruction owns its procedure, checklist, output and exit conditions.
+- Feature Extended uses 01-intent.md, 02-spec.md, 03-plan.md, 04-implementation.md and 05-review.md. Developer's artifact includes verification evidence.
+- Bug Extended uses 01-diagnosis-plan.md, 02-implementation.md and 03-review.md.
+- Spike keeps Researcher-owned scope, research, optional scratch experiment and decision stages.
 
-Replace the installed plugin and reload each host. Do not automatically rewrite existing project files.
+Replace the installed plugin and reload the host. Existing project files are not rewritten automatically.
 
-### Existing Extended task records
+## Existing Extended task records
 
-Prior task directories may contain stage IDs and filenames from the previous layout. Do not rename or reinterpret approvals silently. When resuming an older task, detect the old stage schema and either continue using its original record under an explicit legacy mapping or ask the owner to migrate it. A previous approval is never approval of a different artifact/revision.
+Do not silently rename old stage IDs or treat an earlier approval as approval of a different artifact. When resuming an older task, continue with its original record under an explicit legacy mapping or ask the owner to migrate it.
 
-Update the validator and eval harness with the new stage/artifact maps. Run python3 tests/validate.py, python3 tests/evals/score.py --self-test and python3 tests/evals/test_grade.py, then run actual host evaluations. Static validation is not proof of host behavior.
+Run `python3 tests/validate.py`, `python3 tests/evals/score.py --self-test` and `python3 tests/evals/test_grade.py`, then run opt-in host evaluations. Static validation does not prove host behavior.

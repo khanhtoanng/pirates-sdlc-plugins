@@ -1,36 +1,34 @@
 # Bug workflow
 
-A Bug repairs existing behavior that violates an established expectation. Normal responsibility order is Architect (assessment + diagnosis + minimal fix plan) → Developer (fix + verification) → independent Reviewer. Do not create fictional Feature Intent or Spec stages. If a repair requires a new business rule, stop and route that WHAT decision through Feature Spec and owner acceptance.
+A Bug repairs existing behavior that violates an established expectation. Normal order is Architect (assessment, diagnosis and minimum repair plan) → Developer (fix and verify) → independent Reviewer. Quick may use bounded Developer triage for a clear, low-risk Bug.
 
-## Role sequence and mode applicability
+## Role sequence by mode
 
-| Order | Responsibility | Quick | Standard | Extended |
-|---|---|---|---|---|
-| 1 | Assess, diagnose and plan | Developer performs bounded symptom check and minimal triage; use Architect if cause/risk is not straightforward | Architect investigates symptom, reproduction, cause and minimal repair plan | One distinct Architect stage/artifact; approval required |
-| 2 | Fix and verify | Developer fixes only with credible evidence and bounded authority, then verifies | Developer implements the minimal repair and verifies | One gated Developer stage combining fix, TDD and verification |
-| 3 | Independent review | Fresh independent review after code changes | Fresh independent review after code changes | Separate gated Reviewer stage |
+| Responsibility | Quick | Standard | Extended |
+|---|---|---|---|
+| Assess/diagnose | Developer performs bounded symptom check and triage | Architect investigates symptom, reproduction and cause | Distinct Architect diagnosis/plan stage; approval required |
+| Fix/verify | Developer fixes only with credible evidence and bounded authority | Developer implements the minimum repair and verifies | One gated fix, TDD and verification stage |
+| Review | Fresh independent review after code changes | Fresh independent review after code changes | Separate gated Reviewer stage |
 
-If the original symptom cannot be reproduced, distinguish REPRODUCED, EVIDENCED_NOT_REPRODUCED and UNVERIFIED. Do not guess root cause or claim a verified fix based only on correlation.
+If reproduction is unavailable, report REPRODUCED, EVIDENCED_NOT_REPRODUCED or UNVERIFIED accurately. Do not infer cause from correlation or patch speculatively.
 
 ## Extended artifacts
 
-- Architect: 01-diagnosis-plan.md (assessment, diagnosis, reproduction evidence and minimum fix plan)
-- Developer: 02-implementation.md (fix and verification evidence)
-- Reviewer: 03-review.md
+1. Architect — 01-diagnosis-plan.md
+2. Developer — 02-implementation.md (fix and verification)
+3. Reviewer — 03-review.md
 
-Use stage IDs diagnosis_plan, implementation and review. Do not create intent.md, spec.md, separate assessment.md/diagnosis.md/plan.md files, or verification.md for the normal Bug route. Each artifact is created only when its stage runs.
+Use stage IDs diagnosis_plan, implementation and review. Create only the current artifact.
 
 ## Bug-specific rules
 
-1. Capture the original report, expected versus actual behavior, environment, occurrence, impact/severity and affected boundary. Preserve a useful baseline.
-2. Inspect authoritative tests, interface/API contracts, documentation and accepted decisions to establish expected behavior.
-3. Reproduce using observed failure/logs or exact trustworthy reporter evidence. Label reproduction status honestly and record exact evidence.
-4. Trace a credible cause and distinguish observed cause from hypothesis. Identify a regression seam and blast radius.
-5. Plan the smallest safe repair, target files/interfaces, regression check, relevant non-regressions and compatibility/rollback concerns when applicable.
-6. After bounded edit authorization, Developer captures a failing regression first where feasible, implements minimally, and reruns the original symptom, targeted regression and relevant integrations.
-7. Developer reports before/after observations, actual commands/results, affected roots, changed snapshot and missing checks.
-8. Reviewer independently checks the original expected/actual symptom, reproduction/cause evidence, diff, test credibility, regression protection and completeness.
+1. Preserve the original report, expected/actual behavior, environment, impact and baseline.
+2. Establish the expected contract from authoritative tests, docs, interfaces and accepted decisions.
+3. Record reproduction evidence and distinguish observed cause from hypothesis.
+4. Identify blast radius, regression seam and smallest safe repair.
+5. If a new business rule or changed expectation is required, stop and route through Feature Spec and owner acceptance.
+6. After authorization, Developer adds a failing regression test where feasible, applies the minimum fix, then reruns the original symptom and relevant regressions/integrations.
+7. Record before/after observations, exact commands/results, changed roots and missing checks.
+8. Reviewer checks the original symptom, diagnosis evidence, diff, test credibility and completeness.
 
-Use VERIFIED_FIX only when credible evidence shows the original symptom resolved, adequate regression evidence exists, required checks are observed and independent review is AI_PASS. Otherwise report PARTIAL or UNVERIFIED with the exact gap.
-
-Extended: Architect, Developer and Reviewer each complete their own checklist and receive approval of the exact artifact revision before the next stage. A new code change requires Developer re-verification and fresh independent review.
+Use VERIFIED_FIX only when the original symptom is credibly resolved, regression evidence exists, required checks are observed and independent review is AI_PASS. Otherwise report PARTIAL or UNVERIFIED.

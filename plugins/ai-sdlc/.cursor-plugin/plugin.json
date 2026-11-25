@@ -1,6 +1,6 @@
 {
   "name": "ai-sdlc",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "Risk-based AI SDLC workflow for local multi-root projects.",
   "skills": "./skills/",
   "agents": "./agents/"

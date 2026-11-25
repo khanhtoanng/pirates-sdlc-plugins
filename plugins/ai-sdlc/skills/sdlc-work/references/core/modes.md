@@ -1,98 +1,92 @@
-# Execution modes — Quick, Standard and Extended
+# Execution modes
 
-Task type (Feature, Bug, Spike) determines **what workflow** runs. Mode (Quick, Standard, Extended) determines **how much process, evidence and human involvement** the workflow uses. Auto selects an effective mode; it is not an execution mode.
+Task type (Feature, Bug or Spike) selects the workflow. Mode (Quick, Standard or Extended) selects its depth and human approval. Auto selects a mode; it is not a mode itself.
 
-The same safety and correctness requirements apply to all modes. Modes change role depth, artifact detail and approval behavior. They never relax permissions, required verification or independent review.
+All modes retain the same permissions, verification and independent-review requirements.
 
-## 1. Mode selection
+## 1. Select a mode
 
-After proportionate read-only inspection, choose the smallest mode justified by observed requirements and risk. Record requested mode, effective mode, reason, evidence and material unknowns.
+After proportionate read-only inspection, choose the smallest mode justified by the evidence. Record requested/effective mode, reason, risk drivers and material unknowns.
 
-| Dimension | Quick | Standard | Extended |
+| Signal | Quick | Standard | Extended |
 |---|---|---|---|
-| Requirements | Known, bounded and source-backed | Some focused clarification or AC work is useful | Consequential new business rules, unresolved high-impact choices or owner requests full review |
-| Design | Existing pattern; small and reversible | Moderate feature design or several components/interfaces | Significant architecture, critical dependency, breaking contract or complex rollout |
-| Data | No material data risk | Compatible/reversible change | Destructive/irreversible migration, loss, privacy-sensitive data or recovery risk |
-| Security | No material security impact | Routine safeguards | Authorization, privacy, compliance or security-critical behavior |
-| Operations | Ordinary local changes | Multi-component delivery or normal coordination | High production/availability impact, privileged operation or irreversible infrastructure impact |
-| Human involvement | Material questions and authority boundaries only | Consequential WHAT/HOW/scope decisions | Explicit approval after every applicable artifact stage |
+| Requirements | Established and bounded | Focused clarification or AC work | New consequential rules or unresolved high-impact choices |
+| Design | Existing pattern, reversible | Moderate design or several components | Critical dependencies, breaking contracts or complex rollout |
+| Data/security | No material impact | Routine safeguards | Irreversible data, privacy, compliance or security risk |
+| Operations | Ordinary local change | Multi-component delivery | High production or infrastructure impact |
+| Human review | Material questions only | Consequential decisions | Approval after every applicable artifact stage |
 
 Selection rules:
 
-1. Explicit Extended always wins. Never downgrade it.
-2. Escalate to Extended when any material high-risk trigger is evidenced, even if Quick or Standard was requested. Explain the trigger and pause before crossing a newly discovered consequential decision or permission boundary.
-3. Quick is allowed only when all relevant risk dimensions are low, expected behavior is established and no substantial design decision is needed.
-4. Standard is the default when Quick's criteria are not all met and Extended is not warranted.
-5. Multiple repositories alone do not imply Extended. Assess actual contracts, risk and rollout complexity.
-6. A consequential unknown is not low risk. Investigate read-only or ask the single most important question before editing.
-7. Never lower the effective mode during a run without explicit human agreement and resolved risk.
-8. For Spike, assess research/experiment risk separately. Mode selection never grants permission to edit production code or run an experiment.
+1. Explicit Extended always wins.
+2. Escalate when evidence shows material high risk, even if Quick or Standard was requested. Explain why and pause at a new consequential decision or permission boundary.
+3. Quick requires low risk, established expected behavior and no substantial design decision.
+4. Otherwise choose Standard unless Extended is warranted.
+5. Multiple repositories alone do not imply Extended; assess actual integration and rollout risk.
+6. A consequential unknown is not low risk. Investigate read-only or ask the most important question before editing.
+7. Do not downgrade a run without human agreement and resolved risk.
+8. For Spike, assess research and experiment risk separately; mode never grants production-edit or experiment authority.
 
 ## 2. Quick — minimum safe path
 
-**Purpose:** Finish a small, clear, low-risk task with minimum ceremony.
+Use for clear, low-risk work with an established approach.
 
-- Run the minimum role path defined by the selected workflow.
-- Reuse accepted requirements, existing contracts and established implementation patterns.
-- Skip separate Intent, Spec or Architect work only when their decisions are already clear and no new analysis is needed.
-- Do not create role-stage files by default. Return a concise chat result; use an existing ticket when useful.
-- Do not stop after each role for approval.
-- Ask only about material unknowns, scope changes, missing authority or blockers.
-- Developer still implements and performs all applicable verification. TDD applies to behavior changes where a meaningful test seam exists; exceptions must be honest.
-- Feature/Bug code changes still require a genuinely independent Reviewer before claiming AI_PASS.
+- Follow the minimum role path in the selected workflow; reuse accepted requirements and contracts.
+- Skip separate Intent, Spec or Architect work only when its decisions are already clear.
+- Create no stage files or per-role approvals by default; return a concise result.
+- Ask only about material unknowns, scope, authority or blockers.
+- Developer still implements and verifies. Apply TDD where a meaningful test seam exists; record exceptions.
+- Feature/Bug code changes still need a genuinely independent Reviewer before AI_PASS.
 
 Typical paths:
-- Feature: Developer (understand established behavior → implement → verify) → Reviewer.
-- Bug: Developer (bounded symptom check → straightforward diagnosis → fix → verify) → Reviewer. Escalate when reproduction, cause or risk is not simple.
-- Spike: Researcher (bound question → focused research → decision); no production edits. Experiment requires a separate scratch grant.
+- Feature: Developer → Reviewer.
+- Bug: Developer triage, fix and verify → Reviewer; escalate unclear reproduction, cause or risk.
+- Spike: Researcher scope, research and decision. No production edits; experiments need a separate scratch grant.
 
-Quick means less ceremony, not less correctness.
+Less ceremony does not mean less correctness.
 
-## 3. Standard — structured delivery, selective decisions
+## 3. Standard — structured delivery
 
-**Purpose:** Handle normal engineering work with clear reasoning, role ownership and evidence, without mandatory approval after every role.
+Use for normal engineering work that needs analysis or coordination but not approval after every role.
 
-- Run every applicable responsibility in the selected workflow, in order.
-- Reuse accepted Intent/Spec material. Do not regenerate documents just to fill a role.
-- Perform Intent when WHY, WHO, outcome or scope is materially unclear.
-- Perform Spec when changed behavior lacks complete accepted ACs, or a Bug fix would introduce a new business rule. A new business rule must be accepted before implementation.
-- Perform Architect for meaningful technical design, dependency mapping or non-trivial Bug diagnosis/plan. A small established change may use a lightweight design check within Developer.
-- Developer implements and verifies. Reviewer independently checks code and evidence.
-- Prefer an existing ticket/PR/ADR. Otherwise use one compact task record when continuity is needed. Do not create a file for every role by default.
-- Ask for human decisions only for consequential WHAT/HOW/scope/risk/authority choices. Routine handoffs continue without approval.
-- Plan/investigate/review requests are read-only. A bounded implement/fix request may authorize ordinary local edits only within its scope and subject to host/project policy.
+- Run each applicable workflow responsibility in order; reuse accepted Intent and Spec material.
+- Perform Intent when problem, user, outcome or scope is unclear.
+- Perform Spec when accepted ACs are incomplete or a Bug fix needs a new business rule.
+- Perform Architect for meaningful design, dependency mapping or non-trivial Bug diagnosis. Small established changes may use a lightweight design check within Developer.
+- Developer implements and verifies; Reviewer independently checks code and evidence.
+- Prefer an existing ticket/PR/ADR; otherwise use one compact record when continuity matters.
+- Ask for consequential WHAT, HOW, scope, risk or authority decisions. Routine handoffs do not need approval.
+- Plan, research and review requests are read-only. A bounded implement/fix request may authorize ordinary local edits within scope and host policy.
 
 Typical paths:
-- Feature: Intent (if needed) → Spec (if needed) → Architect (if needed) → Developer → Reviewer.
-- Bug: Architect (assessment + diagnosis + minimal fix plan) → Developer → Reviewer. A clearly reproduced, low-risk Bug may use the Quick Developer path.
-- Spike: Researcher (scope + research + decision); optional experiment only with a separate explicit scratch grant.
+- Feature: Intent? → Spec? → Architect? → Developer → Reviewer.
+- Bug: Architect → Developer → Reviewer; clear low-risk Bugs may use the Quick path.
+- Spike: Researcher scope → research → decision; experiment requires a separate scratch grant.
 
-## 4. Extended — full human-in-the-loop workflow
+## 4. Extended — approval at every stage
 
-**Purpose:** Handle complex, consequential or explicitly human-supervised work. Every applicable artifact-producing stage is reviewed and approved before the next stage starts.
+Run the complete applicable workflow. Each stage completes its role checklist, writes one artifact and pauses for approval of that exact revision.
 
-- Execute the complete applicable route in its defined order.
-- Each role owns its numbered procedure and mandatory checklist. Complete the checklist before presenting the artifact.
-- Generate only the current stage artifact with the exact ordinal filename defined by the selected workflow.
-- Validate source/decision references and exit conditions. AI validation is not human approval.
-- Persist state and artifact revision in one authorized task directory or existing tracker.
-- Present a review card with task, stage, revision, artifact path, summary, decisions, risks, exclusions, evidence, checklist result and limitations.
-- End the turn after presenting the card. Do not create downstream artifacts, start downstream work, poll or interpret silence as consent.
-- Continue only after explicit approval of the exact current stage and revision.
-- Material changes invalidate affected downstream approvals/evidence. Return to the earliest affected stage.
-- Developer's implementation and verification are one stage and one artifact. Reviewer is a separate independent stage and artifact.
+- Create only the current stage artifact, using the filename in the workflow table.
+- Validate source references and exit conditions before presenting the artifact.
+- Persist stage state and revision in one authorized task directory or existing tracker.
+- Present a review card with stage, revision, artifact path, decisions, evidence, checklist result, risks and the next human action.
+- End the turn. Do not start downstream work, poll or interpret silence as consent.
+- Continue only after explicit approval of the current stage and revision.
+- A material upstream change invalidates affected downstream approvals/evidence; return to the earliest affected stage.
+- Developer's implementation and verification are one stage. Reviewer is a separate independent stage.
 
-### Extended stage and artifact order
+### Stage and artifact map
 
-| Task | Stage ID | Owner | Artifact |
+| Task | Stage | Owner | Artifact |
 |---|---|---|---|
 | Feature | intent | Intent | 01-intent.md |
 | Feature | spec | Spec | 02-spec.md |
 | Feature | plan | Architect | 03-plan.md |
-| Feature | implementation | Developer (build + verify) | 04-implementation.md |
+| Feature | implementation | Developer | 04-implementation.md |
 | Feature | review | Reviewer | 05-review.md |
-| Bug | diagnosis_plan | Architect (assess + diagnose + plan) | 01-diagnosis-plan.md |
-| Bug | implementation | Developer (fix + verify) | 02-implementation.md |
+| Bug | diagnosis_plan | Architect | 01-diagnosis-plan.md |
+| Bug | implementation | Developer | 02-implementation.md |
 | Bug | review | Reviewer | 03-review.md |
 | Spike | scope | Researcher | 01-scope.md |
 | Spike | research | Researcher | 02-research.md |
@@ -100,47 +94,31 @@ Typical paths:
 | Spike | experiment (optional) | Researcher | 04-experiment.md |
 | Spike | decision | Researcher | 05-decision.md |
 
-For Spike without an experiment, mark both optional stages not_applicable with a reason. Do not create placeholder artifacts.
+For a Spike without an experiment, mark both optional stages not_applicable with a reason. Do not create placeholders.
 
-### Extended approval protocol
+### Approval and resume protocol
 
-1. Run only the current stage. Load its role instructions and follow its numbered procedure.
-2. Complete the role's mandatory checklist. An essential unmet item means BLOCKED or NEEDS_DECISION, not READY.
-3. Create/update only the current stage artifact. Never create future-stage placeholders.
-4. Persist state with current_stage, status awaiting_human_approval, artifact path, integer revision and relevant source/snapshot references.
-5. Present a compact review card. The full artifact must be accessible.
-6. End the turn. Do not begin the next stage, wait/poll or seek simulated approval from a worker.
-7. On the next user turn, reload the exact state/artifact. Recheck revision, sources, permission scope and snapshot freshness.
-8. Accept approval only for the current stage and exact revision (for example, approve spec r1). Record the human response/reference and time when available.
-9. Request changes: revise the same stage, increment revision, rerun its checklist and request approval again. Reject: stop as cancelled. Ambiguous response: clarify; do not advance.
-10. After approval, start only the next applicable stage. Plan approval does not grant extra edit or privileged-operation authority.
-11. Material changes to source, requirements, scope, plan or code invalidate affected downstream approvals/evidence. Return to the earliest affected stage. Do not reapprove unchanged unaffected artifacts.
-12. Developer verification failure blocks the Developer stage. Reviewer findings block review completion. Any material repair requires Developer re-verification and fresh independent review. Escalate after at most three AI repair/review cycles.
-13. Final Reviewer approval completes workflow evidence; it does not authorize merge, production migration or deployment.
+1. Run only the current stage and follow its role instructions.
+2. Complete the role checklist. An essential unmet item is BLOCKED or NEEDS_DECISION.
+3. Create/update only the current artifact and increment its revision when changed.
+4. Persist state as awaiting_human_approval with the stage, revision, artifact path and source/snapshot references.
+5. Present the review card and end the turn.
+6. On the next turn, reload the exact state and artifact. Recheck revision, sources, scope, permissions and snapshot freshness.
+7. Accept approval only for the current stage and exact revision (for example, “approve spec r1”). Record the response/reference and time when available.
+8. For requested changes, revise the same artifact, increment revision, rerun the checklist and request approval again. Rejection cancels the task; ambiguity requires clarification.
+9. After approval, run only the next applicable stage. Plan approval does not grant extra edit or privileged-operation authority.
+10. A material change to source, requirements, scope, plan or code invalidates affected downstream evidence. Do not reapprove unaffected stages.
+11. Developer verification failure blocks the stage. A repair requires Developer re-verification and fresh independent review. Escalate after at most three repair/review cycles.
+12. Final Reviewer approval completes workflow evidence; it does not authorize merge, production migration or deployment.
 
-### State and durable records
+### Durable state
 
-Prefer an existing authorized issue, PR, ADR or tracker with revisioned stage sections. Otherwise ask once for permission to use one task directory in one selected writable root. The exact files depend on the route:
+Prefer an existing authorized issue, PR, ADR or tracker with revisioned sections. Otherwise request permission for one task directory in one writable root.
 
-Feature: state.json, 01-intent.md, 02-spec.md, 03-plan.md, 04-implementation.md, 05-review.md.
-Bug: state.json, 01-diagnosis-plan.md, 02-implementation.md, 03-review.md.
-Spike: state.json, 01-scope.md, 02-research.md, optional 03-experiment-plan.md and 04-experiment.md, 05-decision.md.
+state.json records task ID/type, requested/effective mode and reason; current stage and per-stage status/revision/artifact; request/source references, roots and edit scope; evidence, snapshot identity and exact approval reference.
 
-state.json must include:
-- schema_version, task_id, task_type, requested_mode, mode and mode_reason;
-- current_stage, top-level status and stages map keyed by the stage IDs for the selected route;
-- each stage status, integer revision, artifact path/section, evidence and approval reference;
-- request/source references, repository roots, edit scope, baseline/changed snapshots and material decisions;
-- approval record containing exact stage revision, human response/reference and timestamp when available.
+Stage status is one of: pending, in_progress, awaiting_human_approval, approved, blocked, needs_decision, cancelled, invalidated or not_applicable. Update state before handoff. If persistence fails, report HANDOFF: NOT DURABLE and provide a pasteable handoff; do not claim reliable resume.
 
-Allowed stage statuses: pending, in_progress, awaiting_human_approval, approved, blocked, needs_decision, cancelled, invalidated, not_applicable. State and stage statuses must agree. Update state before returning control. If durable persistence fails, report HANDOFF: NOT DURABLE with a pasteable handoff; do not claim reliable resume. On resume, refresh sources, permissions and Git snapshots before continuing.
+## 5. Cross-mode safety
 
-## 5. Safety and evidence invariants across all modes
-
-- Never equate visible repositories with approved edit roots. Distinguish VISIBLE, RELEVANT, EDIT_APPROVED and EXCLUDED.
-- Preserve staged, unstaged and untracked user work. A snapshot must account for dirty changes, not HEAD alone.
-- Distinguish OBSERVED, SOURCE_BACKED, OWNER_ACCEPTED, PROPOSED, ASSUMPTION, UNKNOWN, NOT RUN and NOT VERIFIED.
-- No role approves a human decision, grants its own authority or invokes a downstream role autonomously.
-- Do not fabricate test output, reproduction, approval, reviewer independence or host capabilities.
-- An explicit implement/fix request may authorize ordinary local edits within its bounded scope, subject to project and host permissions. It does not authorize destructive operations, installs, secrets access, remote/cloud changes, commit/push/merge, production migrations or deployment.
-- Spike is research/advisory by default. Any POC needs an explicit bounded scratch grant. Never convert a Spike into production implementation without a new Feature/Bug task and authorization.
+Follow the state, permission and evidence invariants in references/core/runtime.md. Mode selection never expands edit scope, grants privileged actions or allows a Spike to become production implementation.
