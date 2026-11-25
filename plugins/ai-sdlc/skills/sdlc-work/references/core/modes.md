@@ -115,9 +115,14 @@ For a Spike without an experiment, mark both optional stages not_applicable with
 
 Prefer an existing authorized issue, PR, ADR or tracker with revisioned sections. Otherwise request permission for one task directory in one writable root.
 
-state.json records task ID/type, requested/effective mode and reason; current stage and per-stage status/revision/artifact; request/source references, roots and edit scope; evidence, snapshot identity and exact approval reference.
+state.json schema (v1) records:
+- `schema_version`, `task_id`, `task_type`, `requested_mode`, `mode` and `mode_reason`.
+- `current_stage`, top-level `status` and a `stages` map keyed by the selected route's stage IDs.
+- Each stage's `status`, integer `revision`, artifact path/section, evidence and approval record.
+- `request_ref`, source references, repository roots, edit scope, baseline/changed snapshots and material decisions.
+- Each approval's exact stage/revision, human response or reference, and timestamp when available.
 
-Stage status is one of: pending, in_progress, awaiting_human_approval, approved, blocked, needs_decision, cancelled, invalidated or not_applicable. Update state before handoff. If persistence fails, report HANDOFF: NOT DURABLE and provide a pasteable handoff; do not claim reliable resume.
+Stage status is one of: pending, in_progress, awaiting_human_approval, approved, blocked, needs_decision, cancelled, invalidated or not_applicable. Keep top-level and stage status consistent. Update state before handoff. If persistence fails, report HANDOFF: NOT DURABLE and provide a pasteable handoff; do not claim reliable resume.
 
 ## 5. Cross-mode safety
 
