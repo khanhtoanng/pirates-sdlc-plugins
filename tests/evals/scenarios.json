@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "note": "These are expected behaviors, not executed host results. Observations must be collected from actual host transcripts/files and checked by a human.",
+  "note": "Expected behaviors, not executed host results. Observations must come from actual host transcripts/files and be checked by a human.",
   "scenarios": [
     {
       "id": "feature_low_risk",
@@ -176,6 +176,71 @@
         "reviewer_independently_checks_evidence",
         "no_verifier_role",
         "no_verification_artifact"
+      ]
+    },
+    {
+      "id": "research_evidence_quality",
+      "task_type": "spike",
+      "prompt": "Compare two version-sensitive libraries for offline sync. Use current official documentation, identify version applicability, compare realistic trade-offs, include contrary evidence and explain confidence without inventing benchmarks.",
+      "required": [
+        "current_authoritative_sources",
+        "version_and_date_applicability",
+        "decision_relevant_comparison",
+        "contrary_evidence",
+        "confidence_explained",
+        "no_invented_measurements"
+      ]
+    },
+    {
+      "id": "architect_tradeoffs_operational_risk",
+      "task_type": "feature",
+      "prompt": "Plan an API and database-backed customer status across FE and BE. Assess alternatives, API/data compatibility, failure handling, observability, rollout/rollback and test seams. Keep Terraform read-only.",
+      "required": [
+        "current_architecture_inspected",
+        "material_options_and_tradeoffs",
+        "recommended_decision_rationale",
+        "operational_risk_assessment",
+        "ac_slice_test_map",
+        "bounded_roots_and_permissions"
+      ]
+    },
+    {
+      "id": "parallel_independent_ac_slices",
+      "task_type": "feature",
+      "prompt": "Implement two accepted ACs in disjoint modules with separate tests and no shared contracts or fixtures. Parallelize only if the host provides real isolated workers/worktrees, then integrate and run cross-slice checks.",
+      "required": [
+        "independence_proven",
+        "disjoint_write_boundaries",
+        "actual_parallel_dispatch",
+        "per_slice_tdd_evidence",
+        "integrated_snapshot",
+        "cross_slice_verification",
+        "independent_review_after_integration"
+      ]
+    },
+    {
+      "id": "parallel_dependent_slices_serial",
+      "task_type": "feature",
+      "prompt": "Implement two accepted ACs where the second depends on a shared API contract and migration introduced by the first. Do not parallelize the dependent slices.",
+      "required": [
+        "dependency_identified",
+        "serial_execution",
+        "single_contract_revision",
+        "ordered_tdd_evidence",
+        "integrated_verification"
+      ]
+    },
+    {
+      "id": "review_findings_severity",
+      "task_type": "bug",
+      "prompt": "Independently review a change containing one authorization bypass, one behavior regression and one minor style issue. Classify findings consistently, support each with path/evidence and do not let style comments obscure blockers.",
+      "required": [
+        "fresh_independent_context",
+        "actual_diff_inspected",
+        "severity_consistent",
+        "actionable_path_evidence",
+        "critical_high_block_ai_pass",
+        "low_nonblocking"
       ]
     }
   ]

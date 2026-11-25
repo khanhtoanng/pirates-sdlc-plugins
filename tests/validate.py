@@ -2,11 +2,13 @@
 """Dependency-free package and workflow contract validation; not a host eval."""
 from pathlib import Path
 import json
+import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 PLUGIN = ROOT / "plugins" / "ai-sdlc"
-REFS = PLUGIN / "skills" / "sdlc-work" / "references"
+SKILLS = PLUGIN / "skills"
+REFS = SKILLS / "sdlc-work" / "references"
 VERSION = "0.8.0"
 errors = []
 
@@ -40,7 +42,7 @@ for label, path in [
               "Cursor: native component path mismatch")
 
 for name in ("sdlc-work", "sdlc-setup", "sdlc-doctor"):
-    path = PLUGIN / "skills" / name / "SKILL.md"
+    path = SKILLS / name / "SKILL.md"
     check(path.is_file(), f"missing skill {name}")
     if path.is_file():
         txt = path.read_text(encoding="utf-8")
@@ -147,6 +149,78 @@ for path in PLUGIN.rglob("*.md"):
 check(not (PLUGIN / "hooks").exists(), "unexpected auto hooks directory")
 check(not (PLUGIN / "mcp.json").exists(), "unexpected automatic MCP")
 check((ROOT / "docs/TASK_ROUTES.md").is_file(), "human task routes missing")
+
+# Practice ownership and role-to-practice references.
+developer = (REFS / 'roles/developer.md').read_text(encoding='utf-8')
+architect = (REFS / 'roles/architect.md').read_text(encoding='utf-8')
+reviewer = (REFS / 'roles/reviewer.md').read_text(encoding='utf-8')
+researcher = (REFS / 'roles/researcher.md').read_text(encoding='utf-8').lower()
+coverage = (REFS / 'practices/coverage.md').read_text(encoding='utf-8')
+delegation = (REFS / 'practices/delegation.md').read_text(encoding='utf-8').lower()
+workspace = (REFS / 'practices/workspace.md').read_text(encoding='utf-8').lower()
+check('practices/tdd.md' in developer and 'practices/tdd.md' in reviewer,
+      'Developer and Reviewer must refer to the single TDD practice')
+check('RED → GREEN → REFACTOR' not in developer and '**RED:**' not in developer,
+      'Developer duplicates the normative TDD sequence')
+check('independent AC' in developer and 'delegation.md' in developer,
+      'Developer must define independent-slice parallelism and delegate to its practice')
+check('operational' in architect.lower() and 'trade-off' in architect.lower(),
+      'Architect is missing operational assessment or decision rationale')
+check('confidence' in researcher and 'contrary evidence' in researcher,
+      'Researcher is missing evidence confidence/contrary evidence')
+check('## Finding severity' in reviewer, 'Reviewer is missing finding severity definitions')
+check('REQUIRED' in coverage and 'VERIFY' in coverage,
+      'Coverage must own requirement versus verification classification')
+check('independent reviewer requirement' in delegation and 'parallel work' in delegation,
+      'Delegation must own independent review and parallel execution rules')
+check('actual worker dispatch' not in workspace and 'parallel/serial execution rules' not in workspace,
+      'Workspace repeats delegation execution policy; link to delegation.md instead')
+check('RED/GREEN' not in runtime and 'AI_PASS' in runtime,
+      'Coordinator runtime contains detailed TDD procedure or lacks review invariant')
+check('human-gates.md' not in runtime and 'human-gates.md' not in skill,
+      'runtime/Coordinator references removed human-gates.md')
+
+# Agent instructions must not depend on human-only docs/ pages.
+for path in SKILLS.rglob('*.md'):
+    check('docs/' not in path.read_text(encoding='utf-8'),
+          f'agent skill must not depend on human-only docs/: {path.relative_to(ROOT)}')
+
+# Validate local Markdown links throughout the repository. Ignore examples in fenced blocks.
+link_pattern = r'(?<!!)\[[^\]]*\]\(([^)\s]+)(?:\s+[^)]*)?\)'
+for path in ROOT.rglob('*.md'):
+    if '.git' in path.parts:
+        continue
+    content = path.read_text(encoding='utf-8')
+    content = re.sub(r'```.*?```|~~~.*?~~~', '', content, flags=re.DOTALL)
+    for target in re.findall(link_pattern, content):
+        target = target.strip('<>')
+        if target.startswith(('https://', 'http://', 'mailto:', '#')):
+            continue
+        target_path = target.split('#', 1)[0].split('?', 1)[0]
+        if not target_path:
+            continue
+        resolved = (path.parent / target_path).resolve()
+        try:
+            resolved.relative_to(ROOT.resolve())
+        except ValueError:
+            errors.append(f'{path.relative_to(ROOT)}: link escapes repository: {target}')
+            continue
+        check(resolved.exists(), f'{path.relative_to(ROOT)}: broken local Markdown link: {target}')
+
+check((ROOT / 'docs/TASK_RECORDS.md').is_file(), 'human task-record guide missing')
+extended_guide = (ROOT / 'docs/EXTENDED.md').read_text(encoding='utf-8')
+check('## Durable record' not in extended_guide, 'EXTENDED.md duplicates the durable-record guide')
+check('TASK_RECORDS.md' in extended_guide, 'EXTENDED.md must point to the dedicated task-record guide')
+for path in PLUGIN.rglob('*.md'):
+    content = path.read_text(encoding='utf-8')
+    check('core/human-gates.md' not in content,
+          f'stale removed human-gates reference in {path.relative_to(ROOT)}')
+
+required_ids = {case.get('id') for case in cases if isinstance(case, dict)}
+for expected_id in ('research_evidence_quality', 'architect_tradeoffs_operational_risk',
+                    'parallel_independent_ac_slices', 'parallel_dependent_slices_serial',
+                    'review_findings_severity'):
+    check(expected_id in required_ids, f'missing behavioral eval {expected_id}')
 
 if errors:
     print("\n".join("FAIL: " + error for error in errors))

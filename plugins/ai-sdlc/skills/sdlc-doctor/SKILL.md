@@ -7,14 +7,14 @@ argument-hint: "[claude|cursor|codex|all] [workspace roots]"
 # SDLC Doctor — inspect first
 
 <checks>
-1. Identify current host, installed plugin identity, skill discovery and effective version. Report `VERIFIED / NOT VERIFIED / UNAVAILABLE` and how verified; do not equate a valid JSON file with runtime discovery.
+1. Identify current host, installed plugin identity, skill discovery and effective version. Report VERIFIED / NOT VERIFIED / UNAVAILABLE and how verified; do not equate a valid JSON file with runtime discovery.
 2. Check workspace roots, actual permissions, trust/instruction loading, Git worktrees, unrelated local modifications and cross-root access.
-3. Find old `.claude/skills/sdlc-work`, `.cursor/skills/sdlc-work`, `.agents/skills/sdlc-work` and legacy reviewer definitions; propose a diff-based manual retirement plan, never silently delete them.
-4. Check whether a fresh independent reviewer can actually be invoked on an identifiable current snapshot. Non-editing prompt ≠ sandbox enforcement in Codex.
-5. Detect conflicting host/path rules, missing files, invalid relative references, unsupported config keys and optional dependency assumptions. Verify the installed `core/routing.md` exposes exactly `feature|bug|spike`, `core/modes.md` defines modes, and `core/human-gates.md` requires every Extended checkpoint, without confusing legacy `spike` alias with a risk mode.
+3. Find old .claude/skills/sdlc-work, .cursor/skills/sdlc-work, .agents/skills/sdlc-work and legacy reviewer definitions; propose a diff-based manual retirement plan, never silently delete them.
+4. Check whether a fresh independent reviewer can actually be invoked on an identifiable current snapshot. Non-editing prompt does not imply sandbox enforcement in Codex.
+5. Detect conflicting host/path rules, missing files, invalid relative references, unsupported config keys and optional dependency assumptions. Verify the installed core/routing.md exposes exactly feature|bug|spike and core/modes.md defines modes and owns every Extended checkpoint; do not confuse the legacy spike alias with a risk mode.
 6. If an optional workspace profile exists, check names and paths, schema and relationship hypotheses. Propose compatible corrections with an exact approval request before writing.
 </checks>
 
 <result>
-Optionally run installed static validator and scorer self-test **only when these package files are locally available**; label both as static/synthetic, not host behavioral proof. Output a concise table: `Host | Plugin discovery | Roots | Reviewer | Issues | Next action`. Any migration/repair is a separate approved change. The installed plugin runtime is authoritative; project-owned rules remain project-owned.
+Optionally run the installed static validator and scorer self-test only when these package files are locally available; label both as static/synthetic, not host behavioral proof. Output a concise table: Host | Plugin discovery | Roots | Reviewer | Issues | Next action. Any migration/repair is a separate approved change. The installed plugin runtime is authoritative; project-owned rules remain project-owned.
 </result>

@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased
+
+- Tightened practice ownership: coverage classifies requirements vs verification examples; TDD owns RED/GREEN/REFACTOR; delegation owns worker dispatch/parallelism and independent Reviewer isolation; review owns human decision cards.
+- Expanded Researcher evidence quality, Architect decision/operational analysis, Developer safe parallel AC execution and Reviewer structured findings/severity.
+- Simplified Coordinator runtime invariants and removed duplicated role/stage checklists.
+- Added local Markdown-link validation and behavioral eval scenarios for role quality and parallel AC slices.
+- Split the human-facing Extended record guide from the mode/approval guide.
+
 ## 0.8.0 — consolidated modes and role workflows
 
 - Clarified Quick, Standard and Extended behavior, including revision-aware Extended approval, pause/resume and invalidation.

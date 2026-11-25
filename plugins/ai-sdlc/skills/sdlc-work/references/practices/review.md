@@ -1,40 +1,31 @@
-# Human review and handoff — narrow, source-backed, snapshot-aware
+# Human decisions and review handoffs
 
-## Human decision ownership (Quick/Standard)
+This practice defines what the Coordinator presents to a human and when an explicit decision is needed. It does not define the technical code-review procedure; that belongs to `roles/reviewer.md`. Extended stage approvals and resume rules are owned by `core/modes.md`.
 
-Extended additionally requires mandatory stage-by-stage review and approval as specified in core/human-gates.md; the decision-based policy below cannot bypass those gates.
+## Human decision ownership
 
-| Transition | What AI prepares | When human action is necessary |
+| Transition | AI prepares | Human action is needed when |
 |---|---|---|
-| Feature Intent / Spec | Outcome, full source-linked testable changed AC set + complete ID map | Consequential changed WHAT/scope, approval binds complete accessible revision |
-| Bug diagnosis | Expected/actual, reproduction evidence, cause hypothesis, minimum fix | Consequential new expected behavior or safety decision; normal agreed regression needs no extra AC ceremony |
-| Architect / fix plan | Minimal slices, tests, compatibility, risk and rollout | Only material trade-offs (security, irreversible data, breaking change, production) |
-| Local implementation | Exact change roots/files/operations | An **explicit bounded implement/fix request** can grant ordinary local edits, unless project/host policy demands more; evaluation/spike/plan requests do not grant edits |
-| Code review | Fresh independent reviewer findings and verification omissions | High-risk/org-specific final acceptance; still separate from merge/deploy |
-| Spike decision | Question, observed and contrary evidence, options, verdict | Owner decides whether to open a new Feature/Bug, never automatic continuation |
+| Feature Intent / Spec | Outcome, source-linked changed ACs, complete AC ID map and non-goals | A consequential WHY/WHO/WHAT/scope decision remains or the owner must accept the exact Spec revision |
+| Bug diagnosis | Original symptom, expected/actual evidence, cause confidence and minimum repair | Expected behavior changes or a material safety/data decision is needed |
+| Architect / fix plan | Minimal slices, dependencies, tests, compatibility and relevant risks | A material trade-off affects security, irreversible data, breaking contracts or production rollout |
+| Local implementation | Exact roots, paths and bounded operations | Host/project policy requires an additional grant; planning/research alone never authorizes edits |
+| Code review | Independent findings, verification gaps and residual risks | Organization-specific or high-risk final acceptance is required; review does not authorize merge/deploy |
+| Spike decision | Evidence, contrary evidence, options, confidence and PROCEED/CLARIFY/STOP | Owner decides whether to create a separate Feature/Bug task |
 
-Do not re-approve unchanged accepted sources; do not claim unobserved consent. No AI worker asks the owner directly or grants itself authority; the Coordinator handles material questions one at a time.
+Do not re-approve unchanged accepted sources or claim unobserved consent. AI workers do not ask the owner directly or grant themselves authority; the Coordinator raises one material question at a time.
 
-## Minimal human-facing cards
+## Human-facing cards
 
-**Feature:** Outcome; all changed AC IDs with short meaning and pointers to exact full AC revision/sources; non-goals; material risks/decision; requested action. Human summary must map to *every* changed AC, not a hidden subset. If full revision inaccessible, `AC_ACCEPTANCE: NOT VERIFIED`.
+- **Feature:** outcome; every changed AC ID with a short meaning and pointer to its complete source-linked revision; non-goals; material risk/decision; exact action requested. If the complete AC revision is inaccessible, report `AC_ACCEPTANCE: NOT VERIFIED`.
+- **Bug:** original symptom; reproduction status/evidence; cause confidence; targeted repair and regression; behavior/rights/data risk; decision requested, if any.
+- **Spike:** bounded question; main and contrary evidence; compared alternatives and confidence; `PROCEED`, `CLARIFY` or `STOP`; explicit statement that no production implementation was performed.
+- **Final code-change handoff:** changed roots and snapshots; AC/symptom-to-test coverage; actual commands/results and `NOT RUN` items; cross-root compatibility/release order; independent Reviewer verdict; residual risks; separate merge/deploy permissions.
 
-**Bug:** Original symptom; observed reproduction; root-cause evidence/confidence; proposed targeted fix and regression; any altered behavior/rights/data risk; requested decision if necessary. Do not require speculative negative-case AC inventory.
+A card is a navigable summary, not a substitute for the authoritative requirement, full review or approved artifact.
 
-**Spike:** Research question; evidence-backed main finding, contrary evidence and confidence; compared alternatives; `PROCEED/CLARIFY/STOP`; explicit no implementation. Human may approve a *new* implementation task separately.
+## Records and continuity
 
-**Final code-change handoff:** Changed root and snapshot list; AC/symptom→test coverage; actual commands/results + `NOT RUN`; cross-root compatibility/rollout order; independent reviewer context/verdict, residual risks and separate merge/deploy permissions. A review card is a navigable summary, never the sole source of normative decisions.
+Prefer an existing authorized issue, PR, ticket or ADR. Standard work spanning sessions uses one compact record. Extended uses revisioned artifacts and state as defined in `core/modes.md`. If the required record cannot be persisted, report `HANDOFF: NOT DURABLE` and provide a pasteable handoff; do not claim reliable resume.
 
-## Durable continuation without document sprawl
-
-Use existing issue/PR/ticket/ADR when possible. Standard work spanning sessions uses one compact record. Extended uses separate inspectable stage outputs and versioned state as defined in core/human-gates.md. If record cannot be persisted, mark `HANDOFF: NOT DURABLE`, provide a pasteable summary and do not claim reliable resumption. On resume, inspect current sources, permissions and Git state.
-
-## End-state semantics
-
-- `ROLE READY`: proposed stage output, not owner acceptance.
-- `SPEC ACCEPTED`: exact full Feature AC revision has valid authority.
-- `EDIT AUTHORIZED`: bounded ordinary local file grant; separately restrict privileged/external operations.
-- `VERIFY COMPLETE`: mandatory outcomes and checks observed for actual snapshot, not just planned.
-- `AI_PASS`: fresh independent reviewer verified the actual snapshot; not a human approval, merge, deployment or production authorization.
-- `HUMAN ACCEPTED`: actual authorized owner approved specific reviewed scope/snapshot when required.
-- `SPIKE PROCEED`: evidence-backed recommendation only, not implementation approval.
+Approval applies only to the accessible source/artifact revision and scope explicitly accepted. A Spike `PROCEED` is advisory and never authorizes implementation.
