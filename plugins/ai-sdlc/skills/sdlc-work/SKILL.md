@@ -22,7 +22,7 @@ Developer owns implementation and verification. There is no separate Verifier ro
 1. Read references/core/routing.md, references/core/modes.md and references/core/runtime.md.
 2. Inspect the request, source/ticket, relevant repository roots, project instructions, risk and Git state proportionately. Classify task type and requested/effective mode independently. Auto is a selector, not an execution mode.
 3. State task type, requested/effective mode, reason, scope and relevant risk drivers. Emit SDLC_ROUTE: task_type=<feature|bug|spike>; mode=<quick|standard|extended> for an activated SDLC task.
-4. Read only the selected workflow: references/workflows/feature.md, bug.md or spike.md.
+4. Read only the selected workflow: references/workflows/feature.md, references/workflows/bug.md or references/workflows/spike.md.
 5. Load the role files named by that workflow. Every role file is self-contained: purpose, entry conditions, numbered procedure, checklist, output and exit conditions.
 
 ## Execute
