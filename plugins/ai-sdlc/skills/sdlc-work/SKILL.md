@@ -10,10 +10,10 @@ Execute the workflow from this installed plugin. Do not generate project harness
 
 ## Route
 
-1. Read references/core/routing.md, modes.md and runtime.md.
+1. Read references/core/routing.md, references/core/modes.md and references/core/runtime.md.
 2. Inspect the request, ticket/source, project instructions, relevant roots, risk and Git state.
 3. Classify task type and requested/effective mode independently. Report the route, reason, scope and risk; emit `SDLC_ROUTE: task_type=<feature|bug|spike>; mode=<quick|standard|extended>`.
-4. Read only the selected workflow: references/workflows/feature.md, bug.md or spike.md.
+4. Read only the selected workflow: references/workflows/feature.md, references/workflows/bug.md or references/workflows/spike.md.
 5. Load the role files named by that workflow. Each role owns its procedure, checklist, output and exit conditions.
 
 ## Execute
@@ -31,7 +31,7 @@ Reload the task state and pending artifact. Verify its exact revision, approval,
 ## Guardrails
 
 - Never invent approvals, test results, reproduction evidence, reviewer independence or host capabilities.
-- Developer implements and verifies; Reviewer independently inspects the actual changes and evidence.
+- Developer performs implementation plus verification. Reviewer independently inspects the actual changes and evidence.
 - If a fresh independent Reviewer cannot be dispatched, report `INDEPENDENCE: NOT VERIFIED` and `REVIEW: PENDING`.
 - A stale snapshot cannot be reviewed as current. Relevant changes require re-verification and fresh review.
 - A Spike ends with a decision. Any POC needs a separate bounded scratch grant; production delivery requires a new Feature/Bug task.

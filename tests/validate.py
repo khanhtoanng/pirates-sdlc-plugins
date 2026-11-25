@@ -7,7 +7,7 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 PLUGIN = ROOT / "plugins" / "ai-sdlc"
 REFS = PLUGIN / "skills" / "sdlc-work" / "references"
-VERSION = "0.7.0"
+VERSION = "0.8.0"
 errors = []
 
 
