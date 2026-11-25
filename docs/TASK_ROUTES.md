@@ -1,46 +1,45 @@
-# Three supported task types — examples and expected artifacts
+# Three task types — workflow routes and examples
 
-Task type is independent from execution mode. Use `auto` unless you need explicit `quick`, `standard` or `extended`. Examples describe expected workflow decisions, **not performed host runs**.
-
-For Extended, each applicable route stage requires human approval before the next begins, regardless of prior acceptance or risk determination. See [Extended guide](EXTENDED.md) for the exact stage sequence and resume protocol. The compact artifact advice below refers to Quick/Standard.
+Task type selects the workflow. Mode selects how much process and human approval is applied. Use auto unless a mode is explicitly requested. See core/modes.md for exact behavior.
 
 ## Feature — add customer status
 
-**Request:** `sdlc-work feature standard Add customer status to FE and BE, with a Flyway migration only if necessary. Terraform read-only.`
+Request example: sdlc-work feature standard Add customer status to FE and BE, with a Flyway migration only if necessary. Terraform read-only.
 
-- **Intake:** inspect four roots, current instructions/contracts/tests; separately mark actual edit scope. Identify preexisting branch/untracked changes.
-- **Intent/Spec:** reuse accepted issue. If status states or access rights are not settled in source, ask only material owner questions. Full source-linked ACs (for example `AC-01` API returns persisted accepted status; `AC-02` FE shows it) need owner acceptance when their behavior is newly proposed.
-- **Architect:** map each AC to minimal slice, per-root code and test seam; decide migration and compatibility based on actual schema. Determine real release dependencies, not a hardcoded Flyway→BE→FE order.
-- **Developer:** when local edits are authorized, use targeted RED/GREEN and actual regression/integration checks. Preserve unrelated user work.
-- **Verify/Converge + Reviewer:** all ACs, tests and integration edges accounted for on current per-root diff snapshot; independent review. Handoff separate merge/deploy decisions.
+Responsibility order: Intent (if WHY/WHO/scope needs definition) → Spec (if complete accepted ACs do not exist) → Architect (if technical design/task mapping is needed) → Developer (implementation + verification) → independent Reviewer.
 
-**Durable record:** authoritative full AC revision plus work/evidence at existing ticket/PR, not a mandatory five-file tree. See `EXAMPLE_SPEC_REVIEW.md` and `EXAMPLE_MULTI_REPO.md` for more detail.
+- Intent: problem, target user, expected outcome, scope and non-goals.
+- Spec: stable AC IDs, observable/testable behavior, provenance and complete AC map.
+- Architect: map every AC to implementation slice/root/interface/test seam; order actual dependencies and assess relevant risks.
+- Developer: implement authorized slices with TDD where applicable; verify every accepted AC, meaningful regressions and integrations; record commands/results and per-root snapshot.
+- Reviewer: inspect actual diff, all ACs and Developer evidence in a fresh independent context.
+
+Extended artifacts: 01-intent.md, 02-spec.md, 03-plan.md, 04-implementation.md, 05-review.md and state.json. No separate verification.md.
+
+Quick: Developer → Reviewer when expected behavior is established and risk is low. Standard: run applicable upstream responsibilities without approval after each. Extended: separate approval after every artifact.
 
 ## Bug — endpoint returns 500 instead of existing 400 contract
 
-**Request:** `sdlc-work bug quick Fix a login endpoint returning 500 for an empty password; verify existing 400 contract.`
+Request example: sdlc-work bug quick Fix a login endpoint returning 500 for an empty password; verify existing 400 contract.
 
-- **Assess:** capture supplied report and environment, inspect documented/current API behavior and reproduce `actual=500`, `expected=400` if possible. Do not invent a reproduction or treat a guessed cause as fact.
-- **Diagnose:** trace one credible cause and associated test seam. If existing contract is actually unclear, stop and clarify expected WHAT rather than silently pick status 400.
-- **Fix:** bounded implement request may authorize matching local code paths; add a regression RED for the actual failure when feasible, fix minimally, execute GREEN and relevant non-regression checks.
-- **Verify/Converge:** show before/after response on applicable environment, meaningful regression and integration checks, affected snapshot; independent reviewer checks defect **and** completeness. If reproduction or critical test unavailable, say `PARTIAL`/`UNVERIFIED`, not `VERIFIED_FIX`.
+Responsibility order: Architect (assessment + diagnosis + minimum fix plan; Quick may let Developer do bounded triage) → Developer (fix + verification) → independent Reviewer.
 
-**Durable record:** symptom/expected/actual, reproduction evidence, cause, change/test commands and verdict; no new Feature AC set unless expected product behavior changes.
+Extended artifacts: 01-diagnosis-plan.md, 02-implementation.md, 03-review.md and state.json. Do not create Feature Intent/Spec stages or a separate verification.md.
 
-## Spike — choose offline synchronization approach
+If expected behavior is unclear or a new business rule is required, stop for Feature Spec/owner acceptance. If reproduction is unavailable, report EVIDENCED_NOT_REPRODUCED or UNVERIFIED. Use VERIFIED_FIX only with credible original-symptom resolution, regression evidence, required checks and independent AI_PASS.
 
-**Request:** `sdlc-work spike standard Determine feasibility of offline sync for mobile. Compare alternatives; research only.`
+## Spike — assess offline synchronization
 
-- **Bound:** question, constraints, existing architecture evidence, scope, success/stop criteria. No automatic repo edits.
-- **Research:** inspect current contracts where available, compare approaches and disconfirming evidence, risks and practical unknowns. Mark assumptions vs observed facts, cite external sources when actually used.
-- **Decide:** return `PROCEED` (recommend separate implementation planning), `CLARIFY` (critical unknown), or `STOP` (not warranted) with confidence, trade-offs and unanswered questions.
-- **Stop:** no Spec/AC/build/reviewer chain and no silent feature implementation. A POC would require a separately approved disposable scratch scope.
+Request example: sdlc-work spike standard Determine feasibility of offline sync for mobile. Research only.
 
-**Durable record:** brief research decision or existing issue comment, not `intent.md` + `spec.md` + `plan.md`.
+Researcher owns Scope → Research → optional Experiment Plan → optional Experiment → Decision. Compare realistic options and contrary evidence. A POC requires a separate scratch grant. Return PROCEED, CLARIFY or STOP; no automatic production implementation or code-review chain.
+
+Extended artifacts: 01-scope.md, 02-research.md, optional 03-experiment-plan.md and 04-experiment.md, 05-decision.md and state.json. Mark unused experiment stages not_applicable without placeholder files.
 
 ## Boundary cases
 
-- "Investigate API error" with no fix requested → Bug diagnosis only (read-only), not an implicit code-edit grant.
-- "Add a validation rule to fix a bug" → if existing contract does **not** establish that rule, clarify new Feature WHAT before changing product behavior.
-- "Research and implement if feasible" → finish Spike first, report recommendation, request a separately bounded Feature task. Avoid treating one instruction as unlimited end-to-end authority.
-- Security bypass in one repo → Bug / Extended; two simple repos do not automatically mean Extended.
+- Tiny known Feature: Quick can skip separate Intent/Spec/Architect; Developer still verifies and Reviewer remains independent.
+- Bug without credible reproduction: diagnosis, not a speculative patch.
+- Bug fix requiring a new product rule: Feature decision before code changes.
+- Multiple repositories alone do not imply Extended; assess contract/security/data/rollout risk.
+- Research and implement if feasible: complete Spike first and request a separately scoped Feature/Bug for implementation.

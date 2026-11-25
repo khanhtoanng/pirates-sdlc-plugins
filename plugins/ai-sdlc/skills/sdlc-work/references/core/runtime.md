@@ -1,63 +1,76 @@
-# Coordinator runtime — state, transitions and evidence
+# Coordinator runtime — state, permissions and evidence
 
-<identity>
-One Coordinator owns routing, state and explicit authority. routing.md classifies, modes.md selects rigor, workflows/ defines routes, roles/ defines responsibilities. human-gates.md is authoritative for Extended approval transitions; this runtime owns evidence checks. Project instructions and current real tool permissions still apply.
-</identity>
+## Ownership
 
-<invariants>
-- Never equate `VISIBLE`, `RELEVANT`, `EDIT_APPROVED`, and `EXCLUDED` roots. Read access is not edit consent; host permissions still enforce operations.
-- `OBSERVED` (from real inspection), `SOURCE_BACKED`, `OWNER_ACCEPTED` (with scope/revision), `PROPOSED`, `UNKNOWN`, `NOT RUN` and `NOT VERIFIED` are different. An agent may not self-grant approvals or report an unobserved test as passing.
-- Inspect appropriate current project instructions, request/ticket and change state before affecting files. Don't overwrite staged/unstaged/untracked user work. Re-check upon resuming or after edits; no assumed common HEAD across repositories.
-- Keep a single canonical accepted AC set for Feature, a single original symptom plus regression/evidence record for Bug, or a single bounded question/decision record for Spike. Do not force Feature ACs into other routes.
-- Prefer an existing ticket, PR or ADR. Quick/Standard avoid unnecessary files; Extended persists distinct stage outputs and state per human-gates.md. If persistence unavailable label handoff `NOT DURABLE`.
-- Quick/Standard ask only consequential outstanding decisions. Extended requires approval of every applicable stage, reusing existing accepted decisions as evidence without inventing new ones.
-</invariants>
+- core/routing.md classifies Feature, Bug and Spike.
+- core/modes.md selects execution depth and owns Extended approval, pause, resume, revision and invalidation.
+- workflows/ defines ordered role responsibilities for each task type.
+- roles/ defines each role's numbered procedure, mandatory checklist, output and exit conditions.
+- practices/ contains reusable engineering practices such as TDD, coverage, delegation and review.
+- One Coordinator owns routing, state, permissions, stage transitions and human handoffs.
 
-<state-contract>
-Track only fields relevant to selected route; values can live in existing ticket/PR, session record or a compact work record:
+There is no generic shared-role instruction file and no separate Verifier role. Developer owns implementation and verification. Reviewer is independent and checks the code and Developer's evidence.
 
-- `task_type`: `feature | bug | spike` and `mode`: `quick | standard | extended` (selected from `auto`).
-- `request_ref`: original source/revision and `known_decisions`: exact approval/evidence with owner/time or `NOT VERIFIED`.
-- `roots`: `VISIBLE`, `RELEVANT`, `EDIT_APPROVED`, `EXCLUDED`, plus affected interfaces and applied project instructions.
-- `baseline` and `changed_snapshot` **per relevant root**: branch/HEAD plus staged+unstaged patch identity and relevant untracked contents/paths; refresh after edits. An uncommitted worktree is not identified by HEAD alone. Do not require a cryptographic hash where a reproducible git diff or content description is sufficient.
-- `spec_ref + AC IDs/acceptance` for Feature; `symptom/ref + reproduction state + root cause evidence` for Bug; `question + evidence/confidence + verdict` for Spike.
-- `design_and_verification`: planned slices/tests/integration/rollback as relevant; `authority`: permitted local edit roots/paths and separately permitted external/privileged actions.
-- `verification`: observed exact commands/outcomes/time or `NOT RUN`, AC/symptom coverage, integration edges and omissions; `review`: independent context identity, reviewed snapshot, outcome/findings.
-</state-contract>
+## Invariants
 
-<authorization>
-- An explicit user instruction to **implement/fix** a clearly bounded feature or bug in selected local files/repositories can provide `EDIT_APPROVED` for ordinary project-local changes **within that request**, subject to real host policy and any stricter project/organization requirement. A request to evaluate, plan, spike, review, inspect, or propose is read-only; ambiguous or broadened scope requires an explicit grant.
-- Spec/plan approval is NOT a grant for unrequested edits. A request to implement is NOT blanket authority to edit all visible roots, delete user work, install software, alter unrelated dependencies, spend money, fetch secrets, commit/push/merge, change cloud resources, run production migrations, deploy or perform external side effects.
-- Enforce high-risk operations using host permissions, hooks, CI and protected environment controls when available; Markdown instructions alone cannot enforce filesystem/runtime restrictions. If scope cannot be enforced, narrow or stop.
-</authorization>
+- Never equate VISIBLE, RELEVANT, EDIT_APPROVED and EXCLUDED roots. Read access is not edit consent; actual host permissions still apply.
+- OBSERVED, SOURCE_BACKED, OWNER_ACCEPTED (with scope/revision), PROPOSED, ASSUMPTION, UNKNOWN, NOT RUN and NOT VERIFIED are distinct. A role cannot self-grant approval or report unobserved tests as passing.
+- Inspect relevant project instructions, request/ticket, source and Git state before affecting files. Do not overwrite staged, unstaged or untracked user work. Recheck when resuming or after edits.
+- Keep one canonical accepted AC revision for Feature; one original symptom/expected behavior plus reproduction evidence for Bug; and one bounded research question/decision record for Spike.
+- Prefer existing tickets/PRs/ADRs. Quick avoids artifacts by default; Standard uses concise existing/compact records; Extended uses ordered, inspectable stage artifacts and revisioned state according to core/modes.md.
+- Quick and Standard ask only for consequential decisions. Extended pauses after every applicable artifact-producing stage.
+- Do not create downstream artifacts before their prerequisite stage passes its applicable transition/approval gate.
 
-<transition-gates>
-Before advancing, Coordinator checks these entry, exit and block conditions. A `READY` worker status is a **proposal** until the gate is checked.
+## State contract
 
-| Stage | Entry | Required exit evidence | Block / next |
+Track only fields applicable to the selected route:
+
+- task_type: feature | bug | spike; mode: quick | standard | extended; retain requested mode and reason.
+- request_ref: original request/ticket and revision; known_decisions: exact evidence/approval and owner when known.
+- roots: VISIBLE, RELEVANT, EDIT_APPROVED, EXCLUDED; include affected interfaces and project instructions.
+- baseline and changed_snapshot per relevant root: branch/HEAD plus staged/unstaged patch identity and relevant untracked paths/content. HEAD alone is not a complete dirty-worktree identity.
+- Feature: spec_ref, AC IDs and acceptance source/revision.
+- Bug: original symptom, expected/actual, reproduction status and root-cause evidence.
+- Spike: bounded question, evidence/confidence and verdict.
+- design_and_verification: planned slices/test seams and observed verification evidence. Verification is owned by Developer, not a separate workflow stage.
+- authority: bounded local edit roots/paths and separately authorized privileged/external actions.
+- review: independent context identity, reviewed snapshot, outcome and findings.
+
+Quick/Standard state may live in task context, ticket/PR or compact record. Extended requires durable state or truthful HANDOFF: NOT DURABLE outcome.
+
+## Authorization
+
+- A user request to implement/fix a clearly bounded local Feature/Bug can authorize ordinary local changes within that request, subject to host policy and stricter project/organization rules.
+- A request to evaluate, plan, investigate, spike or review is read-only unless additional authority is explicitly granted.
+- Spec/Plan approval is not blanket edit authorization. A user implementation request does not authorize every visible root, deletion of user work, installs, unrelated dependency changes, secrets, spending, commits/pushes/merges, cloud changes, production migrations or deployment.
+- Use host permissions, hooks, CI and protected environments for enforcement where available. Markdown instructions alone are not a security boundary. If scope cannot be safely enforced, narrow or stop.
+
+## Transition checks
+
+A role's READY status is a proposal. Coordinator checks prerequisites and evidence before handoff.
+
+| Responsibility | Entry | Required exit evidence | Block condition |
 |---|---|---|---|
-| Intake & route | Request exists | Type, mode/reason, scope, sources, visible roots and baseline as relevant | Material mismatch → clarify, otherwise route |
-| Feature Intent / Spec | Feature request, observed current behavior | Source-backed, testable, consistent ACs; full revision accepted when WHAT is new/consequential; unresolved choices excluded | Material WHAT unknown → `NEEDS_DECISION`, never Build |
-| Bug assess | Bug request + baseline | Original expected/actual, `REPRODUCED` or credible `EVIDENCED_NOT_REPRODUCED`, cause hypothesis with evidence | Evidence too weak for safe patch → `UNVERIFIED`/STOP |
-| Architect / fix plan | Accepted WHAT or credible bug cause | Small slices, affected files/interfaces, verification seams, actual risky trade-offs and rollback/compatibility when needed | Unresolved material HOW/risk → approval, else authorize |
-| Edit gate | Implementation requested and plan scope known | Precisely bounded local change grant, host permission, protected ops excluded | Missing grant/access → plan only |
-| Developer | Edit gate passed, fresh baseline | Identifiable changed snapshot, observed test results, justified TDD evidence/exception, scope check | Failures/side effects → repair or BLOCK |
-| Verify & Converge | Actual changes and expectations | All applicable ACs/symptom covered, meaningful regression, integrations/contracts and omitted tests identified on **current** snapshot | Missing critical requirement/evidence → repair or `BLOCKED`, not pass |
-| Independent Reviewer | Stable changed snapshot | Fresh separate reviewer actually inspected diff, coverage and evidence on same snapshot; actionable verdict | No fresh review → `REVIEW: PENDING`; findings → repair and re-verify/re-review |
-| Human handoff | Current verdict or documented limits | Changed/reviewed snapshot, evidence, outstanding risks, release order and separate next permissions | AI never authorizes merge/deploy |
-| Spike decision | Bounded question and sources | Evidence for/against, confidence, `PROCEED/CLARIFY/STOP`, explicit no-build termination | Insufficient evidence → `CLARIFY`, STOP |
+| Intake/route | User request | Task type, requested/effective mode, reason, scope, sources and risk | Material mismatch or consequential unknown |
+| Feature Intent | WHY/WHO/scope unclear, or Extended requires it | Grounded outcome, target user, scope and non-goals | Material product intent unresolved |
+| Feature Spec | Changed behavior lacks complete accepted ACs, or Extended requires it | Full source-linked, testable AC revision and complete ID map | Conflicting/untestable ACs or unresolved consequential WHAT |
+| Feature Architect | Accepted WHAT and technical planning needed, or Extended requires it | AC-to-slice/root/interface/test-seam map, dependency order and relevant risks | Unresolved material HOW or unsafe plan |
+| Bug Architect | Reported contract violation | Expected/actual, reproduction or qualified evidence, credible cause, regression seam and minimal plan | Evidence too weak or behavior contract unclear |
+| Edit gate | Implementation requested; scope known | Bounded local grant and actual host permission; protected operations excluded | Missing authority/access or unclear scope |
+| Developer build + verify | Edit gate passed; accepted Feature WHAT or credible Bug contract; fresh baseline | Actual changes, TDD evidence/exception, exact commands/results, AC/symptom coverage, regression/integration evidence, changed snapshot and honest gaps | Required verification missing, test failure, scope drift or stale baseline |
+| Independent Reviewer | Stable changed snapshot and Developer evidence | Fresh independent context inspected exact diff/evidence and returned actionable verdict | Independence not verified, stale snapshot or missing evidence |
+| Spike Researcher | Bounded feasibility question | Scope, supporting/contrary evidence, options, confidence, verdict and optional approved experiment results | Scope unclear, unsupported conclusion or no experiment authority |
 
-Quick may omit unnecessary role prose, not safety/evidence gates. Standard increases thoroughness. Extended splits combined rows into the exact stage IDs in human-gates.md and pauses after each; the table defines evidence, never permission to skip a human checkpoint. Spike does not enter Edit/Developer/Reviewer by default; an approved scratch POC is not reviewed product code.
-</transition-gates>
+## Developer verification and independent review
 
-<verify-and-converge>
-1. **Correctness:** verify each changed Feature AC or Bug original symptom with independent observation where possible. A passing unrelated test is not proof.
-2. **Completeness:** compare source goal → accepted ACs / bug symptom → planned slices → actual diff → tests; flag missing behavior, forgotten tasks and scope drift. Do not count a test file's existence as test execution.
-3. **Integration:** check affected roots, API/schema/deployment skew, data and authorization paths where implicated. Mark inaccessible checks `NOT RUN` with impact rather than claiming them.
-4. **Freshness:** bind result to changed snapshot; after repair/rebase/new file changes invalidate affected verification/review and re-run appropriately. Up to three AI repair/review rounds before human escalation.
-5. `AI_PASS` only after actual independent current-snapshot reviewer concludes required evidence is complete. On Bug, additionally distinguish `VERIFIED_FIX | PARTIAL | UNVERIFIED`; on Feature, distinguish `IMPLEMENTED`, `VERIFIED`, `REVIEWED`, and `READY_FOR_MERGE_REVIEW` (not MERGED or DEPLOYED).
-</verify-and-converge>
+Developer must verify every applicable accepted Feature AC or the Bug's original symptom, run meaningful regression/integration checks, record exact commands and actual outcomes, inspect the changed diff and bind evidence to the current per-root snapshot. A passing unrelated test is not proof. Missing required checks are NOT RUN/BLOCKED, not success.
 
-<completion>
-Return one short outcome: route/mode and reason, authoritative expectation (AC revision / bug original symptom / spike question), roots and snapshots if applicable, what changed or researched, observed tests and missing evidence, reviewer independence/verdict when needed, decisions and human next action. Extended returns the current review card instead of prematurely completing the whole route.
-</completion>
+Reviewer independently inspects the actual diff (including relevant untracked files), accepted ACs or original Bug symptom, Developer's test evidence, security/data/compatibility risks and completeness. Self-review cannot yield AI_PASS. Any code change after verification invalidates affected evidence; any code change after review requires fresh verification and independent review.
+
+For Bug, use VERIFIED_FIX only when credible evidence shows the original symptom resolved, regression evidence exists, required checks are credible and independent review is AI_PASS. Otherwise report PARTIAL or UNVERIFIED.
+
+For Feature, distinguish IMPLEMENTED, VERIFIED, REVIEWED and READY_FOR_MERGE_REVIEW. None means merged or deployed.
+
+## Completion
+
+Return route/mode and reason, authoritative expectation (AC revision, Bug symptom or Spike question), relevant roots/snapshot, work performed, actual test commands/results and missing evidence, independent review verdict when applicable, unresolved risks and human next action. Extended returns the current review card and ends the turn while approval is pending.

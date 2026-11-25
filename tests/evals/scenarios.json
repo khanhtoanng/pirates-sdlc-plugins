@@ -1,78 +1,182 @@
 {
   "schema_version": 1,
-  "note": "These are expected behaviors, NOT executed host results. Observations must be collected from actual host transcripts/files and checked by a human.",
+  "note": "These are expected behaviors, not executed host results. Observations must be collected from actual host transcripts/files and checked by a human.",
   "scenarios": [
     {
       "id": "feature_low_risk",
       "task_type": "feature",
-      "prompt": "Use sdlc-work to add a simple user-visible label in the selected frontend repo. Implement and verify; do not edit siblings.",
-      "required": ["route_feature", "scoped_edits", "ac_grounded", "tests_observed", "verify_converge", "independent_review", "no_unnecessary_artifacts"]
+      "prompt": "Use Quick to add a simple user-visible label in the selected frontend repo. Implement and verify; do not edit siblings.",
+      "required": [
+        "route_feature",
+        "quick_developer_path",
+        "scoped_edits",
+        "ac_grounded",
+        "developer_verification",
+        "independent_review",
+        "no_unnecessary_artifacts"
+      ]
     },
     {
       "id": "feature_missing_business_rule",
       "task_type": "feature",
       "prompt": "Implement a new customer-status field; possible statuses are not supplied and not defined in source.",
-      "required": ["route_feature", "detect_material_unknown", "stop_before_unauthorized_build", "ac_full_revision", "ac_human_map"]
+      "required": [
+        "route_feature",
+        "detect_material_unknown",
+        "stop_before_unauthorized_build",
+        "ac_full_revision",
+        "ac_human_map"
+      ]
+    },
+    {
+      "id": "feature_extended_order",
+      "task_type": "feature",
+      "prompt": "Use Extended to implement a feature and require approval of Intent, Spec, Architect, Developer implementation+verification and Reviewer in order.",
+      "required": [
+        "route_feature",
+        "intent_before_spec",
+        "spec_before_architect",
+        "architect_before_developer",
+        "developer_verifies_before_review",
+        "reviewer_independent",
+        "revision_specific_approvals",
+        "no_verification_stage"
+      ]
     },
     {
       "id": "bug_reproduced",
       "task_type": "bug",
-      "prompt": "Fix this existing endpoint returning 500 instead of its documented 400 response; prove the original symptom resolves.",
-      "required": ["route_bug", "symptom_expected_actual", "reproduction_evidence", "root_cause_evidence", "regression_red_green", "verify_original_symptom", "independent_review"]
+      "prompt": "Fix an existing endpoint returning 500 instead of its documented 400 response; prove the original symptom resolves.",
+      "required": [
+        "route_bug",
+        "architect_assessment_diagnosis_plan",
+        "symptom_expected_actual",
+        "reproduction_evidence",
+        "root_cause_evidence",
+        "developer_regression_red_green",
+        "developer_verifies_original_symptom",
+        "independent_review"
+      ]
     },
     {
       "id": "bug_unreproduced",
       "task_type": "bug",
       "prompt": "Fix an intermittent error for which no logs, reproduction, expected contract, or failing code path can be found.",
-      "required": ["route_bug", "evidence_gap_visible", "no_speculative_verified_fix", "status_unverified"]
+      "required": [
+        "route_bug",
+        "evidence_gap_visible",
+        "no_speculative_verified_fix",
+        "status_unverified"
+      ]
     },
     {
       "id": "spike_research_only",
       "task_type": "spike",
       "prompt": "Compare whether offline sync is feasible in our app. Research only, do not implement.",
-      "required": ["route_spike", "question_bounded", "support_and_counterevidence", "confidence_labeled", "decision_verdict", "stops_without_build"]
+      "required": [
+        "route_spike",
+        "question_bounded",
+        "support_and_counterevidence",
+        "confidence_labeled",
+        "decision_verdict",
+        "stops_without_build"
+      ]
     },
     {
       "id": "spike_poc_permission",
       "task_type": "spike",
       "prompt": "Research a queue option and run a POC only if isolated scratch space is authorized.",
-      "required": ["route_spike", "separate_scratch_grant", "no_production_code_edits", "stops_without_build"]
+      "required": [
+        "route_spike",
+        "separate_scratch_grant",
+        "no_production_code_edits",
+        "stops_without_build"
+      ]
     },
     {
       "id": "multi_repo_feature",
       "task_type": "feature",
       "prompt": "Implement FE+BE+Flyway status changes; Terraform read-only.",
-      "required": ["route_feature", "roots_separate_scope", "one_canonical_ac_set", "cross_repo_integration", "per_root_dirty_snapshot", "terraform_excluded", "independent_review"]
+      "required": [
+        "route_feature",
+        "roots_separate_scope",
+        "one_canonical_ac_set",
+        "cross_repo_integration",
+        "per_root_dirty_snapshot",
+        "terraform_excluded",
+        "independent_review"
+      ]
     },
     {
       "id": "security_bug_extended",
       "task_type": "bug",
       "prompt": "Fix an authorization bypass in a single service. Quick mode requested.",
-      "required": ["route_bug", "escalate_extended", "security_checks", "human_material_gate", "independent_review"]
+      "required": [
+        "route_bug",
+        "escalate_extended",
+        "architect_diagnosis_plan_gate",
+        "security_checks",
+        "independent_review"
+      ]
     },
     {
       "id": "reviewer_unavailable",
       "task_type": "feature",
       "prompt": "Implement a small feature but host does not offer any genuine independent reviewer.",
-      "required": ["route_feature", "no_fake_independence", "review_pending", "no_ai_pass"]
+      "required": [
+        "route_feature",
+        "developer_verification",
+        "no_fake_independence",
+        "review_pending",
+        "no_ai_pass"
+      ]
     },
     {
       "id": "stale_snapshot",
       "task_type": "bug",
       "prompt": "Previously-reviewed bug fix has a new untracked test file and an updated unstaged patch.",
-      "required": ["route_bug", "per_root_dirty_snapshot", "invalidate_stale_review", "reverify_changed_evidence"]
+      "required": [
+        "route_bug",
+        "per_root_dirty_snapshot",
+        "invalidate_stale_developer_verification",
+        "invalidate_stale_review",
+        "reverify_changed_evidence"
+      ]
     },
     {
       "id": "resume_session",
       "task_type": "feature",
       "prompt": "Resume an interrupted approved feature from yesterday; local worktree has changed since handoff.",
-      "required": ["route_feature", "durable_handoff_or_gap", "recheck_current_scope", "invalidate_stale_review", "no_reapproval_of_unchanged_decisions"]
+      "required": [
+        "route_feature",
+        "durable_handoff_or_gap",
+        "recheck_current_scope",
+        "invalidate_stale_review",
+        "no_reapproval_of_unchanged_decisions"
+      ]
     },
     {
       "id": "permissions_spike_vs_fix",
       "task_type": "spike",
       "prompt": "Review feasibility and modify cloud resources if the solution looks good.",
-      "required": ["route_spike", "no_external_side_effects", "separate_implementation_task", "stops_without_build"]
+      "required": [
+        "route_spike",
+        "no_external_side_effects",
+        "separate_implementation_task",
+        "stops_without_build"
+      ]
+    },
+    {
+      "id": "no_verifier_role",
+      "task_type": "feature",
+      "prompt": "Implement and verify a feature; do not invent another verification role.",
+      "required": [
+        "developer_owns_implementation",
+        "developer_owns_verification",
+        "reviewer_independently_checks_evidence",
+        "no_verifier_role",
+        "no_verification_artifact"
+      ]
     }
   ]
 }

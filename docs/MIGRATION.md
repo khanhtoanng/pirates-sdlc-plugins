@@ -1,27 +1,20 @@
-# Migrating from v0.4/v0.5 to v0.6 runtime
+# Migration guide
 
-## From v0.6.0 to v0.7.0
+## From v0.7.0 to consolidated mode/role layout
 
-- Update/reload the plugin; invocation and host manifests remain compatible.
-- Extended now pauses at every applicable stage. Reuse prior evidence but never assume an earlier v0.6 record contains a human checkpoint approval.
-- Existing project rules remain yours; do not copy the new runtime into projects. Approve a task record location only when needed.
-- Run offline tests and the selected opt-in host evaluation scenarios before treating behavior as verified.
+This change simplifies workflow ownership without changing host packaging or requiring project-level harness files.
 
-The v0.4 package generated a standalone repo skill (`.claude/skills/sdlc-work` or `.cursor/skills/sdlc-work`) and possibly a reviewer agent. This version ships SDLC at plugin runtime. Installing it does NOT automatically delete or supersede old project files.
+- Extended approval, pause/resume, revision and invalidation rules move from core/human-gates.md into core/modes.md.
+- Generic role rules move out of roles/shared.md. Each role file becomes self-contained with its own purpose, entry conditions, numbered procedure, checklist, output and exit conditions.
+- Feature Extended changes from six artifacts to five: 01-intent.md, 02-spec.md, 03-plan.md, 04-implementation.md, 05-review.md. Developer's artifact includes verification evidence; verification.md and the standalone Verification stage are removed.
+- Bug uses Architect's 01-diagnosis-plan.md, Developer's 02-implementation.md (fix + verification), then Reviewer 03-review.md.
+- Spike retains Researcher-owned scope, research, optional scratch experiment plan/experiment and decision.
+- No Verifier role is introduced. Developer verifies; Reviewer independently inspects code and evidence.
 
-1. Install v0.5 local plugin in one selected host; verify its `sdlc-work` skill without editing the project.
-2. Run `sdlc-doctor` to discover old skills in `.claude/skills`, `.cursor/skills`, `.agents/skills`, and old reviewer definitions. Inspect local Git changes; preserve edits.
-3. Compare old project-specific additions against current project instruction sources. Move only owner-approved project-specific rules into appropriate existing `CLAUDE.md`, `AGENTS.md`, `.cursor/rules` or optional workspace profile. Do not paste runtime role policies across hosts.
-4. Present an exact `KEEP/MERGE/RETIRE` diff. Obtain approval before removing old generated skill/agent files. If cannot resolve conflicts, leave both and warn explicitly about ambiguous skill discovery; do not claim it is migrated.
-5. Run one read-only exercise (setup inspect) and one dry-run Standard plan. Test actual reviewer dispatch before marking verification complete.
+Replace the installed plugin and reload each host. Do not automatically rewrite existing project files.
 
-Use absolute plugin invocation for Claude (`/ai-sdlc:sdlc-work`) to avoid ambiguity; Cursor and Codex may show names under their native skill selectors.
+### Existing Extended task records
 
-## From v0.5.0 to v0.6.0
+Prior task directories may contain stage IDs and filenames from the previous layout. Do not rename or reinterpret approvals silently. When resuming an older task, detect the old stage schema and either continue using its original record under an explicit legacy mapping or ask the owner to migrate it. A previous approval is never approval of a different artifact/revision.
 
-- Replace installed plugin and reload each host; do not modify project files automatically.
-- `spike` is now a task type, **not** a risk mode. `sdlc-work spike <question>` remains a legacy alias; new preferred input is `sdlc-work spike auto <question>`.
-- `feature` and `bug` can be specified explicitly before `auto|quick|standard|extended`; no type specified means Coordinator derives it from the task.
-- A scoped explicit `implement/fix` request can authorize ordinary local edits unless stricter host/project policy demands permission; it never authorizes privileged/external operations.
-- No new required project config; `routing.md` and `tests/evals` are plugin-owned files only.
-- Run `python3 tests/validate.py`, `python3 tests/evals/score.py --self-test`, then real host discovery and behavioral scenarios; static and synthetic results are not host proof.
+Update the validator and eval harness with the new stage/artifact maps. Run python3 tests/validate.py, python3 tests/evals/score.py --self-test and python3 tests/evals/test_grade.py, then run actual host evaluations. Static validation is not proof of host behavior.

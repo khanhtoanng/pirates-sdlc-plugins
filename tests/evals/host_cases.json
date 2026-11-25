@@ -3,43 +3,213 @@
     {
       "id": "extended_feature_checkpoints",
       "turns": [
-        {"prompt": "Use sdlc-work feature extended. Add a customer status display; Active is the accepted default. Implement in this repo. You may store task artifacts in .sdlc/changes/eval-task. Start the workflow.", "type": "feature", "mode": "extended", "stage": "intent", "revision": 1, "approved": [], "unchanged": true},
-        {"prompt": "Use sdlc-work resume .sdlc/changes/eval-task. Approve intent r1 only.", "type": "feature", "mode": "extended", "stage": "spec", "revision": 1, "approved": ["intent"], "unchanged": true},
-        {"prompt": "Use sdlc-work resume .sdlc/changes/eval-task. Request changes to spec r1: explicitly state automatic reactivation is out of scope. Do not approve it.", "type": "feature", "mode": "extended", "stage": "spec", "revision": 2, "approved": ["intent"], "unchanged": true},
-        {"prompt": "Use sdlc-work resume .sdlc/changes/eval-task. Approve spec r2 only.", "type": "feature", "mode": "extended", "stage": "plan", "revision": 1, "approved": ["intent", "spec"], "unchanged": true}
+        {
+          "prompt": "Use sdlc-work feature extended. Add customer_status() to app.py returning the accepted value Active. AC-01: the function returns Active. Add a meaningful unittest in test_app.py. Do not change protected_data(). Implement in this repo. You may store task artifacts in .sdlc/changes/eval-task. Start the workflow.",
+          "type": "feature",
+          "mode": "extended",
+          "stage": "intent",
+          "revision": 1,
+          "approved": [],
+          "unchanged": true
+        },
+        {
+          "prompt": "Use sdlc-work resume .sdlc/changes/eval-task. Approve intent r1 only.",
+          "type": "feature",
+          "mode": "extended",
+          "stage": "spec",
+          "revision": 1,
+          "approved": [
+            "intent"
+          ],
+          "unchanged": true
+        },
+        {
+          "prompt": "Use sdlc-work resume .sdlc/changes/eval-task. Request changes to spec r1: explicitly state customer status is read-only and automatic reactivation is out of scope. Do not approve it.",
+          "type": "feature",
+          "mode": "extended",
+          "stage": "spec",
+          "revision": 2,
+          "approved": [
+            "intent"
+          ],
+          "unchanged": true
+        },
+        {
+          "prompt": "Use sdlc-work resume .sdlc/changes/eval-task. Approve spec r2 only.",
+          "type": "feature",
+          "mode": "extended",
+          "stage": "plan",
+          "revision": 1,
+          "approved": [
+            "intent",
+            "spec"
+          ],
+          "unchanged": true
+        },
+        {
+          "prompt": "Use sdlc-work resume .sdlc/changes/eval-task. Approve plan r1 only. Start Developer implementation + verification. Write the test first, observe an intended RED failure, implement customer_status(), observe GREEN, run python -m unittest -v, inspect the diff, and create only the implementation artifact. Do not start Reviewer.",
+          "type": "feature",
+          "mode": "extended",
+          "stage": "implementation",
+          "revision": 1,
+          "approved": [
+            "intent",
+            "spec",
+            "plan"
+          ],
+          "must_change_files": [
+            "app.py",
+            "test_app.py"
+          ],
+          "only_change_files": [
+            "app.py",
+            "test_app.py"
+          ],
+          "verify_customer_status": true,
+          "artifact_contains": [
+            "AC-01",
+            "verification results",
+            "python -m unittest"
+          ]
+        },
+        {
+          "prompt": "Use sdlc-work resume .sdlc/changes/eval-task. Approve implementation r1 only. Now dispatch a genuinely fresh independent Reviewer context to inspect the current diff and Developer evidence. Do not modify source. Create the review artifact.",
+          "type": "feature",
+          "mode": "extended",
+          "stage": "review",
+          "revision": 1,
+          "approved": [
+            "intent",
+            "spec",
+            "plan",
+            "implementation"
+          ],
+          "no_source_change": true,
+          "artifact_contains": [
+            "independence",
+            "AI_PASS"
+          ]
+        },
+        {
+          "prompt": "Use sdlc-work resume .sdlc/changes/eval-task. Approve review r1 and complete the workflow.",
+          "type": "feature",
+          "mode": "extended",
+          "stage": "review",
+          "revision": 1,
+          "approved": [
+            "intent",
+            "spec",
+            "plan",
+            "implementation",
+            "review"
+          ],
+          "status": "completed",
+          "unchanged": false,
+          "no_source_change": true
+        }
       ]
     },
     {
       "id": "security_escalation",
       "turns": [
-        {"prompt": "Use sdlc-work bug quick. Fix the authorization bypass in app.py: non-admin users must not see protected data. You may store review artifacts in .sdlc/changes/eval-task.", "type": "bug", "mode": "extended", "stage": "assessment", "revision": 1, "approved": [], "unchanged": true}
+        {
+          "prompt": "Use sdlc-work bug quick. Fix the authorization bypass in app.py: non-admin users must not see protected data. You may store review artifacts in .sdlc/changes/eval-task. Assess the task and do not edit source before the approval checkpoint.",
+          "type": "bug",
+          "mode": "extended",
+          "stage": "diagnosis_plan",
+          "revision": 1,
+          "approved": [],
+          "unchanged": true
+        }
       ]
     },
     {
       "id": "extended_spike",
       "turns": [
-        {"prompt": "Use sdlc-work spike extended to assess whether to add a cache for protected data. Research only, no experiments, no source edits. You may store review artifacts in .sdlc/changes/eval-task.", "type": "spike", "mode": "extended", "stage": "scope", "revision": 1, "approved": [], "unchanged": true},
-        {"prompt": "Use sdlc-work resume .sdlc/changes/eval-task. Approve scope r1 only.", "type": "spike", "mode": "extended", "stage": "research", "revision": 1, "approved": ["scope"], "unchanged": true},
-        {"prompt": "Use sdlc-work resume .sdlc/changes/eval-task. Approve research r1 only. No experiment.", "type": "spike", "mode": "extended", "stage": "decision", "revision": 1, "approved": ["scope", "research"], "unchanged": true},
-        {"prompt": "Use sdlc-work resume .sdlc/changes/eval-task. Approve decision r1.", "type": "spike", "mode": "extended", "stage": "decision", "revision": 1, "approved": ["scope", "research", "decision"], "status": "completed", "unchanged": true}
+        {
+          "prompt": "Use sdlc-work spike extended to assess whether to add a cache for protected data. Research only, no experiments, no source edits. You may store review artifacts in .sdlc/changes/eval-task. Start with Scope.",
+          "type": "spike",
+          "mode": "extended",
+          "stage": "scope",
+          "revision": 1,
+          "approved": [],
+          "unchanged": true
+        },
+        {
+          "prompt": "Use sdlc-work resume .sdlc/changes/eval-task. Approve scope r1 only.",
+          "type": "spike",
+          "mode": "extended",
+          "stage": "research",
+          "revision": 1,
+          "approved": [
+            "scope"
+          ],
+          "unchanged": true
+        },
+        {
+          "prompt": "Use sdlc-work resume .sdlc/changes/eval-task. Approve research r1 only. No experiment is needed; mark experiment_plan and experiment not_applicable without creating files, then create the decision artifact.",
+          "type": "spike",
+          "mode": "extended",
+          "stage": "decision",
+          "revision": 1,
+          "approved": [
+            "scope",
+            "research"
+          ],
+          "unchanged": true
+        },
+        {
+          "prompt": "Use sdlc-work resume .sdlc/changes/eval-task. Approve decision r1.",
+          "type": "spike",
+          "mode": "extended",
+          "stage": "decision",
+          "revision": 1,
+          "approved": [
+            "scope",
+            "research",
+            "decision"
+          ],
+          "status": "completed",
+          "unchanged": true
+        }
       ]
     },
     {
       "id": "research_only",
       "turns": [
-        {"prompt": "Use sdlc-work in standard mode. Compare the feasibility of two local caching approaches for this small API; research only, do not edit any files.", "type": "spike", "mode": "standard", "unchanged": true, "no_artifacts": true}
+        {
+          "prompt": "Use sdlc-work spike standard. Compare feasibility of two local caching approaches for this small API; research only, do not edit any files.",
+          "type": "spike",
+          "mode": "standard",
+          "unchanged": true,
+          "no_artifacts": true
+        }
       ]
     },
     {
       "id": "known_small_feature",
       "turns": [
-        {"prompt": "Use sdlc-work. Change the exact customer label in app.py from Customer to Client. Implement and verify only this known wording change; do not modify other behavior.", "type": "feature", "mode": "quick", "file_contains": {"app.py": "Client"}, "no_artifacts": true, "verify_label": true}
+        {
+          "prompt": "Use sdlc-work. Change the exact customer label in app.py from Customer to Client. Implement and verify only this known wording change; do not modify other behavior.",
+          "type": "feature",
+          "mode": "quick",
+          "file_contains": {
+            "app.py": "Client"
+          },
+          "no_artifacts": true,
+          "verify_label": true
+        }
       ]
     },
     {
       "id": "unrelated_explanation",
       "turns": [
-        {"prompt": "Explain in two sentences what an HTTP 404 response means. Do not edit files.", "no_route": true, "unchanged": true, "no_artifacts": true}
+        {
+          "prompt": "Explain in two sentences what an HTTP 404 response means. Do not edit files.",
+          "no_route": true,
+          "unchanged": true,
+          "no_artifacts": true
+        }
       ]
     }
   ]

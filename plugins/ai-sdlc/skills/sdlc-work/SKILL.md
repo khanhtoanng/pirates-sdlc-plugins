@@ -1,27 +1,48 @@
 ---
 name: sdlc-work
-description: Coordinate SDLC feature delivery, bug diagnosis/fix, or bounded technical feasibility research in one or multiple repositories. Auto-select quick, standard, or extended (mandatory per-stage human review), or resume a pending SDLC task. Use for scoped engineering work and explicit SDLC requests, not unrelated explanations or general Q&A.
+description: Coordinate SDLC feature delivery, bug diagnosis/fix, or bounded technical feasibility research in one or multiple repositories. Auto-select Quick, Standard or Extended; Extended requires approval after every applicable artifact stage. Use for scoped engineering work, not unrelated explanations or general Q&A.
 argument-hint: "[feature|bug|spike] [auto|quick|standard|extended] <request> [selected roots] | resume <task-id or record>"
 ---
 
 # AI SDLC work — router and coordinator
 
-<purpose>
-Execute the SDLC from this installed plugin. Do not bootstrap or duplicate agent/role files in the project. One coordinator owns the state; Intent, Spec, Architect, Developer and Reviewer are **logical roles**, not mandatory subagents. Only three task types exist: `feature`, `bug`, `spike`.
-</purpose>
+## Purpose
 
-<start>
-1. Read `references/core/routing.md`, `references/core/modes.md` and `references/core/runtime.md`. Inspect current request, sources, project rules, risk and Git state proportionately. Classify type and mode independently; legacy positional spike selects type spike/mode auto. State route, requested/effective mode, reason and scope. If resuming, reload state and pending approval instead of starting over.
-2. Read ONLY the selected workflow: `references/workflows/feature.md`, `references/workflows/bug.md`, or `references/workflows/spike.md`. Read `references/core/human-gates.md` for Extended (including escalation/resume). Extended: never advance to any next applicable stage until explicit approval of the exact current artifact revision; persist stage state, present review card and END TURN.
-3. Load on demand: `references/roles/shared.md` and relevant role in references/roles/ (intent, spec, architect, developer, reviewer, researcher); `references/practices/coverage.md` for ACs/regressions; `references/practices/tdd.md` before executable changes; `references/practices/workspace.md` for multi-root; `references/practices/review.md` for review/handoffs; `references/practices/delegation.md` for independent review; hosts/{claude,cursor,codex}.md only for actual host capabilities; `references/practices/integrations.md` for selected add-ons.
-4. Follow route and runtime evidence checks; re-evaluate risk each stage. User-specified scoped implementation may authorize ordinary local edits under real host permissions, but never bypass Extended checkpoints or grant excluded roots, commit/push/merge, applied migrations, production, deployment or external side effects.
-5. Return factual evidence and the route-specific outcome. If necessary permissions, decisions, access, or tests are missing, report the precise blocked or unverified state; do not fabricate approval or results.
-</start>
+Execute the SDLC from this installed plugin. Do not bootstrap or duplicate agent/role files in the project. One Coordinator owns routing, mode selection, task state, permissions and handoffs.
 
-<routes>
-See the chosen workflow and mode policy; these references own the stage sequence and gates.
-</routes>
+Roles are logical responsibilities, not automatically separate native subagents:
+- Feature: Intent, Spec, Architect, Developer, Reviewer.
+- Bug: Architect, Developer, Reviewer.
+- Spike: Researcher.
 
-<guardrails>
-Do not manufacture current test outputs, reviewer isolation, approvals, or implementation status. A self-review cannot yield `AI_PASS`. A source edit reviewed on a stale snapshot needs re-verification/review. If reviewer cannot actually run independently, report `INDEPENDENCE: NOT VERIFIED` and `REVIEW: PENDING`; never imply final AI approval. A research-only spike needs no feature ACs, production implementation, or code reviewer.
-</guardrails>
+Developer owns implementation and verification. There is no separate Verifier role or Verification stage. Reviewer independently checks code and Developer's verification evidence.
+
+## Start and route
+
+1. Read references/core/routing.md, references/core/modes.md and references/core/runtime.md.
+2. Inspect the request, source/ticket, relevant repository roots, project instructions, risk and Git state proportionately. Classify task type and requested/effective mode independently. Auto is a selector, not an execution mode.
+3. State task type, requested/effective mode, reason, scope and relevant risk drivers. Emit SDLC_ROUTE: task_type=<feature|bug|spike>; mode=<quick|standard|extended> for an activated SDLC task.
+4. Read only the selected workflow: references/workflows/feature.md, bug.md or spike.md.
+5. Load the role files named by that workflow. Every role file is self-contained: purpose, entry conditions, numbered procedure, checklist, output and exit conditions.
+
+## Execute
+
+1. Follow the selected workflow's exact responsibility order and mode applicability rules.
+2. Extended approval, pause, resume, revision and invalidation rules are owned by references/core/modes.md. Do not load a separate human-gates file.
+3. Load practices/coverage.md for AC/regression classification; practices/tdd.md before executable Feature/Bug changes; practices/workspace.md for multi-root work; practices/review.md for human decisions and handoffs; practices/delegation.md for independent review; practices/integrations.md for selected add-ons. Load host adapters only when actual host capabilities matter.
+4. Complete the current role checklist and return its output to Coordinator. A role never approves a human gate, grants new scope or starts a downstream role autonomously.
+5. Developer performs implementation plus verification. Reviewer independently inspects the code changes and Developer's evidence. Do not create/invoke a separate Verifier stage.
+6. Reassess risk, authority, source freshness and scope at every transition. A user-authorized local implementation does not authorize excluded roots, destructive operations, installs, commits, pushes, merges, production migrations, cloud changes or deployment.
+
+## Resume
+
+Reload the existing task state and pending artifact. Verify exact revision, prior human approval, repository scope, project instructions and source/Git snapshot freshness. Do not restart completed work or infer approval from silence. Resume protocol is in references/core/modes.md.
+
+## Guardrails
+
+- Do not manufacture approvals, test outputs, reviewer isolation or implementation status.
+- Developer self-check is not independent review and cannot yield AI_PASS.
+- A stale snapshot cannot be reviewed as current. Relevant edits require re-verification and fresh review.
+- If a fresh independent Reviewer cannot actually be dispatched, report INDEPENDENCE: NOT VERIFIED and REVIEW: PENDING.
+- Spike never enters production implementation or code review. A POC requires a separate bounded scratch-space grant and ends with a decision, not a delivered feature.
+- Markdown instructions do not enforce filesystem/runtime permissions; actual host and operating-system controls remain authoritative.

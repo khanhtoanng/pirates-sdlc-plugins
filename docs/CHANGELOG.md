@@ -27,3 +27,11 @@
 - Changed Extended mode from automatic for any cross-repo write to actual risk-driven escalation.
 - Added native Cursor and Claude reviewer discovery, and Codex local marketplace/subagent instructions.
 - Added local-only installation guide and static integrity validator; no publication workflow, bundled MCP, hook, or external integration installation.
+
+
+## Unreleased — consolidated modes and role workflows
+
+- Make Quick, Standard and Extended operationally distinct in core/modes.md, including Extended approval/resume/revision behavior.
+- Remove the separate human-gates and shared-role references; each role owns a numbered procedure and checklist.
+- Make Developer own implementation plus verification; retain Reviewer as independent evidence/code review.
+- Align Feature, Bug and Spike role sequences, ordinal artifact paths and behavioral evaluation fixtures.

@@ -1,33 +1,54 @@
-# Architecture decisions — AI SDLC v0.7.0
+# Architecture decisions — consolidated SDLC modes and roles
 
-## Single plugin, minimal host adapter
+## One coordinator, three task types and three modes
 
-One `ai-sdlc` runtime holds three task routes and five logical role contracts. Host-native manifests/catalogs expose the same installed skills to Claude Code, Cursor and Codex. Project-specific instructions/config remain project-owned. Do not generate a second kit or per-repo harness by default. Setup and Doctor are optional skills.
+One installed plugin coordinates Feature, Bug and Spike work across Claude Code, Cursor and Codex. It does not generate a second repository harness or copy role files into projects by default.
 
-## Two independent axes
+- Task type selects the workflow: Feature (new/changed observable behavior), Bug (repair an existing violated contract), Spike (bounded research/feasibility question).
+- Mode selects execution depth and human approval behavior: Quick, Standard or Extended. Auto selects a mode; it is not an execution mode.
+- One Coordinator owns routing, state, permissions, stage transitions and handoffs.
+- Roles are logical responsibilities, not mandatory native subagents. Delegate selectively when isolation or parallelism adds value.
 
-- **Task type** (`routing.md`): `Feature` (new or intentionally changed observable behavior), `Bug` (repair proven violated behavior), `Spike` (bounded research/feasibility decision, no automatic implementation).
-- **Execution mode** (`auto`/`quick`/`standard`/`extended`): evidence and human-gate depth based on real risk; multi-repo count alone is not Extended. The old `spike` mode is now a supported legacy alias for the Spike task type.
+## Role ownership
 
-Each route has stage entry/exit evidence and explicit block conditions (`core/runtime.md`). `core/routing.md` classifies, `core/modes.md` selects rigor, `workflows/` contains the routes, `roles/` specifies responsibilities, and `practices/` holds shared rules. Intent (WHY), Spec (WHAT), Architect (HOW), Developer (BUILD), Reviewer (independent VERIFY) are *logical* responsibilities. Reviewer dispatch uses a fresh independent context.
+- Intent: WHY, WHO, outcome, scope and non-goals for Feature.
+- Spec: observable WHAT, AC creation, source mapping and consistency.
+- Architect: Feature technical design/plan; Bug assessment, diagnosis and minimum fix plan.
+- Developer: authorized implementation and verification, including TDD, regressions/integrations and changed snapshot evidence.
+- Reviewer: fresh independent review of code and Developer's evidence.
+- Researcher: Spike scope, research, optional bounded scratch experiment and decision.
 
-## Verify and converge, not just run a test
+There is no roles/shared.md; each role owns purpose, entry conditions, numbered procedure, checklist, output and exit conditions. Global permission/state invariants live in core/runtime.md and Coordinator instructions. There is no separate Verifier role or Verification stage.
 
-- **Feature:** accepted AC revision → planned slice and root → actual diff → meaningful observed test; check completeness, compatibility and rollout dependencies.
-- **Bug:** original expected/actual symptom → reproduction evidence → root cause/fix → observed after-state → regression protection; no `VERIFIED_FIX` on weak or stale evidence.
-- **Spike:** bounded question → credible supporting and disconfirming evidence → confidence/options/verdict → STOP; a POC requires a separate scratch grant and never becomes implementation silently.
-- All code-change verification is tied to actual per-root branch/HEAD **plus dirty patch/untracked state**. Repairs/rebases can invalidate old proof or a previous review.
+## Workflow sequences
+
+- Feature: Intent → Spec → Architect → Developer (implement + verify) → Reviewer.
+- Bug: Architect (assess + diagnose + plan) → Developer (fix + verify) → Reviewer.
+- Spike: Researcher (scope → research → optional experiment plan/experiment → decision); no production Developer/Reviewer chain.
+
+Task-specific workflow files define role applicability, order and Extended artifact names.
+
+## Mode behavior
+
+- Quick: minimum safe role path; no per-stage documents or approvals by default. Skip separate Intent/Spec/Architect only when expected behavior and approach are established. Developer verifies and code changes still require independent review for AI_PASS.
+- Standard: all applicable responsibilities in order, selective human decisions, concise/compact record instead of a file per role.
+- Extended: full applicable role workflow, ordinal artifact per stage, mandatory role checklist and explicit approval after every artifact stage. Approval binds to an exact revision; resume refreshes source/scope/snapshot.
+
+core/modes.md owns selection plus the complete Extended approval, pause, resume, revision and invalidation protocol. There is no separate human-gates.md.
+
+## Evidence and convergence
+
+- Feature: accepted AC revision → plan slice → code/diff → Developer's observed test evidence → independent review.
+- Bug: original expected/actual symptom → reproduction/diagnosis evidence → minimal repair → Developer's after-state/regression evidence → independent review.
+- Spike: bounded question → supporting/contrary evidence → confidence/options/verdict → STOP. POC requires a separate scratch grant and never becomes production implementation implicitly.
+- Verification is tied to each current Git root snapshot, including dirty patch and relevant untracked state. Any relevant code change invalidates affected verification and previous review.
 
 ## Authority and human review
 
-A bounded user **implement/fix** request can authorize local source edits within that scope if host/project policy permits. Approval of new business behavior remains separate. A request to analyze/plan/spike does not grant source edits; any broadened paths or privileged/external operations need explicit permission. Nothing in prompt text overrides OS/host permission, protected environments or CI controls.
+A bounded user implement/fix request may authorize ordinary local edits inside selected scope, subject to host/project policy. Plan/research/spike/review requests do not grant implementation authority. Plan approval does not authorize privileged operations. Commit/push/merge, installs, secrets, cloud changes, production migration and deployment require separate authority.
 
-Human sees concise changed decisions/AC mapping, not every brainstorming thought. Extended requires explicit approval after every applicable stage, even when there is no new material decision. `core/human-gates.md` owns mandatory pause/resume/revision invalidation; see [Extended](EXTENDED.md). An independent `AI_PASS` is not merge/deploy authority.
+An Extended approval is not an operating-system permission and does not authorize merge/deployment. AI_PASS requires actual independent review and is not human release approval.
 
-## Multi-repo and continuation
+## Multi-repository work and continuation
 
-Treat independent Git roots separately: `VISIBLE`, `RELEVANT`, `EDIT_APPROVED`, `EXCLUDED`. Share one accepted Feature AC set, maintain a per-root impact/test map and dependency-aware release order. Quick/Standard use concise records; Extended requires distinct stage artifacts and state in one authorized location or tracker. Resume refreshes source, permissions, approvals and snapshots.
-
-## Upgrades
-
-Replace the plugin package and reload the host. Do not automatically change project files or pin runtime version in project instructions. Optional workspace profile `schemaVersion` is a schema identifier, not an installed plugin version. Doctor detects legacy per-repo skills before any approved retirement.
+Treat each Git root separately: VISIBLE, RELEVANT, EDIT_APPROVED, EXCLUDED. Share one accepted Feature AC revision and maintain per-root impact, test and snapshot evidence. Release order follows actual integration dependencies, not a fixed repository order. Extended uses one authorized task directory or existing tracker, not scattered stage files.
