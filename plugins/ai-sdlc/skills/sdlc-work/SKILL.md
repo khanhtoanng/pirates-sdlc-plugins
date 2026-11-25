@@ -20,9 +20,10 @@ Execute the workflow from this installed plugin. Do not generate project harness
 
 1. Follow the workflow's order and mode applicability.
 2. For Extended, follow the approval and resume protocol in references/core/modes.md. Run only the current stage.
-3. Load supporting practices when relevant: coverage.md for AC/regression classification, tdd.md for Feature/Bug changes, workspace.md for multi-root work, review.md for review decisions, delegation.md for independent review, and integrations.md for optional add-ons. Load host adapters only when host capabilities matter.
-4. Return each role's result to the Coordinator. The Coordinator checks evidence and prerequisites before handing off.
-5. Reassess risk, authority, source freshness and scope at each transition. A local edit grant does not authorize privileged operations or excluded roots.
+3. Load practices by responsibility: coverage.md when classifying candidate rules versus verification examples; tdd.md for Architect test-seam planning, Developer test execution and Reviewer evidence checks; delegation.md for actual dispatch, safe parallel work and Reviewer isolation; review.md for human decisions/cards; workspace.md for multi-root work; integrations.md for optional add-ons. Load host adapters only when host capabilities matter.
+4. Treat each practice as the single owner of its detailed procedure. Role files define role-specific responsibilities and point to practices rather than copying their procedures.
+5. Return each role's result to the Coordinator. The Coordinator checks evidence and prerequisites before handing off.
+6. Reassess risk, authority, source freshness and scope at each transition. A local edit grant does not authorize privileged operations or excluded roots.
 
 ## Resume
 
@@ -31,7 +32,8 @@ Reload the task state and pending artifact. Verify its exact revision, approval,
 ## Guardrails
 
 - Never invent approvals, test results, reproduction evidence, reviewer independence or host capabilities.
-- Developer performs implementation plus verification. Reviewer independently inspects the actual changes and evidence.
+- Developer performs implementation plus verification and may parallelize only independent, bounded AC slices under references/practices/delegation.md.
+- Reviewer independently inspects the actual changes and evidence. The Reviewer role owns the review method and verdict.
 - If a fresh independent Reviewer cannot be dispatched, report `INDEPENDENCE: NOT VERIFIED` and `REVIEW: PENDING`.
 - A stale snapshot cannot be reviewed as current. Relevant changes require re-verification and fresh review.
 - A Spike ends with a decision. Any POC needs a separate bounded scratch grant; production delivery requires a new Feature/Bug task.

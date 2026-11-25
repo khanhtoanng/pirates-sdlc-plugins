@@ -22,7 +22,7 @@ Auto selects the smallest safe mode; it is a selector, not a fourth mode. Explic
 
 ## Role ownership
 
-Intent defines the problem and outcome; Spec defines observable behavior and acceptance criteria; Architect plans the technical approach and diagnoses Bugs; Developer implements and verifies; Reviewer independently checks code and evidence; Researcher owns Spikes. The Coordinator controls routing, permissions, state and handoffs.
+Intent defines the problem and outcome; Spec defines observable behavior and acceptance criteria; Architect plans technical design, dependencies and test seams; Developer implements, applies TDD and verifies (parallelizing only independent AC slices); Reviewer independently checks code and evidence; Researcher owns Spikes. The Coordinator controls routing, permissions, state and handoffs.
 
 ## Invoke locally
 
@@ -32,7 +32,9 @@ Intent defines the problem and outcome; Spec defines observable behavior and acc
 
 Optional skills: `sdlc-setup` inspects or configures an approved workspace; `sdlc-doctor` checks plugin and host readiness.
 
-See [local setup](docs/LOCAL_SETUP.md), [architecture](docs/ARCHITECTURE.md), [task routes](docs/TASK_ROUTES.md), [Extended guide](docs/EXTENDED.md) and [migration](docs/MIGRATION.md).
+See [local setup](docs/LOCAL_SETUP.md), [architecture](docs/ARCHITECTURE.md), [task routes](docs/TASK_ROUTES.md), [Extended guide](docs/EXTENDED.md), [task records](docs/TASK_RECORDS.md) and [migration](docs/MIGRATION.md).
+
+**Documentation boundary:** `docs/` contains human-facing guides and examples; it is not loaded as agent instructions. Normative runtime instructions live under `plugins/ai-sdlc/skills/` and are referenced by the installed skills.
 
 ## Records and authority
 

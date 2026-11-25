@@ -27,7 +27,7 @@ Use stage IDs diagnosis_plan, implementation and review. Create only the current
 3. Record reproduction evidence and distinguish observed cause from hypothesis.
 4. Identify blast radius, regression seam and smallest safe repair.
 5. If a new business rule or changed expectation is required, stop and route through Feature Spec and owner acceptance.
-6. After authorization, Developer adds a failing regression test where feasible, applies the minimum fix, then reruns the original symptom and relevant regressions/integrations.
+6. After authorization, Developer follows practices/tdd.md for a failing regression, minimum fix, GREEN evidence and justified exceptions.
 7. Record before/after observations, exact commands/results, changed roots and missing checks.
 8. Reviewer checks the original symptom, diagnosis evidence, diff, test credibility and completeness.
 

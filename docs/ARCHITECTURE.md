@@ -16,9 +16,9 @@ One installed plugin coordinates Feature, Bug and Spike work across Claude Code,
 | Intent | Feature problem, user, outcome, scope and non-goals |
 | Spec | Observable behavior, acceptance criteria and source mapping |
 | Architect | Feature design/plan; Bug assessment, diagnosis and minimum fix plan |
-| Developer | Authorized implementation, TDD and verification |
-| Reviewer | Independent review of the actual diff and Developer evidence |
-| Researcher | Spike scope, research, optional scratch experiment and decision |
+| Developer | Authorized implementation, TDD, AC-slice decomposition and verification |
+| Reviewer | Independent review of the actual integrated diff and Developer evidence |
+| Researcher | Spike scope, evidence-based research, optional scratch experiment and decision |
 
 ## Workflow order
 
@@ -26,15 +26,15 @@ One installed plugin coordinates Feature, Bug and Spike work across Claude Code,
 - **Bug:** Architect → Developer → independent Reviewer. A clearly reproduced, low-risk Bug may use bounded Developer triage in Quick.
 - **Spike:** Researcher scope → research → optional approved experiment → decision. Production implementation is a separate Feature/Bug task.
 
-Workflow files define role applicability, order and Extended artifact names.
+Workflow files define role applicability, order and Extended artifact names. Developer may parallelize only independent, non-conflicting AC slices; final integration verification and independent review remain mandatory.
 
-## Mode contract
+## Shared practice ownership
 
-- **Quick:** minimum safe route, no stage files or per-role approvals by default.
-- **Standard:** all applicable responsibilities, selective decisions and a compact record.
-- **Extended:** every applicable stage, one artifact per stage and explicit approval of each artifact revision.
-
-The mode guide owns selection, Extended approval, pause/resume and invalidation policy.
+- `coverage.md` classifies accepted rules versus verification examples and consequential questions.
+- `tdd.md` owns test-seam guidance, RED/GREEN/REFACTOR and TDD evidence.
+- `delegation.md` owns actual worker dispatch, safe parallel execution and independent Reviewer isolation.
+- `review.md` owns human decision policy and review handoff cards.
+- Role files own role procedures and outputs; `runtime.md` owns Coordinator invariants; `modes.md` owns mode and Extended state/approval policy.
 
 ## Evidence and authority
 
@@ -46,4 +46,4 @@ A scoped implement/fix request may authorize ordinary local edits. Plan approval
 
 ## Multi-repository work
 
-Classify each root as VISIBLE, RELEVANT, EDIT_APPROVED or EXCLUDED. Keep one accepted Feature AC revision, track evidence per root, and order delivery by real integration dependencies. Visibility alone never grants edit access.
+Classify each root as VISIBLE, RELEVANT, EDIT_APPROVED or EXCLUDED. Keep one accepted AC set, track evidence per root, and order delivery by actual integration dependencies. Visibility alone never grants edit access.

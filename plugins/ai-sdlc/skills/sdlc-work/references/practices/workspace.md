@@ -1,44 +1,45 @@
 # Workspace and multi-repository coordination
 
-<discovery>
-A workspace can be one Git repo, a monorepo, or several independent repos. Detect repository boundaries via actual local Git root / worktree metadata, not folder names, glob matches, or assumed hierarchy. Capture for each: real path, role/technology (observed or UNKNOWN), applicable instructions, current branch/HEAD, staged/unstaged patch identity and relevant untracked contents/paths, read/write access, available test commands and CI. Do not assume adding a directory to a host also loads its project instructions. Confirm applied instructions explicitly.
+## Discovery
+
+A workspace can be one Git repo, a monorepo, or several independent repos. Detect repository boundaries via actual local Git root/worktree metadata, not folder names, glob matches or assumed hierarchy. Capture each relevant root's real path, role/technology (observed or UNKNOWN), applicable instructions, branch/HEAD, staged/unstaged patch identity, relevant untracked paths/content, access, available tests and CI. Confirm project instructions are actually applied; adding a directory to a host does not prove its instructions were loaded.
 
 Define separate sets:
-- `VISIBLE`: actual directories available/readable in host;
-- `RELEVANT`: roots needed to understand/task outcome (read-only allowed);
-- `EDIT_APPROVED`: roots and paths with explicit authorized changes;
-- `EXCLUDED`: not to touch, including unrelated repos.
+- VISIBLE: actual directories available/readable in the host;
+- RELEVANT: roots needed to understand the outcome (read-only access may suffice);
+- EDIT_APPROVED: roots and paths with explicit authorized changes;
+- EXCLUDED: roots not to touch, including unrelated repositories.
 
-For a read-only Spike without code roots, repository discovery is optional. If a required root is inaccessible, report missing evidence and ask to expose it or narrow scope. Don't fake analysis or demand workspace edits just because another repository is visible. No assumed global Git transactions.
-</discovery>
+For a read-only Spike without code roots, repository discovery is optional. If a required root is inaccessible, report missing evidence and ask to expose it or narrow scope. Do not assume global Git transactions.
 
-<impact-analysis>
-For every requested outcome: map `AC → repository changes → integration evidence`; trace contracts and dependencies. Typical four-repo project:
-- FE: views, validation, HTTP client, generated API clients.
-- BE: endpoints, business rules, DTOs, storage mappings.
-- DB/Flyway: forward migrations, rollout compatibility, existing data/backfill and rollback plan.
-- Terraform: infrastructure resources, IAM/network, state, plan/apply risks.
-Only use labels supported by inspection. Relevance is not authorization to edit. A change might require FE+BE+Flyway but *not* Terraform.
-</impact-analysis>
+## Impact and dependency analysis
 
-<planning>
-- Keep one authoritative AC set, not four contradictory specs. Record root and exact source revision plus working-tree patch/untracked identity per implementation slice; HEAD alone is insufficient for dirty worktrees.
-- Build a dependency graph: database expand → BE compatible release → FE consumption is one possible order, NOT a universal rule. Flag incompatible API/schema/infra assumptions and inter-release skew.
-- Design backwards-compatible expand/contract where relevant. For Flyway, prefer new migrations rather than mutating already-applied versioned migrations, after checking actual environment. For Terraform, `plan` is evidence, never permission for `apply`; review impact/state/secrets, and require approval to run any destructive operation.
-- Parallel delegate only independent read-only exploration or changes proven nonconflicting; workers may not write the same files/worktree concurrently. Respect per-root permission boundaries and context.
-</planning>
+For each accepted Feature outcome, map AC to affected roots/contracts to integration evidence. Trace actual callers, data ownership and dependencies. A common FE/BE/DB/infra workspace may involve:
+- FE: views, validation, HTTP clients and generated API clients.
+- BE: endpoints, business rules, DTOs and storage mappings.
+- DB/migrations: schema evolution, backfill, compatibility and rollback.
+- Infrastructure: resources, IAM/network, state and plan/apply risks.
 
-<verification>
-- Check each affected repository's own relevant tests/lint/static analysis on its actual snapshot.
-- Check interface contract tests, migration-to-BE schema compatibility, FE-to-BE scenarios, infrastructure inputs/outputs and deployment sequence where relevant. `NOT RUN` if integration environment cannot be exercised.
-- Reviewer verifies each diff and cross-root edges. `AI_PASS` for the *whole task* is blocked when an affected root or required integration evidence was omitted.
-- End with one human review summary: affected vs examined-only roots, snapshot/branch per changed repo, AC→repo→test mapping, compatibility/release order, residual risk, separate PR/merge/deploy actions. Do not claim atomic commits/rollouts.
-</verification>
+Only use labels supported by inspection. Relevance is not edit authorization; a change may require FE+BE+DB but not infrastructure.
 
-<optional-workspace-profile>
-The plugin does not require generated config. For recurring multi-repo sessions, `sdlc-setup` may propose one user-owned `.ai-sdlc/workspace.yaml` with `schemaVersion: 1`, repository aliases/paths and verified relationships. Treat it as an *index and preference*, not as authority for files, permissions, requirements, or deployment. Never auto-commit duplicates across repos or override host trust boundaries.
-</optional-workspace-profile>
+Keep one authoritative AC set. Record root and source revision plus working-tree patch/untracked identity for each implementation slice; HEAD alone is insufficient for dirty worktrees. Build the actual dependency graph. A database expand → compatible BE → FE rollout is one possible sequence, not a universal rule. Flag incompatible API/schema/infra assumptions and inter-release skew.
 
-<snapshot-freshness>
-When a tracked or untracked file changes after tests/review, refresh its worktree identity and re-run affected verification; do not reuse stale cross-repo `AI_PASS`. Treat each repo as separately versioned. Changing only an excluded root cannot be silently added to the approved task. A completion card distinguishes `IMPLEMENTED`, `VERIFIED`, `REVIEWED`, `READY_FOR_MERGE_REVIEW` and actual merge/deployment states.
-</snapshot-freshness>
+Design backward-compatible expand/contract where relevant. For Flyway, prefer new migrations rather than modifying applied versioned migrations after checking actual environment. A Terraform plan is evidence, never permission to apply. Destructive operations require separate authority.
+
+## Verification and release coordination
+
+Check each affected repository's relevant tests/lint/static analysis on its actual snapshot. Where relevant, check interface contracts, migration-to-BE compatibility, FE-to-BE behavior, infrastructure inputs/outputs and deployment sequence. Record unavailable checks as NOT RUN.
+
+Reviewer must assess each changed root and important cross-root edge; incomplete critical integration evidence blocks whole-task AI_PASS. End with one human summary: affected versus examined-only roots, snapshot/branch per changed repo, AC to repo to test mapping, compatibility/release order, residual risk and separate PR/merge/deploy actions. Do not claim atomic commits or rollouts.
+
+## Parallel work boundary
+
+This file owns root discovery, impact and dependency analysis. Worker dispatch, worktree isolation, write-conflict checks and whether slices run concurrently or sequentially are defined only in delegation.md. Do not independently delegate writes based on repository boundaries alone.
+
+## Optional workspace profile
+
+The plugin does not require generated config. For recurring multi-repo sessions, sdlc-setup may propose one user-owned .ai-sdlc/workspace.yaml with schemaVersion: 1, repository aliases/paths and verified relationships. Treat it as an index and preference, not authority for files, permissions, requirements or deployment. Never auto-commit duplicates across repos or override host trust boundaries.
+
+## Snapshot freshness
+
+Treat each repository as separately versioned; HEAD alone is not enough to identify a dirty worktree. A change in an excluded root cannot be silently added to the approved task. Apply the Coordinator's snapshot and invalidation rules in core/runtime.md and the Developer/Reviewer handoff rules; do not reuse evidence from a stale root snapshot.
