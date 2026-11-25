@@ -1,27 +1,38 @@
 ---
 name: sdlc-work
-description: Coordinate SDLC feature delivery, bug diagnosis/fix, or bounded technical feasibility research in one or multiple repositories. Auto-select quick, standard, or extended (mandatory per-stage human review), or resume a pending SDLC task. Use for scoped engineering work and explicit SDLC requests, not unrelated explanations or general Q&A.
+description: Coordinate feature delivery, bug diagnosis/fix, or bounded technical research across one or more repositories. Select Quick, Standard or Extended; Extended requires approval after each applicable artifact stage. Use for engineering work, not general Q&A.
 argument-hint: "[feature|bug|spike] [auto|quick|standard|extended] <request> [selected roots] | resume <task-id or record>"
 ---
 
-# AI SDLC work — router and coordinator
+# AI SDLC work — Coordinator
 
-<purpose>
-Execute the SDLC from this installed plugin. Do not bootstrap or duplicate agent/role files in the project. One coordinator owns the state; Intent, Spec, Architect, Developer and Reviewer are **logical roles**, not mandatory subagents. Only three task types exist: `feature`, `bug`, `spike`.
-</purpose>
+Execute the workflow from this installed plugin. Do not generate project harness files. The Coordinator owns routing, mode selection, task state, permissions and handoffs.
 
-<start>
-1. Read `references/core/routing.md`, `references/core/modes.md` and `references/core/runtime.md`. Inspect current request, sources, project rules, risk and Git state proportionately. Classify type and mode independently; legacy positional spike selects type spike/mode auto. State route, requested/effective mode, reason and scope. If resuming, reload state and pending approval instead of starting over.
-2. Read ONLY the selected workflow: `references/workflows/feature.md`, `references/workflows/bug.md`, or `references/workflows/spike.md`. Read `references/core/human-gates.md` for Extended (including escalation/resume). Extended: never advance to any next applicable stage until explicit approval of the exact current artifact revision; persist stage state, present review card and END TURN.
-3. Load on demand: `references/roles/shared.md` and relevant role in references/roles/ (intent, spec, architect, developer, reviewer, researcher); `references/practices/coverage.md` for ACs/regressions; `references/practices/tdd.md` before executable changes; `references/practices/workspace.md` for multi-root; `references/practices/review.md` for review/handoffs; `references/practices/delegation.md` for independent review; hosts/{claude,cursor,codex}.md only for actual host capabilities; `references/practices/integrations.md` for selected add-ons.
-4. Follow route and runtime evidence checks; re-evaluate risk each stage. User-specified scoped implementation may authorize ordinary local edits under real host permissions, but never bypass Extended checkpoints or grant excluded roots, commit/push/merge, applied migrations, production, deployment or external side effects.
-5. Return factual evidence and the route-specific outcome. If necessary permissions, decisions, access, or tests are missing, report the precise blocked or unverified state; do not fabricate approval or results.
-</start>
+## Route
 
-<routes>
-See the chosen workflow and mode policy; these references own the stage sequence and gates.
-</routes>
+1. Read references/core/routing.md, references/core/modes.md and references/core/runtime.md.
+2. Inspect the request, ticket/source, project instructions, relevant roots, risk and Git state.
+3. Classify task type and requested/effective mode independently. Report the route, reason, scope and risk; emit `SDLC_ROUTE: task_type=<feature|bug|spike>; mode=<quick|standard|extended>`.
+4. Read only the selected workflow: references/workflows/feature.md, references/workflows/bug.md or references/workflows/spike.md.
+5. Load the role files named by that workflow. Each role owns its procedure, checklist, output and exit conditions.
 
-<guardrails>
-Do not manufacture current test outputs, reviewer isolation, approvals, or implementation status. A self-review cannot yield `AI_PASS`. A source edit reviewed on a stale snapshot needs re-verification/review. If reviewer cannot actually run independently, report `INDEPENDENCE: NOT VERIFIED` and `REVIEW: PENDING`; never imply final AI approval. A research-only spike needs no feature ACs, production implementation, or code reviewer.
-</guardrails>
+## Execute
+
+1. Follow the workflow's order and mode applicability.
+2. For Extended, follow the approval and resume protocol in references/core/modes.md. Run only the current stage.
+3. Load supporting practices when relevant: coverage.md for AC/regression classification, tdd.md for Feature/Bug changes, workspace.md for multi-root work, review.md for review decisions, delegation.md for independent review, and integrations.md for optional add-ons. Load host adapters only when host capabilities matter.
+4. Return each role's result to the Coordinator. The Coordinator checks evidence and prerequisites before handing off.
+5. Reassess risk, authority, source freshness and scope at each transition. A local edit grant does not authorize privileged operations or excluded roots.
+
+## Resume
+
+Reload the task state and pending artifact. Verify its exact revision, approval, scope, project instructions and source/Git snapshot freshness before continuing. Follow the resume protocol in references/core/modes.md.
+
+## Guardrails
+
+- Never invent approvals, test results, reproduction evidence, reviewer independence or host capabilities.
+- Developer performs implementation plus verification. Reviewer independently inspects the actual changes and evidence.
+- If a fresh independent Reviewer cannot be dispatched, report `INDEPENDENCE: NOT VERIFIED` and `REVIEW: PENDING`.
+- A stale snapshot cannot be reviewed as current. Relevant changes require re-verification and fresh review.
+- A Spike ends with a decision. Any POC needs a separate bounded scratch grant; production delivery requires a new Feature/Bug task.
+- Host and operating-system permissions remain authoritative; Markdown instructions are not an enforcement boundary.

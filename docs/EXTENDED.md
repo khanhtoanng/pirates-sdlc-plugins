@@ -1,40 +1,37 @@
-# Extended mode — review every stage
+# Extended mode
 
-Run e.g. `/ai-sdlc:sdlc-work feature extended Add customer status` (Claude), or `Use sdlc-work feature extended ...` (Cursor/Codex). For high-risk tasks the coordinator escalates even if Quick was requested.
+Extended runs the complete applicable workflow. Each stage produces one inspectable artifact, completes its role checklist and pauses for approval of that exact revision. The Coordinator starts the next stage only after approval.
 
-| Feature | Bug | Spike |
+## Artifact order
+
+| Task | Order | Artifact |
 |---|---|---|
-| Intent | Assessment | Scope |
-| Spec | Diagnosis | Research |
-| Plan | Plan | Optional experiment plan |
-| Implementation | Implementation | Optional experiment |
-| Verification | Verification | Decision |
-| Review | Review | — |
+| Feature | Intent → Spec → Architect → Developer → Reviewer | 01-intent.md → 02-spec.md → 03-plan.md → 04-implementation.md → 05-review.md |
+| Bug | Architect → Developer → Reviewer | 01-diagnosis-plan.md → 02-implementation.md → 03-review.md |
+| Spike | Researcher: Scope → Research → optional Experiment Plan → optional Experiment → Decision | 01-scope.md → 02-research.md → 03-experiment-plan.md → 04-experiment.md → 05-decision.md |
 
-The agent validates each output, presents a concise summary and **ends its turn while awaiting explicit approval**. It does not start the next role, create its artifact, or poll. Reply to the current checkpoint:
+Spike experiment stages are optional. Mark unused stages not_applicable in state with a reason; do not create placeholder files.
 
-- `approve intent r1` — approve this artifact, not future stages.
-- `request changes to spec r1: ...` — revise and request approval again.
-- `reject plan r2` — stop.
-- `Use sdlc-work resume .sdlc/changes/add-customer-status` — recover pending state; approve the correct revision separately.
+## Durable record
 
-An accepted requirement can be reused without re-litigating it, but Extended still presents the stage for review. Approval of a plan does not authorize unrelated edits or privileged operations. Spike completion never authorizes production code.
+Prefer an existing authorized ticket, PR or ADR with revisioned sections. Otherwise, use one approved task directory:
 
-## Artifacts
+    .sdlc/changes/<task-id>/
+      state.json
+      01-intent.md
+      02-spec.md
+      03-plan.md
+      04-implementation.md
+      05-review.md
 
-Use the existing ticket/PR if it has revisioned stage sections. Otherwise approve one task directory in a selected writable repository:
+Use only the artifacts required by the selected route. state.json tracks the current stage, status, revision, artifact, approval, sources, scope and relevant snapshots.
 
-```text
-.sdlc/changes/add-customer-status/
-  state.json
-  intent.md
-  spec.md
-  plan.md
-  implementation.md
-  verification.md
-  review.md
-```
+## Stage review
 
-Each file is created **only when its stage runs**. A review card identifies artifact and revision, outcome, risk and evidence; Spec maps every AC ID to the full inspectable requirement. State records pending stage, approval history, sources and scope. Material changes invalidate affected approvals and evidence; resume rechecks them. Do not commit artifacts without separate approval. If persistence isn't allowed, the agent stops with a pasteable handoff and marks durability unverified.
+Present the task, stage and revision; artifact path; outcome and key decisions; evidence and checklist result; scope, exclusions, risks and unverified items; and the exact next human action. The full artifact must be accessible.
 
-These are workflow instructions, not a security boundary; independent evaluation measures compliance. Real mandatory tool restrictions require host permissions or an external controller.
+## Approval
+
+Follow the approval, revision, resume and invalidation protocol in [core/modes.md](../plugins/ai-sdlc/skills/sdlc-work/references/core/modes.md). End the turn after presenting a stage for approval; do not poll or treat silence as consent. Approval applies only to the current artifact revision and does not expand edit scope. Material upstream changes invalidate affected downstream evidence. Developer owns implementation and verification; Reviewer is a separate independent stage.
+
+Reviewer approval does not authorize merge, production migration or deployment. When durable state cannot be saved, report HANDOFF: NOT DURABLE and provide a pasteable handoff.

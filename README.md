@@ -1,43 +1,45 @@
 # AI SDLC — local-first plugin for Claude Code, Cursor and Codex
 
-**Version 0.7.0.** One installed plugin contains the SDLC coordinator, optional setup, and doctor. It does **not** generate a second repository harness, copy role instructions to every repo, install hooks/MCPs, or deploy anything by default.
+**Version 0.8.0.** One installed plugin coordinates engineering work across one or more repositories. It does not generate project harness files or install hooks, MCPs or integrations by default.
 
-## Choose a task type, then an execution mode
+## Choose a task type and mode
 
-| Task | Flow | Final result |
+| Task | Workflow | Result |
 |---|---|---|
-| **Feature** | Intent/Spec where needed → Architect/test plan → authorized Build → Verify & Converge → independent Review | AC-linked implementation evidence and release readiness |
-| **Bug** | Symptom → Reproduce/diagnose → minimal fix plan → authorized Fix → verify original symptom + regressions → independent Review | `VERIFIED_FIX`, `PARTIAL` or `UNVERIFIED` |
-| **Spike** | Bounded question → research both sides → optional authorized disposable POC → decision → STOP | `PROCEED`, `CLARIFY` or `STOP`; no automatic code implementation |
+| **Feature** | Intent → Spec → Architect → Developer → Reviewer | Accepted ACs, implementation evidence and release readiness |
+| **Bug** | Architect → Developer → Reviewer | VERIFIED_FIX, PARTIAL or UNVERIFIED |
+| **Spike** | Researcher: scope → research → optional experiment → decision | PROCEED, CLARIFY or STOP |
 
-**Mode** is independent: `auto` (default), `quick`, `standard`, `extended`. Severity and material risk decide mode, not number of repos. Legacy `sdlc-work spike <question>` remains accepted as type `spike`, mode `auto`.
+Upstream Feature roles run when needed in Quick and Standard. Extended runs every applicable stage.
 
-| Mode | Human review | Record |
+| Mode | Use it for | Human involvement |
 |---|---|---|
-| Quick | Material ambiguity and permissions only | Compact summary |
-| Standard | Consequential decisions | Existing ticket or compact record |
-| Extended | **Explicit approval of every applicable stage** | Stage artifacts + resumable state |
+| **Quick** | Clear, low-risk work using an established approach | Material questions and authority boundaries |
+| **Standard** | Normal engineering work with some analysis or coordination | Consequential WHAT, HOW and scope decisions |
+| **Extended** | Complex, high-risk or explicitly supervised work | Approval of each applicable artifact stage |
 
-Explicit Extended always wins; high risk escalates Quick/Standard. See [Extended guide](docs/EXTENDED.md).
+Auto selects the smallest safe mode; it is a selector, not a fourth mode. Explicit Extended is never downgraded. See [mode policy](plugins/ai-sdlc/skills/sdlc-work/references/core/modes.md).
 
-The five logical responsibilities remain **Intent, Spec, Architect, Developer, Reviewer**, but the selected route invokes only those needed. `sdlc-work` is a progressively loaded skill, not a mandatory five-agent orchestration. Review on code-changing Feature/Bug requires an actually fresh independent host context to claim `AI_PASS`.
+## Role ownership
+
+Intent defines the problem and outcome; Spec defines observable behavior and acceptance criteria; Architect plans the technical approach and diagnoses Bugs; Developer implements and verifies; Reviewer independently checks code and evidence; Researcher owns Spikes. The Coordinator controls routing, permissions, state and handoffs.
 
 ## Invoke locally
 
-- **Claude Code:** `/ai-sdlc:sdlc-work feature standard Add customer status in FE+BE+Flyway; inspect Terraform read-only.`
-- **Cursor:** `Use sdlc-work for a bug in quick mode: reproduce the 500 response, fix it, and verify the regression.`
-- **Codex:** `Use sdlc-work spike standard to compare two approaches for offline sync. Research only; do not implement.`
-- `sdlc-setup`: optional read-only inspection, then exact approved configuration *only if needed*.
-- `sdlc-doctor`: check plugin discovery, root access, conflicts and reviewer capability.
+- **Claude Code:** `/ai-sdlc:sdlc-work feature standard Add customer status in FE and BE`
+- **Cursor:** `sdlc-work bug quick Reproduce and fix the login 500 response`
+- **Codex:** `sdlc-work spike standard Compare two approaches for offline sync`
 
-See [Local Setup](docs/LOCAL_SETUP.md) for host installation, [Architecture](docs/ARCHITECTURE.md) for gates, [Task Routes](docs/TASK_ROUTES.md) for examples, [Multi-Repo](docs/EXAMPLE_MULTI_REPO.md), [Spec Review](docs/EXAMPLE_SPEC_REVIEW.md), and [Migration](docs/MIGRATION.md).
+Optional skills: `sdlc-setup` inspects or configures an approved workspace; `sdlc-doctor` checks plugin and host readiness.
 
-## Scope and evidence, not document sprawl
+See [local setup](docs/LOCAL_SETUP.md), [architecture](docs/ARCHITECTURE.md), [task routes](docs/TASK_ROUTES.md), [Extended guide](docs/EXTENDED.md) and [migration](docs/MIGRATION.md).
 
-Use one accepted AC revision for Features, one original-symptom/regression record for Bugs, or one bounded question/decision brief for Spikes. Quick/Standard avoid mandatory stage files; Extended uses distinct, revisioned stage artifacts in an authorized tracker or one task directory, not a second harness.
+## Records and authority
 
-An explicit bounded **implement/fix** request may authorize ordinary local edits in its own scope, subject to host/project permission; a **plan/research/spike** request does not. Separately authorize destructive operations, secrets, remote services, installs, commit/push/merge, Terraform apply, production migrations and deployment. Multi-root visibility never grants edit scope.
+Quick normally returns a chat result. Standard uses an existing ticket/PR or one compact record. Extended creates ordered stage artifacts and revisioned state in one authorized tracker or task directory.
 
-## Test the plugin
+A bounded implement/fix request may authorize ordinary local edits within its scope, subject to host and project policy. Planning, research and review are read-only. Destructive operations, secrets, installs, remote services, commits, pushes, merges, production migrations and deployment require separate authority.
 
-`python3 tests/validate.py`, `python3 tests/evals/score.py --self-test` and `python3 tests/evals/test_grade.py` run offline validation. These checks **do not prove host behavior**. Run real opt-in host scenarios with `python3 tests/evals/run.py --host claude --case extended_feature_checkpoints --output eval-runs/claude-01`. See [evaluation guide](tests/SCENARIOS.md) for Claude native evals, Codex/Cursor runners, limitations and baselines. Sources: [docs/SOURCES.md](docs/SOURCES.md).
+## Validate
+
+Run `python3 tests/validate.py`, `python3 tests/evals/score.py --self-test` and `python3 tests/evals/test_grade.py`. These are offline checks, not proof of host behavior. Run opt-in host scenarios with `tests/evals/run.py`; see `tests/SCENARIOS.md` and `docs/SOURCES.md`.

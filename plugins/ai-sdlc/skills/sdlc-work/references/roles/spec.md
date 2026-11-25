@@ -1,5 +1,46 @@
-# Spec — observable WHAT / feature only when needed
+# Spec — observable behavior and acceptance criteria
 
-**Entry:** Extended Feature, or Feature has new/changed behavior without complete accepted requirements, or Bug repair would change authoritative expected behavior. Reuse existing accepted rules; derive source-linked ACs with IDs and revision, observable Given/When/Then (or equivalent), acceptance source, expectations and explicit non-goals. Use lightweight Example Mapping: Story → REQUIRED rules → VERIFY examples → DECISION. Consult `practices/coverage.md`; negative/boundary examples do **not** become speculative new business ACs.
+## Purpose
 
-**Readiness:** all changed ACs are testable, internally consistent, provenance-backed, complete for the accepted outcome, and have no unresolved consequential WHAT. Show the owner a short map covering **every AC ID**, with access to full exact revision. If a consequential choice is unresolved, return `NEEDS_DECISION`. A complete but not yet accepted proposal is ready for human review, not accepted for planning; in Extended the Spec checkpoint supplies explicit acceptance. **Exit:** `READY | NEEDS_DECISION | BLOCKED`, full inspectable AC revision, checks and exclusions. No architecture or unauthorized edits.
+Define the Feature's required behavior. Spec creates, classifies and source-maps acceptance criteria (ACs); it does not choose technical implementation.
+
+## Entry conditions
+
+- The task is a Feature, or a Bug reveals a materially ambiguous/new contract that must be routed through Feature.
+- Intent and existing accepted contracts have been inspected.
+- Accepted ACs are incomplete, or Extended requires the stage.
+
+## Procedure
+
+1. Inspect accepted Intent, request, ticket, API/UI contracts, documentation and relevant tests.
+2. Extract externally observable outcomes and business rules. Do not infer product behavior from implementation convenience.
+3. Create stable AC IDs (AC-01, AC-02, ...). Write each as Given/When/Then or an equally testable rule.
+4. Use practices/coverage.md to classify REQUIRED ACs, VERIFY examples, DECISION questions, DEFER items and REJECT speculation.
+5. Map every AC to an accepted source or explicit owner decision; distinguish accepted behavior from proposals.
+6. Check completeness, consistency, testability and scope. Avoid speculative permutations.
+7. Surface the single most consequential unresolved WHAT decision to the Coordinator. Do not silently accept a proposal.
+8. Create 02-spec.md in Extended, a concise complete Spec/AC section in Standard, or reuse accepted ACs in Quick.
+9. Return READY, NEEDS_DECISION or BLOCKED.
+
+## Checklist
+
+- [ ] Every AC has a stable ID and describes observable, testable behavior.
+- [ ] Every AC maps to an authoritative source or owner decision.
+- [ ] Accepted behavior is distinguished from proposals.
+- [ ] REQUIRED rules and VERIFY examples are separated.
+- [ ] DECISION, DEFER and REJECT candidates are handled.
+- [ ] ACs are complete, consistent and free of speculative scope.
+- [ ] The human summary maps to every AC ID and full AC text is accessible.
+- [ ] Consequential WHAT decisions are resolved or block readiness.
+
+## Output
+
+Revision, context, full AC list, source per AC, REQUIRED/VERIFY classification, decisions, non-goals and a complete AC ID summary.
+
+## Exit conditions
+
+- READY: source-backed ACs are complete and ready for owner acceptance/Architect.
+- NEEDS_DECISION: consequential expected behavior is unresolved.
+- BLOCKED: evidence or authority is insufficient.
+
+Extended approval of the exact Spec revision is the human acceptance checkpoint. Spec never chooses HOW or grants edit permission.

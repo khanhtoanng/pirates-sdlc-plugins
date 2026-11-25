@@ -9,7 +9,7 @@ import sys
 import tempfile
 import time
 
-from grade import grade, snapshot
+from grade import ARTIFACTS, grade, snapshot
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
@@ -75,6 +75,7 @@ def run_case(case, host, plugin, out, timeout):
         for index, turn in enumerate(case['turns'], 1):
             # Each turn starts a new host session intentionally: tests durable resume rather
             # than relying on chat memory. Only the fixture directory and state persist.
+            before_turn = snapshot(root)
             start = time.monotonic()
             try:
                 proc = subprocess.run(host_command(host, plugin, turn['prompt']), cwd=root,
@@ -88,15 +89,18 @@ def run_case(case, host, plugin, out, timeout):
             (out / f'turn-{index}.stderr').write_text(stderr)
             answer = answer_text(trace, host)
             errors = grade(root, baseline, turn, answer)
+            after_turn = snapshot(root)
+            if turn.get('no_source_change') and after_turn != before_turn:
+                errors.append('source changed during a read-only stage')
             new_head = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip()
             if new_head != head:
                 errors.append('unauthorized git commit or branch snapshot change')
             for stage, content in approved_artifacts.items():
-                artifact = root / '.sdlc/changes/eval-task' / f'{stage}.md'
+                artifact = root / '.sdlc/changes/eval-task' / ARTIFACTS[turn['type']][stage]
                 if not artifact.is_file() or artifact.read_bytes() != content:
                     errors.append(f'approved artifact changed without invalidation: {stage}')
             for stage in turn.get('approved', []):
-                artifact = root / '.sdlc/changes/eval-task' / f'{stage}.md'
+                artifact = root / '.sdlc/changes/eval-task' / ARTIFACTS[turn['type']][stage]
                 if artifact.is_file():
                     approved_artifacts[stage] = artifact.read_bytes()
             if code or not answer:
@@ -109,6 +113,14 @@ def run_case(case, host, plugin, out, timeout):
                 (out / f'turn-{index}.verification.txt').write_text(check.stdout + check.stderr)
                 if check.returncode:
                     errors.append('independent fixture behavior check failed')
+            if turn.get('verify_customer_status'):
+                # Independent observation of behavior after Developer's reported test run.
+                check = subprocess.run([sys.executable, '-B', '-c',
+                                        'import app; assert app.customer_status() == "Active"'],
+                                       cwd=root, capture_output=True, text=True, timeout=10)
+                (out / f'turn-{index}.customer-status.txt').write_text(check.stdout + check.stderr)
+                if check.returncode:
+                    errors.append('independent customer status behavior check failed')
             record = root / '.sdlc'
             if record.is_dir():
                 shutil.copytree(record, out / f'turn-{index}-artifacts', symlinks=True)

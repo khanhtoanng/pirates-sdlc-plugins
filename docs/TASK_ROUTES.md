@@ -1,46 +1,41 @@
-# Three supported task types — examples and expected artifacts
+# Task routes
 
-Task type is independent from execution mode. Use `auto` unless you need explicit `quick`, `standard` or `extended`. Examples describe expected workflow decisions, **not performed host runs**.
-
-For Extended, each applicable route stage requires human approval before the next begins, regardless of prior acceptance or risk determination. See [Extended guide](EXTENDED.md) for the exact stage sequence and resume protocol. The compact artifact advice below refers to Quick/Standard.
+Task type selects the workflow; mode selects its depth and human approval. Auto chooses the smallest safe mode. See core/modes.md for selection rules.
 
 ## Feature — add customer status
 
-**Request:** `sdlc-work feature standard Add customer status to FE and BE, with a Flyway migration only if necessary. Terraform read-only.`
+Example: `sdlc-work feature standard Add customer status to FE and BE; use Flyway only if needed; keep Terraform read-only.`
 
-- **Intake:** inspect four roots, current instructions/contracts/tests; separately mark actual edit scope. Identify preexisting branch/untracked changes.
-- **Intent/Spec:** reuse accepted issue. If status states or access rights are not settled in source, ask only material owner questions. Full source-linked ACs (for example `AC-01` API returns persisted accepted status; `AC-02` FE shows it) need owner acceptance when their behavior is newly proposed.
-- **Architect:** map each AC to minimal slice, per-root code and test seam; decide migration and compatibility based on actual schema. Determine real release dependencies, not a hardcoded Flyway→BE→FE order.
-- **Developer:** when local edits are authorized, use targeted RED/GREEN and actual regression/integration checks. Preserve unrelated user work.
-- **Verify/Converge + Reviewer:** all ACs, tests and integration edges accounted for on current per-root diff snapshot; independent review. Handoff separate merge/deploy decisions.
+**Order:** Intent (when problem/scope needs clarity) → Spec (when accepted ACs are incomplete) → Architect (when design or slicing is needed) → Developer → independent Reviewer.
 
-**Durable record:** authoritative full AC revision plus work/evidence at existing ticket/PR, not a mandatory five-file tree. See `EXAMPLE_SPEC_REVIEW.md` and `EXAMPLE_MULTI_REPO.md` for more detail.
+- Intent: problem, target user, outcome, scope and non-goals.
+- Spec: stable, testable ACs with source mapping and a complete AC summary.
+- Architect: map each AC to implementation slices, roots, interfaces, dependencies and test seams.
+- Developer: implement authorized slices with TDD where applicable; verify each AC and relevant regressions/integrations.
+- Reviewer: inspect the actual diff, AC coverage and Developer evidence in a fresh context.
 
-## Bug — endpoint returns 500 instead of existing 400 contract
+Extended artifacts: 01-intent.md, 02-spec.md, 03-plan.md, 04-implementation.md, 05-review.md.
 
-**Request:** `sdlc-work bug quick Fix a login endpoint returning 500 for an empty password; verify existing 400 contract.`
+## Bug — endpoint returns 500 instead of the existing 400 contract
 
-- **Assess:** capture supplied report and environment, inspect documented/current API behavior and reproduce `actual=500`, `expected=400` if possible. Do not invent a reproduction or treat a guessed cause as fact.
-- **Diagnose:** trace one credible cause and associated test seam. If existing contract is actually unclear, stop and clarify expected WHAT rather than silently pick status 400.
-- **Fix:** bounded implement request may authorize matching local code paths; add a regression RED for the actual failure when feasible, fix minimally, execute GREEN and relevant non-regression checks.
-- **Verify/Converge:** show before/after response on applicable environment, meaningful regression and integration checks, affected snapshot; independent reviewer checks defect **and** completeness. If reproduction or critical test unavailable, say `PARTIAL`/`UNVERIFIED`, not `VERIFIED_FIX`.
+Example: `sdlc-work bug quick Fix the login 500 for an empty password and verify the existing 400 contract.`
 
-**Durable record:** symptom/expected/actual, reproduction evidence, cause, change/test commands and verdict; no new Feature AC set unless expected product behavior changes.
+**Order:** Architect (assessment, diagnosis and minimum repair plan) → Developer (fix and verify) → independent Reviewer. Quick may use bounded Developer triage for a clear, low-risk Bug.
 
-## Spike — choose offline synchronization approach
+Extended artifacts: 01-diagnosis-plan.md, 02-implementation.md, 03-review.md. If expected behavior is unclear or a new business rule is needed, route it through Feature Spec and owner acceptance. Report reproduction status honestly; use VERIFIED_FIX only with credible symptom resolution, regression evidence, required checks and independent AI_PASS.
 
-**Request:** `sdlc-work spike standard Determine feasibility of offline sync for mobile. Compare alternatives; research only.`
+## Spike — assess offline synchronization
 
-- **Bound:** question, constraints, existing architecture evidence, scope, success/stop criteria. No automatic repo edits.
-- **Research:** inspect current contracts where available, compare approaches and disconfirming evidence, risks and practical unknowns. Mark assumptions vs observed facts, cite external sources when actually used.
-- **Decide:** return `PROCEED` (recommend separate implementation planning), `CLARIFY` (critical unknown), or `STOP` (not warranted) with confidence, trade-offs and unanswered questions.
-- **Stop:** no Spec/AC/build/reviewer chain and no silent feature implementation. A POC would require a separately approved disposable scratch scope.
+Example: `sdlc-work spike standard Assess offline sync feasibility for mobile. Research only.`
 
-**Durable record:** brief research decision or existing issue comment, not `intent.md` + `spec.md` + `plan.md`.
+**Order:** Researcher scope → research → optional separately approved scratch experiment → decision. Compare viable options and contrary evidence; return PROCEED, CLARIFY or STOP. Production implementation requires a separate Feature/Bug task.
+
+Extended artifacts: 01-scope.md, 02-research.md, optional 03-experiment-plan.md and 04-experiment.md, then 05-decision.md.
 
 ## Boundary cases
 
-- "Investigate API error" with no fix requested → Bug diagnosis only (read-only), not an implicit code-edit grant.
-- "Add a validation rule to fix a bug" → if existing contract does **not** establish that rule, clarify new Feature WHAT before changing product behavior.
-- "Research and implement if feasible" → finish Spike first, report recommendation, request a separately bounded Feature task. Avoid treating one instruction as unlimited end-to-end authority.
-- Security bypass in one repo → Bug / Extended; two simple repos do not automatically mean Extended.
+- Tiny, established Feature: Quick may skip separate Intent, Spec and Architect work.
+- Bug without credible reproduction: report the evidence gap; do not make a speculative patch.
+- Bug requiring a new product rule: resolve it as a Feature decision before implementation.
+- Multiple repositories alone do not imply Extended; assess contract, security, data and rollout risk.
+- Research followed by implementation: finish the Spike, then start a separately scoped Feature/Bug.

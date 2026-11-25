@@ -1,9 +1,43 @@
 # Feature workflow
 
-1. Inspect existing ticket/contracts and relevant roots. Intent asks WHY/WHO only if consequential ambiguity remains; no speculative brainstorming transcript.
-2. Spec reuses the accepted AC revision or drafts full observable source-linked ACs. Separate REQUIRED acceptance rules from VERIFY examples (`practices/coverage.md`). **Spec gate:** all changed ACs are testable, mutually consistent, authority-backed and accepted where consequential; open material decisions block build.
-3. Architect maps AC→vertical slice→root/interface/test seam, compatibility, rollback and rollout where implicated. **Plan gate:** impact and verification plan are credible; sensitive technical trade-offs resolved.
-4. Confirm authorized edit scope, build slices test-first where applicable, verify and converge ACs plus dependencies, then independent review on the current snapshot. Any code change invalidates prior review.
-5. Report `READY_FOR_MERGE_REVIEW` only if required evidence and independent verdict support it; this does not authorize merging, deploying or running migrations.
+A Feature adds or intentionally changes observable product behavior. Normal order is Intent (when needed) → Spec (when needed) → Architect (when needed) → Developer → independent Reviewer.
 
-In Extended, follow the exact stage sequence in core/human-gates.md, with a mandatory approval after each applicable stage; do not combine stages or prepare downstream outputs before approval.
+## Role sequence by mode
+
+| Responsibility | Quick | Standard | Extended |
+|---|---|---|---|
+| Intent | Skip when problem and scope are clear | Run when WHY/WHO/outcome/scope needs definition | Always a stage; summarize accepted evidence if settled |
+| Spec | Reuse complete accepted ACs | Run when accepted ACs are incomplete | Always a stage; show every AC ID and full revision |
+| Architect | Skip for a small established pattern | Run for meaningful design/dependencies | Always a plan stage |
+| Developer | Implement and verify | Implement and verify | One gated build-and-verify stage |
+| Reviewer | Fresh independent review after code changes | Fresh independent review after code changes | Separate gated review stage |
+
+Quick requires established behavior, an established approach and low risk. Standard runs applicable roles without per-stage approvals. Extended runs every listed stage and pauses after each artifact approval.
+
+## Extended artifacts
+
+1. Intent — 01-intent.md
+2. Spec — 02-spec.md
+3. Architect — 03-plan.md
+4. Developer — 04-implementation.md (TDD and verification evidence)
+5. Reviewer — 05-review.md
+
+Use one authorized task directory with state.json or an existing revisioned ticket/PR. Create only the current artifact.
+
+## Handoffs
+
+- **Intent** establishes WHY, WHO, outcome, scope and non-goals.
+- **Spec** defines stable AC IDs, observable rules, provenance and a complete AC map. An unresolved consequential WHAT blocks planning.
+- **Architect** maps every accepted AC to minimal slices, affected roots/interfaces, dependency order, test seams and relevant risks.
+- **Developer** follows the accepted scope, uses TDD where applicable, verifies every AC and relevant regression/integration, and records exact commands/results and per-root snapshots.
+- **Reviewer** independently inspects the actual diff, AC coverage and Developer evidence. A stale snapshot or unverified independence cannot receive AI_PASS.
+
+The accepted AC revision is the canonical Feature expectation. Do not add behavior silently during implementation or review.
+
+## Exit outcomes
+
+- READY_FOR_MERGE_REVIEW: accepted requirements, implementation, verification and independent review support human release review.
+- NEEDS_DECISION: a consequential product/technical decision remains.
+- BLOCKED: a required dependency, permission, decision, test or reviewer capability is missing.
+
+READY_FOR_MERGE_REVIEW does not authorize merge, production migration or deployment.

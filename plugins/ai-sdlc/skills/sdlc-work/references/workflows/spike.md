@@ -1,8 +1,38 @@
 # Spike workflow
 
-1. Define one answerable question, context, constraints, success/exit evidence, in-scope roots, time/effort budget if supplied, and what is explicitly NOT being implemented.
-2. Investigate existing code, available documentation, options, costs, failure cases and disconfirming evidence. Label `OBSERVED`, `SOURCE_BACKED`, `ASSUMPTION`, `UNKNOWN`. Use external citations only when accessible; do not invent up-to-date facts.
-3. A POC is optional and must have a separate bounded scratch/experiment grant. A disposable unmerged scratch POC is NOT production implementation or feature acceptance; if actual production/repository code changes are proposed, end the spike and ask for a new Feature/Bug invocation plus normal change gates.
-4. Return concise decision brief: question; evidence and confidence; viable options/trade-offs; recommendation `PROCEED | CLARIFY | STOP`; unanswered risks; recommended next task (if any). **STOP** without creating acceptance criteria, starting a build, or granting itself approval to proceed.
+A Spike answers a bounded feasibility, research or architecture question without committing to production implementation. Researcher owns Scope → Research → optional Experiment Plan → optional Experiment → Decision.
 
-In Extended, follow the exact stage sequence in core/human-gates.md, with a mandatory approval after each applicable stage; do not combine stages or prepare downstream outputs before approval.
+## Role sequence by mode
+
+| Stage | Quick | Standard | Extended |
+|---|---|---|---|
+| Scope | Bound the question in the answer | Define question, constraints and success/stop criteria | Create and approve 01-scope.md |
+| Research | Focused evidence and recommendation | Compare options and contrary evidence | Create and approve 02-research.md |
+| Experiment plan | Skip unless a POC is useful | Optional; separate scratch grant | Optional 03-experiment-plan.md; approve before execution |
+| Experiment | Optional; separately authorized | Optional; separately authorized | Optional 04-experiment.md; run after approval/grant |
+| Decision | PROCEED, CLARIFY or STOP | Decision brief and next task | Create and approve 05-decision.md |
+
+Mode never grants permission to edit production code or run an experiment. Production implementation requires a separate Feature/Bug task.
+
+## Extended artifacts
+
+- 01-scope.md
+- 02-research.md
+- 03-experiment-plan.md (optional)
+- 04-experiment.md (optional)
+- 05-decision.md
+
+Use stage IDs scope, research, experiment_plan, experiment and decision. Mark unused optional stages not_applicable in state with a reason; do not create placeholders.
+
+## Researcher handoff
+
+1. Bound the question, constraints, roots, success criteria and non-goals.
+2. Inspect current architecture, code contracts and prior decisions before asking questions.
+3. Compare realistic options, costs, trade-offs, dependencies, failure modes and contrary evidence.
+4. Label facts, assumptions and unknowns; cite current sources for fresh external claims.
+5. Propose a disposable scratch experiment only when it materially reduces uncertainty. Define hypothesis, scope, success criteria and cleanup.
+6. Obtain a separate grant before creating files, installing dependencies, running services or spending resources.
+7. Record actual experiment commands, results, limitations and cleanup.
+8. Return PROCEED, CLARIFY or STOP with confidence, evidence, residual unknowns and a possible next task.
+
+PROCEED is advisory. A Spike ends with a decision, not production delivery or an automatic Developer/Reviewer chain.
