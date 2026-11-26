@@ -13,18 +13,12 @@ Check whether the Feature/Bug change satisfies the accepted expectation and whet
 
 ## Procedure
 
-1. **Verify independence:** confirm this context did not implement the change. If isolation cannot be verified, report `INDEPENDENCE: NOT VERIFIED`; do not claim AI_PASS.
-2. **Load the basis:** inspect project instructions, accepted Feature ACs or original Bug contract/symptom, approved plan/diagnosis, Developer report and exclusions.
-3. **Check the snapshot:** compare each root's HEAD, dirty diff and relevant untracked files with the Developer-verified integrated snapshot. A mismatch is BLOCKED pending re-verification.
-4. **Inspect the actual diff** and relevant surrounding code; do not rely on summaries alone.
-5. **Review correctness and completeness:** assess every accepted AC or original Bug symptom, planned slice, negative path, missing behavior and unrequested scope.
-6. **Review security and data integrity:** inspect relevant authorization, privacy, injection, secrets, data-loss and recovery risks.
-7. **Review architecture and integration:** check API/schema compatibility, dependencies, cross-repository contracts, rollout assumptions, failure handling and material operational risks.
-8. **Review verification quality:** inspect exact commands, results and assertions. Follow `practices/tdd.md` to assess whether RED failed for the intended reason, GREEN passed, and exceptions are honest. File existence is not execution evidence.
-9. **Record gaps:** list skipped checks, inaccessible roots, unknowns and their impact. Do not infer coverage from an adjacent passing test.
-10. **Report findings** with severity, path/line, expected versus actual behavior, evidence and actionable correction. Use the severity definitions below; avoid non-actionable style comments.
-11. **Write 05-review.md (Feature) or 03-review.md (Bug) in Extended; otherwise return a concise verdict.**
-12. Return AI_PASS, CHANGES_REQUESTED or BLOCKED with independence status, reviewed snapshot and residual risks. Do not edit source or start repairs.
+1. **Establish independence.** Confirm this is a fresh context that did not implement the change. If isolation cannot be verified, report `INDEPENDENCE: NOT VERIFIED`; do not claim AI_PASS.
+2. **Load the review basis.** Inspect project instructions, accepted Feature ACs or original Bug contract/symptom, approved plan/diagnosis, Developer evidence and exclusions.
+3. **Verify the snapshot.** Compare each root's HEAD, dirty diff and relevant untracked files with the Developer-verified integrated snapshot. A mismatch is BLOCKED pending re-verification.
+4. **Inspect the actual change.** Review the diff and relevant surrounding code against every accepted AC or original Bug symptom, including missing behavior and unrequested scope.
+5. **Evaluate risk and evidence.** Assess relevant security, data integrity, architecture, integration and operational concerns. Inspect exact commands, results and assertions; use `practices/tdd.md` for TDD evidence and exception criteria.
+6. **Report the verdict.** Record actionable findings with severity, path/line, expected versus actual behavior and evidence. Include skipped checks, inaccessible roots and residual risks. Write the Extended artifact or return a concise verdict; do not edit source or start repairs.
 
 ## Finding severity
 
@@ -39,16 +33,12 @@ Severity reflects impact and exploitability/likelihood, not code churn or review
 
 ## Checklist
 
-- [ ] Fresh independent context is verified.
-- [ ] Accepted expectations and approved plan/diagnosis were inspected.
-- [ ] Current integrated snapshot matches the Developer-verified snapshot.
-- [ ] Actual diff, relevant untracked files and surrounding code were inspected.
+- [ ] Fresh independent context and current snapshot are verified.
+- [ ] Accepted expectations, approved plan and actual diff were inspected.
 - [ ] Correctness and completeness were checked against every AC/symptom.
-- [ ] Security, data integrity, architecture and cross-root integration were assessed where relevant.
-- [ ] Test commands, assertions and TDD evidence were assessed using `practices/tdd.md`.
-- [ ] Findings use consistent severity and actionable path/evidence.
-- [ ] Gaps and limitations are explicit; findings are evidence-based.
-- [ ] No source edits or privileged actions were performed.
+- [ ] Relevant security, integrity, architecture and integration risks were assessed.
+- [ ] Test commands, assertions, TDD evidence and gaps are evidence-based.
+- [ ] Findings are actionable, severity-qualified and tied to observed evidence; no source edits were made.
 
 ## Output
 
