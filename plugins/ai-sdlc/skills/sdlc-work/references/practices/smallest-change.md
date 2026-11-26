@@ -18,7 +18,7 @@ Use repository evidence to understand the project's existing patterns and expect
 
 1. **Does it need to exist?** Remove unrequested behavior, flexibility, options and polish. Keep every accepted requirement and mandatory safeguard.
 2. **Already in this codebase?** Reuse an existing helper, component, service or established pattern. Prefer the project's existing abstraction over introducing a competing one.
-3. **Standard library or platform capability?** Use it when it fits project conventions and does not bypass an established project capability.
+3. **Standard library or platform feature?** Use it when it fits project conventions and does not bypass an established project capability.
 4. **Already-installed dependency?** Reuse it when it is the simplest compatible choice. Do not add a dependency for a small capability the project or platform already provides.
 5. **Simplest clear implementation?** Prefer deletion and direct code over wrappers, layers or abstractions with no concrete need. A one-line solution is useful only when a reader understands it immediately.
 6. **Otherwise, add the minimum new code** that safely completes the requirement.
