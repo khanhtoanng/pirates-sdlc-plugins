@@ -2,7 +2,11 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "ai-sdlc",
   "version": "0.8.0",
-  "description": "Local-first, risk-based AI SDLC workflow with single- and multi-repository coordination for Claude Code, Cursor and Codex.",
+  "description": "Local-first, risk-based AI SDLC workflow with single- and multi-repository coordination for Claude Code, Cursor, Codex and GitHub Copilot.",
+  "agents": "com.github.copilot/agents/",
+  "skills": [
+    "skills/"
+  ],
   "keywords": [
     "sdlc",
     "tdd",
@@ -10,6 +14,9 @@
     "multi-repo",
     "claude-code",
     "cursor",
-    "codex"
+    "codex",
+    "github-copilot",
+    "copilot-cli",
+    "vscode"
   ]
 }

@@ -30,8 +30,8 @@ def evaluate(observation, cases):
     case = cases.get(observation.get('scenario'))
     if not case:
         return False, ['unknown scenario']
-    if observation.get('host') not in {'claude', 'cursor', 'codex'}:
-        errors.append('host must be claude, cursor or codex')
+    if observation.get('host') not in {'claude', 'cursor', 'codex', 'copilot'}:
+        errors.append('host must be claude, cursor, codex or copilot')
     if not isinstance(observation.get('run_id'), str) or not observation['run_id'].strip():
         errors.append('missing run_id for evidence trace')
     observations = observation.get('observations')

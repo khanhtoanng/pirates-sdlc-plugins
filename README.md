@@ -1,4 +1,4 @@
-# AI SDLC — local-first plugin for Claude Code, Cursor and Codex
+# AI SDLC — local-first plugin for Claude Code, Cursor, Codex and GitHub Copilot
 
 **Version 0.8.0.** One installed plugin coordinates engineering work across one or more repositories. It does not generate project harness files or install hooks, MCPs or integrations by default.
 
@@ -28,6 +28,8 @@ Intent defines the problem and outcome; Spec defines observable behavior and acc
 
 - **Claude Code:** `/ai-sdlc:sdlc-work feature standard Add customer status in FE and BE`
 - **Cursor:** `sdlc-work bug quick Reproduce and fix the login 500 response`
+- **GitHub Copilot in VS Code:** `/sdlc-work feature standard Add customer status`
+- **GitHub Copilot CLI:** `copilot -p "Use /sdlc-work feature standard Add customer status" --plugin-dir /path/to/plugins/ai-sdlc`
 - **Codex:** `sdlc-work spike standard Compare two approaches for offline sync`
 
 Optional skills: `sdlc-setup` inspects or configures an approved workspace; `sdlc-doctor` checks plugin and host readiness.

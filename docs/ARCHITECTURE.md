@@ -2,7 +2,7 @@
 
 ## Operating model
 
-One installed plugin coordinates Feature, Bug and Spike work across Claude Code, Cursor and Codex.
+One installed plugin coordinates Feature, Bug and Spike work across Claude Code, Cursor, Codex, and GitHub Copilot (VS Code and CLI).
 
 - **Task type** chooses the workflow: Feature changes product behavior, Bug repairs a violated contract, and Spike answers a bounded research question.
 - **Mode** chooses execution depth and approval behavior: Quick, Standard or Extended. Auto selects a mode.

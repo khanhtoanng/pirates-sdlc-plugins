@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added GitHub Copilot support for VS Code and Copilot CLI using the portable Agent Plugins 1.0 skill package and Copilot-native Reviewer agent.
+- Extended opt-in host smoke runs and offline grader tests to recognize Copilot CLI JSONL output.
 - Structured Architect planning from accepted ACs through evidence-backed technical choices, tracer-bullet slices, blocker-first dependencies, proposed parallel groups and verification seams.
 - Clarified planning ownership: Architect owns the logical delivery graph; Developer validates current execution feasibility and owns actual dispatch, implementation and verification.
 - Added a human-facing Architect plan review card covering task granularity, blocking edges, execution order, approach and scope decisions.

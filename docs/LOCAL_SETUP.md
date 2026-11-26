@@ -41,6 +41,26 @@ codex --sandbox workspace-write --ask-for-approval on-request \
 
 Host directory access is not SDLC approval to edit every root. The Coordinator still checks the task's bounded scope.
 
+## GitHub Copilot (VS Code and CLI)
+
+The plugin uses the portable Agent Plugins 1.0 manifest, shared `skills/` directory and Copilot-specific `com.github.copilot/agents/sdlc-reviewer.agent.md` Reviewer. The portable manifest points Copilot CLI at that same directory, so both Copilot clients use the `sdlc-reviewer` agent.
+
+For Copilot CLI, install the plugin from the local checkout:
+
+```bash
+copilot plugin install /home/you/AI_SDLC_Local_Plugin_v0.8.0/plugins/ai-sdlc
+copilot plugin list
+```
+
+Start a new CLI session and verify `/skills list` and `/agent`. Invoke a workflow directly:
+
+```bash
+copilot -p "Use /sdlc-work feature standard Add customer status" \
+  --plugin-dir /home/you/AI_SDLC_Local_Plugin_v0.8.0/plugins/ai-sdlc
+```
+
+For persistent installation, use `copilot plugin install` once and start a new session. Reinstall the local path after changing the checkout so the installed cache is refreshed. VS Code automatically discovers plugins installed through Copilot CLI. Select the Copilot harness and verify the plugin and its skills/agent under Chat: Open Customizations → Plugins. For a development checkout, VS Code also supports the experimental `chat.pluginLocations` setting with the plugin directory mapped to `true`.
+
 **Fallback:** when native plugin installation is unavailable, copy `plugins/ai-sdlc/skills/sdlc-*` into `~/.agents/skills/` or project `.agents/skills/`. This is a snapshot; copy again after updates. It does not install the native Reviewer agent.
 
 ## Try the three task routes
