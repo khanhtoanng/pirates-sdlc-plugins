@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- Made Spec output human-first: one authoritative acceptance-criteria table with full observable rules, per-AC source/basis labels, separate verification examples, concise scope and consequential decisions.
+- Made Architect Feature plans actionable: summary-first implementation table mapping each task to actual file operations/paths, specific code responsibilities, ACs and genuine blockers; added explicit unknown-path behavior and a compact Bug repair-plan format.
+- Aligned human review handoffs with the Spec and plan tables and added illustrative Spec and Architect plan examples.
+
 ## 0.9.0 — smallest complete change
 
 - Added a shared smallest-complete-solution decision ladder to Architect and Developer, preferring removal, existing project capabilities, platform/standard-library features and installed dependencies before adding the minimum necessary code.
@@ -38,4 +42,4 @@
 ## 0.5.0 — local-first plugin runtime
 
 - Replaced project-harness generation with one plugin and the `sdlc-work`, `sdlc-setup` and `sdlc-doctor` skills.
-- Added multi-repository coordination, host adapters, local installation guidance and static validation.
+- Added multi-repository coordination, host adapters, local installation guidance and evaluation tooling.
