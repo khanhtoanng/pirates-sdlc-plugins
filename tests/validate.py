@@ -191,6 +191,9 @@ check('## Finding severity' in reviewer, 'Reviewer is missing finding severity d
 check('callers/consumers' in reviewer and 'concrete input' in reviewer.lower()
       and 'expected load' in reviewer.lower(),
       'Reviewer must trace impacted code beyond the diff and validate concrete findings/operating context')
+check('## Finding severity' in reviewer and 'Trigger and problem' in reviewer
+      and 'Smallest safe fix' in reviewer and 'Impact if unchanged' in reviewer,
+      'Reviewer findings must explain trigger, fix and impact in a consistent format')
 check('REQUIRED' in coverage and 'VERIFY' in coverage,
       'Coverage must own requirement versus verification classification')
 check('independent reviewer requirement' in delegation and 'parallel work' in delegation,
