@@ -6,12 +6,12 @@ Task type selects the workflow; mode selects its depth and human approval. Auto 
 
 Example: `sdlc-work feature standard Add customer status to FE and BE; use Flyway only if needed; keep Terraform read-only.`
 
-**Order:** Intent (when problem/scope needs clarity) → Spec (when accepted ACs are incomplete) → Architect (when design or slicing is needed) → Developer → independent Reviewer.
+**Order:** Intent (when problem/scope needs clarity) → Spec (when accepted ACs are incomplete) → Architect (when design or delivery slicing is needed) → Developer → independent Reviewer.
 
 - Intent: problem, target user, outcome, scope and non-goals.
 - Spec: stable, testable ACs with source mapping and a complete AC summary.
-- Architect: map each AC to implementation slices, roots, interfaces, dependencies and test seams.
-- Developer: implement authorized slices with TDD where applicable; verify each AC and relevant regressions/integrations.
+- Architect: investigate current behavior; explain material technical choices; map each accepted AC to complete, outcome-oriented slices; record genuine blockers and reasons; propose parallel groups and test seams.
+- Developer: validate the plan against the fresh baseline and host/worktree isolation; dispatch safe slices; implement authorized work with TDD where applicable; integrate and verify each AC and relevant regressions.
 - Reviewer: inspect the actual diff, AC coverage and Developer evidence in a fresh context.
 
 Extended artifacts: 01-intent.md, 02-spec.md, 03-plan.md, 04-implementation.md, 05-review.md.
@@ -20,7 +20,7 @@ Extended artifacts: 01-intent.md, 02-spec.md, 03-plan.md, 04-implementation.md, 
 
 Example: `sdlc-work bug quick Fix the login 500 for an empty password and verify the existing 400 contract.`
 
-**Order:** Architect (assessment, diagnosis and minimum repair plan) → Developer (fix and verify) → independent Reviewer. Quick may use bounded Developer triage for a clear, low-risk Bug.
+**Order:** Architect (assessment, diagnosis and minimum repair plan) → Developer (validate, fix and verify) → independent Reviewer. Quick may use bounded Developer triage for a clear, low-risk Bug.
 
 Extended artifacts: 01-diagnosis-plan.md, 02-implementation.md, 03-review.md. If expected behavior is unclear or a new business rule is needed, route it through Feature Spec and owner acceptance. Report reproduction status honestly; use VERIFIED_FIX only with credible symptom resolution, regression evidence, required checks and independent AI_PASS.
 

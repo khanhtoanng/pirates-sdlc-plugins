@@ -16,8 +16,12 @@ Spike experiment stages are optional. Unused optional stages are marked `not_app
 
 Present the task, stage and revision; artifact path; outcome and key decisions; evidence and checklist result; scope, exclusions, risks and unverified items; and the exact next human action. The full artifact must be accessible.
 
-Approval applies only to the current artifact revision and does not expand edit scope. Material upstream changes invalidate affected downstream evidence. End the turn after presenting a stage; do not poll or treat silence as consent.
+For an Architect plan or Bug diagnosis/plan, the review card also summarizes the recommended approach, numbered outcome-oriented tasks, AC coverage where applicable, genuine blockers and their reasons, ready tasks, proposed parallel groups, verification seams and material risks. Ask the human to check task granularity, blocking edges, execution order and consequential approach/scope decisions. The complete task contracts remain in the artifact.
 
-Developer owns implementation and verification. Reviewer is a separate independent stage. Reviewer approval does not authorize merge, production migration or deployment.
+Approval applies only to the current artifact revision and does not expand edit scope. Material upstream changes invalidate affected downstream approvals/evidence. End the turn after presenting a stage; do not poll or treat silence as consent.
+
+Architect owns the logical delivery plan. Developer validates the approved plan against the fresh baseline and host/worktree isolation, then owns actual dispatch, implementation and verification. A material plan change returns through Architect and the Coordinator; the revised plan must be approved before the Extended workflow continues.
+
+Reviewer is a separate independent stage. Reviewer approval does not authorize merge, production migration or deployment.
 
 For the authoritative state schema, approval/resume protocol and invalidation rules, see [core/modes.md](../plugins/ai-sdlc/skills/sdlc-work/references/core/modes.md). For the human-facing record location and file layout, see [task records](TASK_RECORDS.md).

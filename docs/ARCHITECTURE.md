@@ -15,25 +15,27 @@ One installed plugin coordinates Feature, Bug and Spike work across Claude Code,
 |---|---|
 | Intent | Feature problem, user, outcome, scope and non-goals |
 | Spec | Observable behavior, acceptance criteria and source mapping |
-| Architect | Feature design/plan; Bug assessment, diagnosis and minimum fix plan |
-| Developer | Authorized implementation, TDD, AC-slice decomposition and verification |
+| Architect | Feature technical approach, AC-to-slice mapping, logical dependency graph and proposed delivery plan; Bug assessment, diagnosis and minimum repair plan |
+| Developer | Validate the plan against the current baseline and host/worktree capabilities; actual dispatch, authorized implementation, TDD, integration and verification |
 | Reviewer | Independent review of the actual integrated diff and Developer evidence |
 | Researcher | Spike scope, evidence-based research, optional scratch experiment and decision |
 
+Architect owns the logical delivery graph. Developer owns execution feasibility and actual dispatch. A material plan change returns through the Coordinator and Architect; Developer does not silently redesign an approved plan.
+
 ## Workflow order
 
-- **Feature:** Intent (when needed) → Spec (when needed) → Architect (when needed) → Developer → independent Reviewer.
+- **Feature:** Intent (when needed) → Spec (when needed) → Architect (when design, dependencies or delivery slicing are needed) → Developer → independent Reviewer.
 - **Bug:** Architect → Developer → independent Reviewer. A clearly reproduced, low-risk Bug may use bounded Developer triage in Quick.
 - **Spike:** Researcher scope → research → optional approved experiment → decision. Production implementation is a separate Feature/Bug task.
 
-Workflow files define role applicability, order and Extended artifact names. Developer may parallelize only independent, non-conflicting AC slices; final integration verification and independent review remain mandatory.
+Workflow files define role applicability, order and Extended artifact names. Architect proposes complete, outcome-oriented slices and genuine blocker relationships. Developer validates safe execution and may parallelize only independent, non-conflicting slices; final integration verification and independent review remain mandatory.
 
 ## Shared practice ownership
 
 - `coverage.md` classifies accepted rules versus verification examples and consequential questions.
 - `tdd.md` owns test-seam guidance, RED/GREEN/REFACTOR and TDD evidence.
-- `delegation.md` owns actual worker dispatch, safe parallel execution and independent Reviewer isolation.
-- `review.md` owns human decision policy and review handoff cards.
+- `delegation.md` owns plan-to-dispatch boundaries, actual worker dispatch, safe parallel execution and independent Reviewer isolation.
+- `review.md` owns human decision policy and review handoff cards, including Architect plan review.
 - Role files own role procedures and outputs; `runtime.md` owns Coordinator invariants; `modes.md` owns mode and Extended state/approval policy.
 
 ## Evidence and authority

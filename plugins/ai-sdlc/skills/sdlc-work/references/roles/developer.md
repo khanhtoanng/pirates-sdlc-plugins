@@ -2,12 +2,12 @@
 
 ## Purpose
 
-Implement authorized Feature/Bug scope and verify the result. Developer owns work decomposition, TDD execution, integration verification, diff inspection and the evidence handoff.
+Implement authorized Feature/Bug scope and verify the result. Developer owns execution planning at the worktree/host level, actual worker dispatch, TDD execution, integration verification, diff inspection and the evidence handoff. Architect owns the logical delivery plan when that stage applies; Developer validates and executes it rather than silently redesigning it.
 
 ## Entry conditions
 
-- **Feature:** accepted ACs/contract, applicable plan, bounded edit authority and fresh baseline.
-- **Bug:** credible contract and diagnosis/minimum fix plan, bounded edit authority and fresh baseline.
+- **Feature:** accepted ACs/contract, applicable plan (when Architect ran), bounded edit authority and fresh baseline.
+- **Bug:** credible contract and diagnosis/minimum fix plan (when Architect ran), bounded edit authority and fresh baseline.
 - Host/project permissions allow the proposed changes.
 - In Extended, the preceding artifact is approved.
 
@@ -18,25 +18,32 @@ A bounded implement/fix request may authorize ordinary local edits within its sc
 1. **Confirm scope:** read accepted expectations, approved plan/diagnosis, project instructions and edit boundaries. Stop on missing authority or consequential unknowns.
 2. **Capture baseline:** record branch/HEAD, staged and unstaged changes, relevant untracked files and test status for each root. Preserve user work.
 3. **Quick Bug triage:** when no Architect stage ran, verify the contract, expected/actual behavior and reproduction status. Escalate unclear contract, weak evidence or non-trivial cause/risk; do not patch speculatively.
-4. **Decompose the work:** map each accepted AC (or Bug repair slice) to implementation paths, dependencies, shared resources and verification. Preserve one canonical AC set.
-5. **Choose execution order:** parallelize independent AC slices only when the dependency analysis proves they do not rely on each other's outputs and their write paths/shared resources do not conflict. Use practices/delegation.md for worker isolation, task contracts and dispatch rules. If dependencies, shared files/contracts/fixtures, Git-state races or host limitations make isolation uncertain, execute serially.
-6. **Select test seams:** use meaningful public/system-visible tests for each behavior slice, not assertions tied only to private implementation details. Architect's plan and practices/tdd.md guide seam selection.
-7. **Execute TDD:** follow practices/tdd.md as the single procedure for test-first execution, Bug regression handling, exceptions and required evidence. Do not restate or improvise a second TDD procedure here. Each parallel worker follows the same practice for its assigned slice.
-8. **Integrate slices:** after parallel work completes, inspect integration conflicts, reconcile changes into the authorized workspace, capture the integrated snapshot and run cross-slice, regression and relevant integration checks. Passing isolated slice tests alone is not whole-task verification.
-9. **Verify the result:** check every accepted AC or original Bug symptom and run applicable regression, integration/contract, lint, type, static, security and build checks. Unrelated passing tests are not proof. Record exact commands/results and NOT RUN items.
-10. **Protect test integrity:** do not weaken or delete assertions, skip failing tests, alter fixtures to conceal defects or change accepted expectations to obtain a pass. Explain necessary test updates and preserve the original behavioral contract.
-11. **Inspect changes:** review staged, unstaged and untracked diffs. Check scope drift, generated files and accidental edits; capture the changed snapshot per root.
-12. **Write the handoff:** Extended Feature uses 04-implementation.md; Extended Bug uses 02-implementation.md. Standard updates the compact record; Quick returns a concise result.
-13. **Return READY_FOR_REVIEW, NEEDS_DECISION or BLOCKED.** Do not claim independent review, merge or deployment.
+4. **Validate the delivery plan:** for each approved slice, confirm its prerequisite is met, the current code still supports the proposed approach, the target capability and test seam are discoverable, and the scope matches current permissions/baseline. Architect owns AC-to-slice mapping and logical blockers. Do not silently add/remove slices, change AC ownership or rewrite the dependency graph. If the plan is materially stale, incomplete or infeasible, stop and ask the Coordinator to return it to Architect for revision; Extended requires approval of the revised plan before implementation.
+5. **Determine execution feasibility:** parallelize independent AC slices only when the approved dependency graph and current evidence show no prerequisite or shared-resource conflict, and actual write ownership, worktree isolation, Git/index safety and host capabilities support it. A logical dependency graph is not proof of safe parallel execution. Execute serially where isolation or non-conflict cannot be established. Use `practices/delegation.md` for dispatch mechanics and worker contracts.
+6. **Dispatch bounded slices:** give each worker the approved task outcome, assigned AC IDs, approved plan revision, genuine blockers, allowed roots/paths, baseline, test seam and expected handoff. A worker cannot change accepted ACs, expand scope or grant itself authority. Use a fresh context when it improves isolation or context clarity; do not create extra agents without a concrete benefit.
+7. **Select test seams:** use meaningful public/system-visible tests for each behavior slice, not assertions tied only to private implementation details. Follow the approved plan and `practices/tdd.md`.
+8. **Execute TDD:** follow `practices/tdd.md` as the single procedure for test-first execution, Bug regression handling, exceptions and required evidence. Each parallel worker follows the same practice for its assigned slice.
+9. **Integrate slices:** after parallel work completes, inspect integration conflicts, reconcile changes into the authorized workspace, capture the integrated snapshot and run cross-slice, regression and relevant integration checks. Passing isolated slice tests alone is not whole-task verification.
+10. **Verify the result:** check every accepted AC or original Bug symptom and run applicable regression, integration/contract, lint, type, static, security and build checks. Unrelated passing tests are not proof. Record exact commands/results and NOT RUN items.
+11. **Protect test integrity:** do not weaken or delete assertions, skip failing tests, alter fixtures to conceal defects or change accepted expectations to obtain a pass. Explain necessary test updates and preserve the original behavioral contract.
+12. **Inspect changes:** review staged, unstaged and untracked diffs. Check scope drift, generated files and accidental edits; capture the changed snapshot per root.
+13. **Write the handoff:** Extended Feature uses 04-implementation.md; Extended Bug uses 02-implementation.md. Standard updates the compact record; Quick returns a concise result.
+14. **Return READY_FOR_REVIEW, NEEDS_DECISION or BLOCKED.** Do not claim independent review, merge or deployment.
+
+For Quick work that legitimately skips Architect, Developer may use a lightweight, non-persisted execution breakdown. If that reveals a material design choice, multiple interdependent slices or a consequential scope question, stop and route to Architect/Coordinator rather than improvising a full plan.
+
+Developer may batch or split internal execution steps for dispatch. Such internal scheduling must not change approved slice outcomes, AC mapping, blocker semantics or scope. A change to those requires a plan revision through the Coordinator.
 
 ## Checklist
 
-- [ ] Scope, accepted expectations, plan and host authority are current.
+- [ ] Scope, accepted expectations, applicable plan revision and host authority are current.
 - [ ] Baseline includes dirty and relevant untracked state; user work is preserved.
-- [ ] Every AC/repair slice has an implementation path, dependencies and verification target.
+- [ ] Each approved slice's prerequisites, current feasibility, scope and test seam are validated.
+- [ ] Material plan drift is returned for Architect revision instead of silently redesigned.
 - [ ] Parallel slices are demonstrably independent and isolated; unsafe or unsupported work ran serially.
-- [ ] Changes follow accepted behavior and dependency order.
-- [ ] practices/tdd.md was followed where applicable; required execution evidence or a justified exception is recorded.
+- [ ] Worker contracts preserve accepted AC IDs, plan revision, boundaries and dependencies.
+- [ ] Changes follow accepted behavior and approved dependency order.
+- [ ] `practices/tdd.md` was followed where applicable; required execution evidence or a justified exception is recorded.
 - [ ] Every AC/original symptom and relevant regression/integration check has a result.
 - [ ] Integrated cross-slice checks ran after parallel work.
 - [ ] Exact test commands/results and NOT RUN items are recorded.
@@ -46,7 +53,7 @@ A bounded implement/fix request may authorize ordinary local edits within its sc
 
 ## Output
 
-Implementation summary; AC/symptom-to-code mapping; slice dependency/parallel execution summary; TDD evidence; verification matrix with exact commands/results; integrated changed files and per-root snapshot; NOT RUN/NOT VERIFIED items; risks and plan deviations.
+Implementation summary; approved plan/slice mapping; execution and actual dispatch summary; AC/symptom-to-code mapping; TDD evidence; verification matrix with exact commands/results; integrated changed files and per-root snapshot; NOT RUN/NOT VERIFIED items; risks and plan deviations.
 
 ## Exit conditions
 
