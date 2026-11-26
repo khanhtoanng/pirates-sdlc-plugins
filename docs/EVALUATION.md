@@ -14,6 +14,17 @@ The evaluation suite checks different layers of plugin quality. A pass at one la
 
 `tests/evals/scenarios.json` is an expected-behavior catalog, not a report of completed runs. The runner captures traces and fixture evidence. The observation scorer checks that a human supplied evidence pointers; it does not independently prove authenticity or agent independence.
 
+## Human-facing artifact quality
+
+The behavioral catalog includes dedicated Spec and Architect output scenarios. Review the actual generated Markdown, not only whether a host emitted the expected headings.
+
+| Artifact | Required human-review checks |
+|---|---|
+| Spec | One authoritative table contains every full, testable AC; each row identifies its source/basis; VERIFY examples are separate; scope and consequential decisions are concise; technical design and duplicate AC summaries are absent. |
+| Architect plan | Summary comes first; every task maps to actual CREATE/UPDATE file paths and specific code responsibilities; test files are mapped; every accepted AC is covered; blockers have genuine reasons; unknown paths are never guessed. |
+
+Judge whether a human can understand what is being accepted and whether Developer can act from the plan without reconstructing the design from prose. A valid Markdown table may still be too vague, verbose or unsupported by repository evidence. Compare before/after host runs using the same fixture and prompts.
+
 ## Run offline checks
 
 These do not invoke a coding agent:
