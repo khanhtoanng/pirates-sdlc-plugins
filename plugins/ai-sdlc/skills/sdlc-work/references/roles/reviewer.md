@@ -16,9 +16,9 @@ Check whether the Feature/Bug change satisfies the accepted expectation and whet
 1. **Establish independence.** Confirm this is a fresh context that did not implement the change. If isolation cannot be verified, report `INDEPENDENCE: NOT VERIFIED`; do not claim AI_PASS.
 2. **Load the review basis.** Inspect project instructions, accepted Feature ACs or original Bug contract/symptom, approved plan/diagnosis, Developer evidence and exclusions.
 3. **Verify the snapshot.** Compare each root's HEAD, dirty diff and relevant untracked files with the Developer-verified integrated snapshot. A mismatch is BLOCKED pending re-verification.
-4. **Inspect the actual change.** Review the diff and relevant surrounding code against every accepted AC or original Bug symptom, including missing behavior and unrequested scope.
-5. **Evaluate risk and evidence.** Assess relevant security, data integrity, architecture, integration and operational concerns. Inspect exact commands, results and assertions; use `practices/tdd.md` for TDD evidence and exception criteria.
-6. **Report the verdict.** Record actionable findings with severity, path/line, expected versus actual behavior and evidence. Include skipped checks, inaccessible roots and residual risks. Write the Extended artifact or return a concise verdict; do not edit source or start repairs.
+4. **Inspect the actual change and its impact.** Review the diff and relevant surrounding code against every accepted AC or original Bug symptom. Where a changed function, signature, shared state or contract affects other paths, trace its callers/consumers, callees, tests, fixtures and configuration; inspect relevant code outside the diff. Do not expand into an unrelated full-repository review.
+5. **Evaluate risk and evidence.** Assess relevant correctness, security, data integrity, compatibility, integration and operational risks. When behavior depends on concurrency, volume or request frequency, derive expected load from project documentation or deployment configuration; state UNKNOWN when evidence is missing instead of inventing a load target. Inspect exact commands, results and assertions; use `practices/tdd.md` for TDD evidence and exception criteria.
+6. **Validate findings and report.** Recheck each finding against the actual code path and a concrete input, event or state that triggers the problem. Explain what the code does, what fails, the impact and the smallest safe fix; include severity, path/line and evidence. Omit style preferences, speculative risks and vague suggestions. Include skipped checks, inaccessible roots and residual risks. Write the Extended artifact or return a concise verdict; do not edit source or start repairs.
 
 ## Finding severity
 
@@ -35,14 +35,14 @@ Severity reflects impact and exploitability/likelihood, not code churn or review
 
 - [ ] Fresh independent context and current snapshot are verified.
 - [ ] Accepted expectations, approved plan and actual diff were inspected.
-- [ ] Correctness and completeness were checked against every AC/symptom.
-- [ ] Relevant security, integrity, architecture and integration risks were assessed.
+- [ ] Relevant callers/consumers and affected code outside the diff were traced where contracts or shared behavior require it.
+- [ ] Correctness, completeness and material risks were checked against every AC/symptom and expected operating context.
 - [ ] Test commands, assertions, TDD evidence and gaps are evidence-based.
-- [ ] Findings are actionable, severity-qualified and tied to observed evidence; no source edits were made.
+- [ ] Every finding has a concrete trigger, impact, smallest safe fix and evidence; style-only preferences are omitted.
 
 ## Output
 
-Verdict and independence status; reviewed roots/snapshots; AC/symptom coverage; correctness, security, architecture and verification findings by severity/path; skipped areas; residual risks and next action.
+Verdict and independence status; reviewed roots/snapshots; AC/symptom coverage; findings by severity with title, path/line, concrete trigger, impact, smallest safe fix and evidence; expected-load basis or UNKNOWN where material; skipped areas; residual risks and next action.
 
 ## Exit conditions
 
