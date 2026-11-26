@@ -11,7 +11,8 @@ This directory explains AI SDLC to people. It is not loaded as agent instruction
 
 ## Examples
 
-- [Spec review](EXAMPLE_SPEC_REVIEW.md) — concise human-facing acceptance-criteria review.
+- [Spec review](EXAMPLE_SPEC_REVIEW.md) — concise AC table, source/basis labels and VERIFY examples.
+- [Architect plan](EXAMPLE_PLAN.md) — actionable task-to-file/code-change table, dependencies and verification.
 - [Multi-repository work](EXAMPLE_MULTI_REPO.md) — one Feature coordinated across FE, BE, migrations and read-only infrastructure.
 
 ## Maintainers
