@@ -12,6 +12,14 @@ Define separate sets:
 
 For a read-only Spike without code roots, repository discovery is optional. If a required root is inaccessible, report missing evidence and ask to expose it or narrow scope. Do not assume global Git transactions.
 
+## One task home across repositories
+
+A multi-repository task has one task record, not one copy in every repository. Select one authorized task-home root: prefer the selected workspace-level root when writable; otherwise use one explicitly selected primary repository. Store plugin-generated durable state and artifacts under that root's `.sdlc/changes/<task-id>/` directory.
+
+Record all participating repository roots, source revisions, edit scopes and per-root snapshots in that one task record. The task-home root is not automatically an edit-approved source root. Creating/updating the task record requires write authorization for that location; source-edit permission remains separate. If there is no authorized task home, stop durable workflow progression rather than choosing a second location or copying records into each repository.
+
+External tickets, issues, PRs and ADRs are source references. They may be linked from the local record but do not replace it or hold a competing copy of plugin state and stage artifacts.
+
 ## Impact and dependency analysis
 
 For each accepted Feature outcome, map AC to affected roots/contracts to integration evidence. Trace actual callers, data ownership and dependencies. A common FE/BE/DB/infra workspace may involve:
@@ -38,7 +46,7 @@ This file owns root discovery, impact and dependency analysis. Worker dispatch, 
 
 ## Optional workspace profile
 
-The plugin does not require generated config. For recurring multi-repo sessions, sdlc-setup may propose one user-owned .ai-sdlc/workspace.yaml with schemaVersion: 1, repository aliases/paths and verified relationships. Treat it as an index and preference, not authority for files, permissions, requirements or deployment. Never auto-commit duplicates across repos or override host trust boundaries.
+The plugin does not require generated config. For recurring multi-repo sessions, sdlc-setup may propose one user-owned .ai-sdlc/workspace.yaml with schemaVersion: 1, repository aliases/paths and verified relationships. Treat it as an index and preference, not authority for files, permissions, requirements or deployment. This optional workspace profile is distinct from task records under .sdlc/changes/. Never auto-commit duplicates across repos or override host trust boundaries.
 
 ## Snapshot freshness
 

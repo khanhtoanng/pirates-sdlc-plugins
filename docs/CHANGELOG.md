@@ -2,12 +2,11 @@
 
 ## Unreleased
 
-- Added GitHub Copilot support for VS Code and Copilot CLI using the portable Agent Plugins 1.0 skill package and Copilot-native Reviewer agent.
-- Extended opt-in host smoke runs and offline grader tests to recognize Copilot CLI JSONL output.
-- Structured Architect planning from accepted ACs through evidence-backed technical choices, tracer-bullet slices, blocker-first dependencies, proposed parallel groups and verification seams.
-- Clarified planning ownership: Architect owns the logical delivery graph; Developer validates current execution feasibility and owns actual dispatch, implementation and verification.
-- Added a human-facing Architect plan review card covering task granularity, blocking edges, execution order, approach and scope decisions.
-- Aligned Feature/Bug workflows and architecture guides with the revised Architect/Developer handoff.
+- Reorganized human documentation around a documentation index, user guide, host guide, task-record guide and evaluation guide; retained compatibility links for older pages.
+- Made `.sdlc/changes/<task-id>/` the canonical location for all durable plugin-generated task records. External tickets, PRs and ADRs are source references, not alternate plugin-state stores.
+- Defined Quick, Standard and Extended persistence behavior and one task home for multi-repository work.
+- Clarified host plugin discovery, installation, automated runner coverage and actual Reviewer delegation.
+- Added migration guidance for tasks created before the canonical task-record policy.
 
 ## 0.8.0 — consolidated modes and role workflows
 

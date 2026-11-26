@@ -43,6 +43,8 @@ Typical paths:
 - Bug: Developer triage, fix and verify → Reviewer; escalate unclear reproduction, cause or risk.
 - Spike: Researcher scope, research and decision. No production edits; experiments need a separate scratch grant.
 
+Any durable record explicitly requested for a Quick task must use the canonical task directory in section 6.
+
 Less ceremony does not mean less correctness.
 
 ## 3. Standard — structured delivery
@@ -54,7 +56,7 @@ Use for normal engineering work that needs analysis or coordination but not appr
 - Perform Spec when accepted ACs are incomplete or a Bug fix needs a new business rule.
 - Perform Architect for meaningful design, dependency mapping or non-trivial Bug diagnosis. Small established changes may use a lightweight design check within Developer.
 - Developer implements and verifies; Reviewer independently checks code and evidence.
-- Prefer an existing ticket/PR/ADR; otherwise use one compact record when continuity matters.
+- Create one compact `task.md` under the canonical task directory when continuity is needed, including multi-repository coordination, cross-session resume or an explicit user request.
 - Ask for consequential WHAT, HOW, scope, risk or authority decisions. Routine handoffs do not need approval.
 - Plan, research and review requests are read-only. A bounded implement/fix request may authorize ordinary local edits within scope and host policy.
 
@@ -67,14 +69,17 @@ Typical paths:
 
 Run the complete applicable workflow. Each stage completes its role checklist, writes one artifact and pauses for approval of that exact revision.
 
+- Create the task directory and `state.json` under `.sdlc/changes/<task-id>/` in one selected, authorized task-home root before beginning the first stage.
 - Create only the current stage artifact, using the filename in the workflow table.
 - Validate source references and exit conditions before presenting the artifact.
-- Persist stage state and revision in one authorized task directory or existing tracker.
+- Persist stage state and revision in `state.json` before every human handoff.
 - Present a review card with stage, revision, artifact path, decisions, evidence, checklist result, risks and the next human action.
 - End the turn. Do not start downstream work, poll or interpret silence as consent.
 - Continue only after explicit approval of the current stage and revision.
 - A material upstream change invalidates affected downstream approvals/evidence; return to the earliest affected stage.
 - Developer's implementation and verification are one stage. Reviewer is a separate independent stage.
+
+The task-record permission is separate from source-code edit permission. If the selected task home is not writable or record creation is not authorized, ask for an authorized task home/write grant or report `HANDOFF: NOT DURABLE`. Do not use an external tracker, host state or another folder as a silent fallback.
 
 ### Stage and artifact map
 
@@ -111,11 +116,23 @@ For a Spike without an experiment, mark both optional stages not_applicable with
 11. Developer verification failure blocks the stage. A repair requires Developer re-verification and fresh independent review. Escalate after at most three repair/review cycles.
 12. Final Reviewer approval completes workflow evidence; it does not authorize merge, production migration or deployment.
 
-### Durable state
+### Durable state and canonical location
 
-Prefer an existing authorized issue, PR, ADR or tracker with revisioned sections. Otherwise request permission for one task directory in one writable root.
+All durable plugin-generated task records use this location relative to one selected task-home root:
 
-state.json schema (v1) records:
+```text
+.sdlc/changes/<task-id>/
+```
+
+- Quick: no record by default; if one is explicitly requested, use this path.
+- Standard: one compact `task.md` in this path when continuity is needed.
+- Extended: mandatory `state.json` and applicable stage artifacts in this path.
+
+External issues, tickets, PRs and ADRs may be recorded as source references. They must not replace the local record or hold a competing copy of its state. Multi-repository work has one task directory in one selected workspace/primary root, not a copy in every repository.
+
+Use a short, lowercase, filesystem-safe task ID with hyphens. Check for collisions before creating the directory; never overwrite an existing task. The Coordinator creates the directory and passes its canonical path to all roles.
+
+The `state.json` schema (v1) records:
 - `schema_version`, `task_id`, `task_type`, `requested_mode`, `mode` and `mode_reason`.
 - `current_stage`, top-level `status` and a `stages` map keyed by the selected route's stage IDs.
 - Each stage's `status`, integer `revision`, artifact path/section, evidence and approval record.

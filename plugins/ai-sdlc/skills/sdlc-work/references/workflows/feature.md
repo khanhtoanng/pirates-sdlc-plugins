@@ -22,7 +22,7 @@ Quick requires established behavior, an established approach and low risk. Stand
 4. Developer — 04-implementation.md (TDD and verification evidence)
 5. Reviewer — 05-review.md
 
-Use one authorized task directory with state.json or an existing revisioned ticket/PR. Create only the current artifact.
+Persist Extended Feature artifacts in the canonical task directory `.sdlc/changes/<task-id>/` selected by the Coordinator under references/core/modes.md. An existing ticket/PR may be linked as a source reference, but is not an alternate location for plugin state or stage artifacts. Create only the current artifact.
 
 ## Handoffs
 

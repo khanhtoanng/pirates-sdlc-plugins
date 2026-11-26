@@ -16,6 +16,12 @@ Execute the workflow from this installed plugin. Do not generate project harness
 4. Read only the selected workflow: references/workflows/feature.md, references/workflows/bug.md or references/workflows/spike.md.
 5. Load the role files named by that workflow. Each role owns its procedure, checklist, output and exit conditions.
 
+## Task records
+
+Follow references/core/modes.md for mode-specific persistence. Every durable plugin-generated record must use one canonical task directory under `.sdlc/changes/<task-id>/` in a selected task-home root. External tickets, issues, PRs and ADRs are source references, not alternate state stores. The Coordinator selects and creates the directory, checks write authorization, and passes its path to every role. Do not create duplicate records in participating repositories.
+
+Quick creates no record by default; Standard creates a compact `task.md` when continuity is needed; Extended requires `state.json` and applicable stage artifacts before the first stage. If required storage is unavailable, report `HANDOFF: NOT DURABLE`; do not silently fall back.
+
 ## Execute
 
 1. Follow the workflow's order and mode applicability.
@@ -27,7 +33,9 @@ Execute the workflow from this installed plugin. Do not generate project harness
 
 ## Resume
 
-Reload the task state and pending artifact. Verify its exact revision, approval, scope, project instructions and source/Git snapshot freshness before continuing. Follow the resume protocol in references/core/modes.md.
+Resolve the supplied task ID or record path to the canonical task directory under the selected task home. Reload its state and pending artifact. Verify its exact revision, approval, scope, project instructions and source/Git snapshot freshness before continuing. Follow the resume protocol in references/core/modes.md.
+
+Do not silently relocate legacy task records. Continue an existing record in its original location only when its identity and prior approvals can be verified; otherwise ask the owner to migrate it explicitly.
 
 ## Guardrails
 
