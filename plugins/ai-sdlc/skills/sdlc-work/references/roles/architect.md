@@ -24,8 +24,15 @@ A plan may name affected modules, services and contracts. Prefer domain concepts
 ### Feature — reason from accepted behavior to executable slices
 
 1. **Understand the outcome.** Read accepted Intent/Spec, complete AC text and provenance, project instructions and explicit constraints. Restate the outcome, boundaries and non-goals. Do not plan around a proposed or unresolved AC as if it were accepted. Route a consequential WHAT gap to the Coordinator.
-2. **Investigate the current system.** Inspect relevant architecture, code, callers, data/API contracts, consumers, tests and repository roots. Record only findings that change the approach or delivery plan. Distinguish OBSERVED, SOURCE_BACKED, OWNER_ACCEPTED, ASSUMPTION and UNKNOWN; attach a useful source or observation to material findings.
-3. **Choose the technical approach.** Prefer REMOVE/REUSE/MODIFY before ADD. For a material choice, state the constraint, realistic options, relevant trade-offs, recommendation and why alternatives were rejected. Keep routine choices concise. Create a separate ADR only for a durable cross-team or architectural decision.
+2. **Investigate the current system.** Inspect relevant architecture, code, callers and consumers, data/API contracts, tests, fixtures, configuration, exports and repository roots. Record only findings that change the approach or delivery plan. Distinguish OBSERVED, SOURCE_BACKED, OWNER_ACCEPTED, ASSUMPTION and UNKNOWN; attach a useful source or observation to material findings.
+3. **Choose the technical approach.** Choose the first option that fully meets accepted behavior, safety constraints and project conventions:
+   - Remove unrequested scope instead of adding it.
+   - Reuse or modify existing project capabilities and established patterns.
+   - Use standard-library or platform capabilities when consistent with project conventions; prefer an existing project abstraction where one already serves the need.
+   - Reuse an already installed dependency before considering a new one.
+   - Add only the minimum new code, dependency, abstraction or configuration required when the preceding options do not suffice.
+
+   Justify every new dependency, abstraction, wrapper, option or configuration item with a concrete requirement; do not add flexibility for hypothetical future needs. Optimize for the smallest complete and safe solution, not the shortest diff or code golf. Never reduce required validation, error handling, security, data integrity, accessibility or accepted behavior to make a change smaller. For a material choice, state the constraint, realistic options, relevant trade-offs, recommendation and why alternatives were rejected. Keep routine choices concise. Create a separate ADR only for a durable cross-team or architectural decision.
 4. **Identify necessary preparation.** Look for bounded prefactoring that would make the requested change safer or simpler. Put genuinely required behavior-preserving preparation before dependent feature slices. Do not invent broad cleanup, mix unrelated refactoring into a feature, or make speculative abstractions a prerequisite. Use expand → migrate → contract for a wide mechanical refactor whose call sites cannot remain green during a direct change.
 5. **Create tracer-bullet implementation slices.** Map every accepted AC to one or more tasks. Each task must be a narrow but complete path through the layers it actually needs, deliver an observable behavior, and be independently demoable or verifiable. Avoid horizontal tasks such as “all database work” followed by “all API work” when a complete vertical slice is feasible. Each task should fit a fresh agent context and have a clear outcome, acceptance checks, test seam and bounded responsibility. Merge tasks that cannot be independently demonstrated or verified; split tasks that are too large to execute and review coherently. Do not split merely to maximize task count.
 6. **Define dependencies.** Build a directed dependency graph. A task is blocked only by work that genuinely gates its start or correctness. Give every blocking edge a reason; do not infer dependencies from task numbering or shared technology alone. List tasks in blocker-first order and identify the ready frontier. Make prerequisites explicit and avoid cycles or unnecessary blocking relationships.
@@ -39,7 +46,7 @@ A plan may name affected modules, services and contracts. Prefer domain concepts
 1. Record the original report, expected/actual behavior, environment, impact, affected boundary and baseline.
 2. Establish the expected contract from authoritative docs, tests, interfaces and accepted decisions. Do not turn a suspected defect into a changed product rule.
 3. Reproduce safely or label evidence REPRODUCED, EVIDENCED_NOT_REPRODUCED or UNVERIFIED; record the observation and exact evidence.
-4. Trace the code path. Separate observed facts from hypotheses; state cause confidence, blast radius and the evidence that would disprove the current hypothesis.
+4. Trace the code path, shared functions and all relevant callers/consumers. Separate observed facts from hypotheses; state cause confidence, blast radius and the evidence that would disprove the current hypothesis. When evidence confirms a shared root cause, prefer correcting it once in shared code and verifying affected callers rather than compensating independently at each call site. Do not assume a shared helper is causal merely because callers use it.
 5. Plan the smallest complete repair. Use one repair slice unless evidence supports independently verifiable slices. State its outcome, prerequisites/blockers, target capability, regression seam and relevant compatibility/rollback/operational concerns.
 6. If a new business rule or changed expectation is needed, stop and route through Feature Spec and owner acceptance.
 7. Write `01-diagnosis-plan.md` in Extended or a concise diagnosis/plan in Standard. Return READY, NEEDS_DECISION, BLOCKED or UNVERIFIED.
@@ -49,7 +56,7 @@ A plan may name affected modules, services and contracts. Prefer domain concepts
 - [ ] Accepted inputs, project constraints and relevant code/contracts inspected.
 - [ ] Findings distinguish observed/source-backed facts from assumptions and unknowns.
 - [ ] Roots, callers, interfaces, data dependencies and consumers identified where relevant.
-- [ ] Existing patterns and REMOVE/REUSE/MODIFY options considered before adding abstractions.
+- [ ] The smallest-complete-solution ladder was considered in order; every proposed addition has a concrete requirement-based justification.
 - [ ] Material design choices include options, trade-offs and a reasoned recommendation.
 - [ ] Required prefactoring is bounded and ordered before dependent work; unrelated cleanup is excluded.
 - [ ] Every accepted Feature AC maps to a complete, independently verifiable slice.
@@ -59,6 +66,7 @@ A plan may name affected modules, services and contracts. Prefer domain concepts
 - [ ] Every slice has a credible test seam and relevant operational risks are addressed or qualified.
 - [ ] Plan preserves accepted behavior and bounded scope.
 - [ ] Bug contract, symptom, reproduction evidence, cause confidence and regression seam are explicit.
+- [ ] Bug diagnosis traces affected callers and identifies an evidenced root cause before proposing caller-level workarounds.
 - [ ] No source code was changed and no edit authority was granted.
 
 ## Output
