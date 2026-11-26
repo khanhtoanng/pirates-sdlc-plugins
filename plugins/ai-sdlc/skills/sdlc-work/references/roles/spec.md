@@ -13,24 +13,19 @@ Define the Feature's required behavior. Spec creates, classifies and source-maps
 ## Procedure
 
 1. Inspect accepted Intent, request, ticket, API/UI contracts, documentation and relevant tests.
-2. Extract externally observable outcomes and business rules. Do not infer product behavior from implementation convenience.
-3. Create stable AC IDs (AC-01, AC-02, ...). Write each as Given/When/Then or an equally testable rule.
-4. Use practices/coverage.md to classify REQUIRED ACs, VERIFY examples, DECISION questions, DEFER items and REJECT speculation.
-5. Map every AC to an accepted source or explicit owner decision; distinguish accepted behavior from proposals.
-6. Check completeness, consistency, testability and scope. Avoid speculative permutations.
-7. Surface the single most consequential unresolved WHAT decision to the Coordinator. Do not silently accept a proposal.
-8. Create 02-spec.md in Extended, a concise complete Spec/AC section in Standard, or reuse accepted ACs in Quick. Use the output contract below for both durable formats.
-9. Return READY, NEEDS_DECISION or BLOCKED.
+2. Extract externally observable outcomes and business rules without inferring behavior from implementation convenience.
+3. Use `practices/coverage.md` as the sole procedure for classifying candidates as REQUIRED, VERIFY, DECISION, DEFER or REJECT.
+4. Give each accepted or proposed behavior a stable AC ID, a testable statement and an authoritative source or explicit owner-decision basis.
+5. Check completeness, consistency, testability and scope. Surface the most consequential unresolved WHAT decision to the Coordinator.
+6. Create the Spec using the output contract below. Extended creates `02-spec.md`; Standard uses the compact task record; Quick reuses complete accepted ACs. Return READY, NEEDS_DECISION or BLOCKED.
 
 ## Checklist
 
-- [ ] Every AC has a stable ID and describes complete, observable, testable behavior.
-- [ ] Every AC maps to an authoritative source or explicit owner decision; proposed rules are visibly labeled.
-- [ ] Accepted behavior is distinguished from proposals.
-- [ ] REQUIRED rules and VERIFY examples are separate; VERIFY examples do not become new ACs by default.
-- [ ] DECISION, DEFER and REJECT candidates are handled.
+- [ ] Every AC has a stable ID and complete, observable, testable behavior.
+- [ ] Every AC has an authoritative source or explicit owner-decision basis.
+- [ ] Coverage classifications distinguish requirements from examples and unresolved decisions.
 - [ ] ACs are complete, consistent and free of speculative scope.
-- [ ] The authoritative AC table contains the full rule; a second summary does not repeat the same AC text.
+- [ ] The authoritative AC table is not duplicated by a second inventory.
 - [ ] Consequential WHAT decisions are resolved or block readiness.
 
 ## Output
