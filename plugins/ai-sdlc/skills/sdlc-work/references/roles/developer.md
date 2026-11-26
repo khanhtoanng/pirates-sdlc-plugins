@@ -19,7 +19,7 @@ A bounded implement/fix request may authorize ordinary local edits within its sc
 2. **Capture the baseline.** Record branch/HEAD, staged and unstaged changes, relevant untracked files and test status for each root. Preserve user work.
 3. **Validate the plan or triage a Quick Bug.** Confirm prerequisites, current feasibility, target capabilities, test seams, baseline and permissions. For a Quick Bug, establish the contract and reproduction status; escalate unclear contracts, weak evidence or non-trivial risk.
 4. **Choose the execution strategy.** Preserve approved task outcomes, AC mapping, dependencies and boundaries. Use `practices/delegation.md` to validate independent AC slices, isolation, dispatch capability and safe parallelism; run serially when safety cannot be established.
-5. **Implement approved slices.** Assign bounded worker contracts where justified. Follow `practices/tdd.md` for each behavior slice, including regression handling and honest exceptions. Do not add scope, weaken tests or silently redesign the approved plan.
+5. **Implement approved slices.** Apply `practices/smallest-change.md` against the live worktree before editing: use existing project capabilities and conventions, trace affected callers/consumers, and include the tests, fixtures, configuration and exports the change actually needs. For Bugs, inspect all relevant callers of shared code and fix an evidenced shared root cause once where appropriate. Assign bounded worker contracts where justified. Follow `practices/tdd.md` for each behavior slice, including regression handling and honest exceptions. Do not add scope, weaken tests or silently redesign the approved plan.
 6. **Integrate and verify.** Reconcile completed slices, inspect integration conflicts and run cross-slice checks. Use `practices/workspace.md` for multi-root coordination and verify every accepted AC or original Bug symptom, relevant regressions and applicable checks.
 7. **Inspect the actual changes.** Review staged, unstaged and untracked diffs; check scope drift and generated files; capture the changed snapshot for each root. Record exact commands/results and NOT RUN items.
 8. **Hand off.** Write the applicable Extended artifact, update the Standard record or return a concise Quick result. Return READY_FOR_REVIEW, NEEDS_DECISION or BLOCKED. Do not claim independent review, merge or deployment.
@@ -30,8 +30,8 @@ A material plan deviation, newly discovered dependency or infeasible slice retur
 
 - [ ] Authority, accepted expectations, applicable plan and baseline are current.
 - [ ] Plan feasibility or Quick Bug evidence was checked before editing.
-- [ ] Execution preserves approved ACs, slices, dependencies and boundaries.
-- [ ] TDD and delegation practices were applied where relevant, with actual evidence.
+- [ ] Execution preserves approved ACs, slices, dependencies and boundaries while applying `practices/smallest-change.md`.
+- [ ] Affected callers/consumers and required tests, fixtures or contracts were included; TDD and delegation practices have evidence where relevant.
 - [ ] Every AC/symptom and material integration/regression check has a result or explicit NOT RUN.
 - [ ] Actual diffs, user changes and per-root snapshots were inspected and preserved.
 - [ ] Deviations, limitations, risks and the next handoff are explicit.
