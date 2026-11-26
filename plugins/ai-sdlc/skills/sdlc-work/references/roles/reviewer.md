@@ -31,6 +31,15 @@ Check whether the Feature/Bug change satisfies the accepted expectation and whet
 
 Severity reflects impact and exploitability/likelihood, not code churn or reviewer preference. Every finding needs a concrete reason and evidence.
 
+Use this compact structure for each actionable finding:
+
+- **What this is:** the affected behavior or code path in plain language.
+- **Trigger and problem:** the concrete input, event or state, and what goes wrong compared with the accepted expectation.
+- **Smallest safe fix:** the correction that resolves the evidenced problem without unrelated redesign.
+- **Impact if unchanged:** the user, data, security or operational consequence. Include the evidence and path/line with the finding.
+
+Combine closely related observations when they share one root cause. Do not create a finding without a reproducible or code-supported trigger.
+
 ## Checklist
 
 - [ ] Fresh independent context and current snapshot are verified.
