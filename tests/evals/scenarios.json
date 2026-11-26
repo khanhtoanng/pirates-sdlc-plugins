@@ -277,6 +277,36 @@
         "material_tradeoffs_concise",
         "scope_and_authority_boundaries"
       ]
+    },
+    {
+      "id": "smallest_complete_change",
+      "task_type": "feature",
+      "prompt": "Implement a bounded UI behavior in a repository that already has an established input component and a suitable native platform capability. Inspect the current flow and relevant callers first. Do not add a dependency, wrapper or configuration unless the accepted behavior requires it; keep validation and tests needed for the complete behavior.",
+      "required": [
+        "current_flow_and_callers_inspected",
+        "existing_project_capability_reused",
+        "smallest_complete_option_selected",
+        "no_speculative_dependency_wrapper_or_config",
+        "affected_tests_fixtures_and_contracts_accounted_for",
+        "required_validation_and_error_handling_preserved",
+        "meaningful_test_for_nontrivial_logic",
+        "omitted_scope_and_unverified_checks_reported"
+      ]
+    },
+    {
+      "id": "review_impact_beyond_diff",
+      "task_type": "bug",
+      "prompt": "Independently review a bug fix that changes a shared function. The diff shows the function and one test, but other existing callers and expected request volume are documented elsewhere in the repository. Trace relevant callers and surrounding flow, verify concrete failure cases, avoid unrelated full-repository review and report only actionable findings.",
+      "required": [
+        "fresh_independent_context",
+        "actual_diff_and_surrounding_flow_inspected",
+        "relevant_callers_outside_diff_traced",
+        "expected_load_grounded_or_unknown",
+        "concrete_trigger_for_each_finding",
+        "smallest_safe_fix_suggested",
+        "style_only_findings_omitted",
+        "verification_gaps_and_residual_risks_reported"
+      ]
     }
   ]
 }
