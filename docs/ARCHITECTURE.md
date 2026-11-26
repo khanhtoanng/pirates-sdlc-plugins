@@ -35,6 +35,7 @@ Workflow files define role applicability, order and Extended artifact names. Arc
 ## Shared practice ownership
 
 - `coverage.md` classifies accepted rules versus verification examples and consequential questions.
+- `smallest-change.md` owns the shared approach-selection and implementation-simplification method used by Architect and Developer.
 - `tdd.md` owns test-seam guidance, RED/GREEN/REFACTOR and TDD evidence.
 - `delegation.md` owns plan-to-dispatch boundaries, actual worker dispatch, safe parallel execution and independent Reviewer isolation.
 - `review.md` owns human decision policy and review handoff cards, including Architect plan review.
