@@ -20,16 +20,11 @@ If reproduction is unavailable, report REPRODUCED, EVIDENCED_NOT_REPRODUCED or U
 
 Use stage IDs diagnosis_plan, implementation and review. Persist these artifacts and `state.json` in the canonical `.sdlc/changes/<task-id>/` directory selected by the Coordinator. Link the issue or PR as a source reference; do not use it as an alternate artifact/state store. Create only the current stage.
 
-## Bug-specific rules
+## Bug workflow constraints
 
-1. Preserve the original report, expected/actual behavior, environment, impact and baseline.
-2. Establish the expected contract from authoritative tests, docs, interfaces and accepted decisions.
-3. Record reproduction evidence and distinguish observed cause from hypothesis.
-4. Identify blast radius, regression seam and smallest safe repair.
-5. Architect owns the diagnosis and proposed minimum repair plan, including genuine prerequisites and verification seams. Developer validates feasibility against the current baseline and executes it; material plan changes return through the Coordinator.
-6. If a new business rule or changed expectation is required, stop and route it through Feature Spec and owner acceptance.
-7. After authorization, Developer follows practices/tdd.md for a failing regression, minimum fix, GREEN evidence and justified exceptions.
-8. Record before/after observations, exact commands/results, changed roots and missing checks.
-9. Reviewer checks the original symptom, diagnosis evidence, diff, test credibility and completeness.
+- Preserve the original report and established expected contract; distinguish observed behavior from hypotheses.
+- Report reproduction as REPRODUCED, EVIDENCED_NOT_REPRODUCED or UNVERIFIED. Do not infer cause from correlation.
+- If the expected behavior itself must change, stop and route the new rule through Feature Spec and owner acceptance.
+- A fix is VERIFIED_FIX only when the original symptom is credibly resolved, regression evidence exists, required checks are observed and independent review is AI_PASS. Otherwise report PARTIAL or UNVERIFIED.
 
-Use VERIFIED_FIX only when the original symptom is credibly resolved, regression evidence exists, required checks are observed and independent review is AI_PASS. Otherwise report PARTIAL or UNVERIFIED.
+The Architect and Developer roles own diagnosis, repair and verification procedures. This workflow owns route order, stage applicability and artifact names.

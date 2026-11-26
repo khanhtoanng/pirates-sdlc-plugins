@@ -23,7 +23,9 @@ The behavioral catalog includes dedicated Spec and Architect output scenarios. R
 | Spec | One authoritative table contains every full, testable AC; each row identifies its source/basis; VERIFY examples are separate; scope and consequential decisions are concise; technical design and duplicate AC summaries are absent. |
 | Architect plan | Summary comes first; every task maps to actual CREATE/UPDATE file paths and specific code responsibilities; test files are mapped; every accepted AC is covered; blockers have genuine reasons; unknown paths are never guessed. |
 
-Judge whether a human can understand what is being accepted and whether Developer can act from the plan without reconstructing the design from prose. A valid Markdown table may still be too vague, verbose or unsupported by repository evidence. Compare before/after host runs using the same fixture and prompts.
+Judge whether a human can understand what is being accepted and whether Developer can act from the plan without reconstructing the design from prose. A valid Markdown table may still be too vague, verbose or unsupported by repository evidence.
+
+Implementation and review runs should also show that the agent traces relevant callers and contracts before choosing a solution, reuses existing capabilities instead of adding speculative layers, preserves necessary safeguards and tests risky logic. Reviewer findings must describe a concrete trigger and impact, including affected code outside the diff when relevant. Compare before/after host runs using the same fixture and prompts.
 
 ## Run offline checks
 

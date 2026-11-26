@@ -39,8 +39,10 @@ tests/evals/scenarios.json defines expected behaviors across Feature, Bug and Sp
 
 - mode selection, risk escalation and source-backed Intent/ACs;
 - AC completeness and traceability from accepted behavior to implementation and tests;
-- Architect alternatives, decision rationale, operational risks and dependency/parallel-slice analysis;
+- Architect alternatives, decision rationale, operational risks, impact tracing and dependency/parallel-slice analysis;
+- Architect/Developer smallest-complete-change selection, existing-code reuse, preservation of safeguards and proportionate tests;
 - Developer TDD reference use, safe independent AC parallelism, serial fallback for shared dependencies and final integration verification;
+- Reviewer tracing of affected callers outside the diff, concrete finding triggers, expected-load context and actionable fixes;
 - no separate Verifier role or verification artifact;
 - independent review, severity consistency and unavailable-reviewer behavior;
 - Bug reproduction, root-cause evidence and verified-fix outcomes;
@@ -56,7 +58,7 @@ Parallel scenarios pass only when traces show actual supported dispatch/isolatio
 2. Scorer sanity: python3 tests/evals/score.py --self-test. Synthetic observations only; no coding agent is invoked.
 3. Offline grader tests: python3 tests/evals/test_grade.py. Validates fixture state transitions and artifact ordering.
 4. Host discovery: invoke Claude/Cursor/Codex/Copilot CLI sessions and confirm skill discovery, actual permissions, worker dispatch and fresh independent Reviewer dispatch where supported. In VS Code, select the Copilot harness and verify the installed plugin, `sdlc-work` skill and `sdlc-reviewer` custom agent in Agent Customizations.
-5. Behavioral eval: run representative task scenarios on disposable fixture repositories. Save prompts, tool traces, Git snapshots, commands/results, approval references and worker/Reviewer context identity.
+5. Behavioral eval: run representative task scenarios on disposable fixture repositories. Save prompts, tool traces, Git snapshots, commands/results, approval references and worker/Reviewer context identity. The smallest-complete-change and review-impact-beyond-diff scenarios specifically check the Ponytail-inspired engineering principles.
 
 CI static checks are not host-behavior proof. Treat observed approval/scope violations, fabricated evidence, premature artifacts, missing Developer verification, unsafe concurrent writes or false Reviewer independence as release-blocking.
 
