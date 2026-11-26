@@ -26,7 +26,7 @@ Quick creates no record by default; Standard creates a compact `task.md` when co
 
 1. Follow the workflow's order and mode applicability.
 2. For Extended, follow the approval and resume protocol in references/core/modes.md. Run only the current stage.
-3. Load practices by responsibility: coverage.md when classifying candidate rules versus verification examples; tdd.md for Architect test-seam planning, Developer test execution and Reviewer evidence checks; delegation.md for actual dispatch, safe parallel work and Reviewer isolation; review.md for human decisions/cards; workspace.md for multi-root work; integrations.md for optional add-ons. Load host adapters only when host capabilities matter.
+3. Load practices by responsibility: coverage.md for requirement classification; smallest-change.md for Architect approach selection and Developer implementation; tdd.md for test-seam planning, execution and evidence; delegation.md for dispatch, safe parallel work and Reviewer isolation; review.md for human decisions/cards; workspace.md for multi-root work; integrations.md for optional add-ons. Load host adapters only when host capabilities matter.
 4. Treat each practice as the single owner of its detailed procedure. Role files define role-specific responsibilities and point to practices rather than copying their procedures.
 5. Return each role's result to the Coordinator. The Coordinator checks evidence and prerequisites before handing off.
 6. Reassess risk, authority, source freshness and scope at each transition. A local edit grant does not authorize privileged operations or excluded roots.
