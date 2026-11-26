@@ -24,15 +24,15 @@ Identify actual repository-relative file paths when inspection supports them. A 
 ### Feature
 
 1. **Confirm the planning basis.** Read the accepted Intent/Spec revision, full ACs and provenance, project instructions and constraints. Route unresolved consequential WHAT decisions to the Coordinator.
-2. **Investigate the relevant system.** Trace the implementation, callers/consumers, contracts, data dependencies, tests and affected roots. Record only findings that change the approach or plan; distinguish observed facts, sources, assumptions and unknowns.
-3. **Choose the smallest complete approach.** Prefer removing unrequested scope, reusing existing capabilities and established patterns, then existing platform capabilities and installed dependencies. Add code, dependencies, abstractions or configuration only when a concrete requirement justifies them. Explain material alternatives and trade-offs; exclude unrelated cleanup.
+2. **Investigate the relevant system.** Trace the relevant flow, not just the target file: entry points, callers/consumers, callees, contracts, relevant tests, fixtures, configuration, exports and affected roots. Note material compatibility, data, security and operational consequences. Record only findings that change the approach or plan; distinguish observed facts, sources, assumptions and unknowns. Do not turn this into an unrelated repository-wide audit.
+3. **Choose the smallest complete approach.** Apply `practices/smallest-change.md` to select the first option that fully satisfies the accepted behavior. Explain only material alternatives and trade-offs; exclude speculative abstractions, dependencies, flexibility and unrelated cleanup.
 4. **Decompose into reviewable slices.** Map every accepted AC to complete, independently verifiable behavior tasks. Merge tasks that cannot be verified independently and split tasks only when needed for coherent execution and review.
 5. **Map files and sequence work.** For every task/file pair, state the repository, exact evidenced path, CREATE/UPDATE operation and specific code responsibility. Mark uncertain paths UNKNOWN. Build only genuine dependency edges with reasons, identify ready work and propose parallel groups without promising dispatch.
 6. **Plan verification and hand off.** Map ACs/tasks to credible test seams and expected evidence using `practices/tdd.md`; assess material operational risks and integration checks, boundaries and separate authorization needs. Write the plan using the output contract below and return READY, NEEDS_DECISION or BLOCKED.
 
 ### Bug
 
-Establish the existing contract, original symptom, reproduction status and evidence before recommending a repair. Trace the likely cause and affected callers, qualify cause confidence, and plan the smallest safe fix with a symptom-focused regression seam. If the expected behavior must change, route it through Feature Spec and owner acceptance.
+Establish the existing contract, original symptom, reproduction status and evidence before recommending a repair. Trace the shared code path and all relevant callers before proposing a fix; where one shared root cause is evidenced, plan one correction and verification across affected callers rather than separate symptom patches. Apply `practices/smallest-change.md`, qualify cause confidence and identify a symptom-focused regression seam. If the expected behavior must change, route it through Feature Spec and owner acceptance.
 
 ### Spike support
 
@@ -41,8 +41,8 @@ When asked for a read-only architecture comparison, provide evidence and trade-o
 ## Checklist
 
 - [ ] Accepted expectations, project constraints and relevant code/contracts were inspected.
-- [ ] Material findings and affected roots/callers are evidence-backed or marked unknown.
-- [ ] The approach is the smallest complete safe solution; additions and material trade-offs are justified.
+- [ ] Relevant entry points, callers/consumers, contracts and affected roots are traced; material findings are evidence-backed or marked unknown.
+- [ ] The approach follows `practices/smallest-change.md`; additions and material trade-offs are justified.
 - [ ] Every accepted AC maps to complete tasks and evidenced task/file rows, or explicit UNKNOWN targets.
 - [ ] Blockers are genuine and reasoned; ready work and parallel candidates are clear.
 - [ ] Test seams, integration evidence, material risks and boundaries are addressed.
