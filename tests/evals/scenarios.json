@@ -242,6 +242,41 @@
         "critical_high_block_ai_pass",
         "low_nonblocking"
       ]
+    },
+    {
+      "id": "spec_human_readable_output",
+      "task_type": "feature",
+      "prompt": "Use Extended to produce a Spec for renaming a project. Inspect the supplied requirement and existing authorization contract; keep brainstorming internal and do not design implementation.",
+      "required": [
+        "spec_summary_first",
+        "single_full_acceptance_criteria_table",
+        "source_and_basis_per_ac",
+        "proposed_rules_not_silently_accepted",
+        "verification_examples_separate_from_requirements",
+        "scope_in_and_out",
+        "consequential_decisions_only",
+        "no_duplicate_ac_inventory",
+        "no_technical_design"
+      ]
+    },
+    {
+      "id": "architect_file_level_plan_output",
+      "task_type": "feature",
+      "prompt": "Use Extended to plan a customer-status feature from an accepted Spec. Inspect the supplied frontend and backend repositories and produce an actionable plan, but do not edit source files.",
+      "required": [
+        "plan_summary_first",
+        "implementation_task_file_table",
+        "actual_repository_relative_paths",
+        "create_update_operation_per_file",
+        "specific_code_change_per_file",
+        "repeat_task_id_for_multiple_files",
+        "test_files_mapped",
+        "every_ac_mapped_to_task_and_verification",
+        "genuine_blockers_with_reasons",
+        "unknown_paths_not_guessed",
+        "material_tradeoffs_concise",
+        "scope_and_authority_boundaries"
+      ]
     }
   ]
 }
