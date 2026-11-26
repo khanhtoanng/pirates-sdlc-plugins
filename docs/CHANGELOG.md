@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.9.0 — smallest complete change
+
+- Added a shared smallest-complete-solution decision ladder to Architect and Developer, preferring removal, existing project capabilities, platform/standard-library features and installed dependencies before adding the minimum necessary code.
+- Required concrete justification for new dependencies, abstractions, wrappers, options and configuration; preserved safety and accepted behavior over minimizing line count.
+- Strengthened caller/consumer impact tracing and evidence-based Bug root-cause repair, including verification of affected callers.
+- Clarified that Developer may simplify implementation within approved outcomes and boundaries, while material design or plan changes still return through Architect and the Coordinator.
 - Reorganized human documentation around a documentation index, user guide, host guide, task-record guide and evaluation guide; retained compatibility links for older pages.
 - Made `.sdlc/changes/<task-id>/` the canonical location for all durable plugin-generated task records. External tickets, PRs and ADRs are source references, not alternate plugin-state stores.
 - Defined Quick, Standard and Extended persistence behavior and one task home for multi-repository work.
