@@ -58,6 +58,7 @@ required_references = (
     "roles/reviewer", "roles/researcher",
     "practices/coverage", "practices/workspace", "practices/review",
     "practices/tdd", "practices/delegation", "practices/integrations",
+    "practices/smallest-change",
 )
 for name in required_references:
     check((REFS / f"{name}.md").is_file(), f"missing reference {name}.md")
@@ -167,8 +168,17 @@ researcher = (REFS / 'roles/researcher.md').read_text(encoding='utf-8').lower()
 coverage = (REFS / 'practices/coverage.md').read_text(encoding='utf-8')
 delegation = (REFS / 'practices/delegation.md').read_text(encoding='utf-8').lower()
 workspace = (REFS / 'practices/workspace.md').read_text(encoding='utf-8').lower()
-check('practices/tdd.md' in developer and 'practices/tdd.md' in reviewer,
-      'Developer and Reviewer must refer to the single TDD practice')
+smallest_change = (REFS / 'practices/smallest-change.md').read_text(encoding='utf-8')
+check('practices/smallest-change.md' in skill,
+      'Coordinator must load smallest-change for Architect and Developer')
+check('practices/smallest-change.md' in architect and 'practices/smallest-change.md' in developer,
+      'Architect and Developer must share the smallest-change practice')
+for phrase in ('Does it need to exist?', 'Already in this codebase?', 'Standard library or platform',
+               'Already-installed dependency?', 'smallest complete', 'all relevant callers'):
+    check(phrase.lower() in smallest_change.lower(),
+          f'smallest-change practice missing principle: {phrase}')
+check('practices/tdd.md' in architect and 'practices/tdd.md' in developer and 'practices/tdd.md' in reviewer,
+      'Architect, Developer and Reviewer must refer to the single TDD practice')
 check('RED → GREEN → REFACTOR' not in developer and '**RED:**' not in developer,
       'Developer duplicates the normative TDD sequence')
 check('independent AC' in developer and 'delegation.md' in developer,
@@ -178,6 +188,9 @@ check('operational' in architect.lower() and 'trade-off' in architect.lower(),
 check('confidence' in researcher and 'contrary evidence' in researcher,
       'Researcher is missing evidence confidence/contrary evidence')
 check('## Finding severity' in reviewer, 'Reviewer is missing finding severity definitions')
+check('callers/consumers' in reviewer and 'concrete input' in reviewer.lower()
+      and 'expected load' in reviewer.lower(),
+      'Reviewer must trace impacted code beyond the diff and validate concrete findings/operating context')
 check('REQUIRED' in coverage and 'VERIFY' in coverage,
       'Coverage must own requirement versus verification classification')
 check('independent reviewer requirement' in delegation and 'parallel work' in delegation,
@@ -228,7 +241,8 @@ for path in PLUGIN.rglob('*.md'):
 required_ids = {case.get('id') for case in cases if isinstance(case, dict)}
 for expected_id in ('research_evidence_quality', 'architect_tradeoffs_operational_risk',
                     'parallel_independent_ac_slices', 'parallel_dependent_slices_serial',
-                    'review_findings_severity'):
+                    'review_findings_severity', 'smallest_complete_change',
+                    'review_impact_beyond_diff'):
     check(expected_id in required_ids, f'missing behavioral eval {expected_id}')
 
 if errors:
