@@ -5,7 +5,7 @@ The Coordinator owns task routing, authority, state transitions and human handof
 ## Instruction ownership
 
 - routing.md: Feature, Bug and Spike classification.
-- modes.md: mode selection, Extended checkpoints, resume/invalidation and the Extended state schema.
+- modes.md: mode selection, canonical task-record location, Extended checkpoints, resume/invalidation and the state schema.
 - workflows/: role order, mode applicability and artifact names.
 - roles/: role-specific procedures, checklists, outputs and exit conditions.
 - practices/: reusable coverage, TDD, delegation, human-review, workspace and integration procedures.
@@ -19,13 +19,16 @@ Do not copy stage checklists, artifact maps, TDD steps or host-specific dispatch
 - Distinguish OBSERVED, SOURCE_BACKED, OWNER_ACCEPTED (with scope/revision), PROPOSED, ASSUMPTION, UNKNOWN, NOT RUN and NOT VERIFIED.
 - Inspect project instructions, request/source and Git state before editing. Preserve staged, unstaged and untracked user work.
 - Keep one canonical Feature AC revision, one original Bug symptom/expected contract with qualified reproduction evidence, or one bounded Spike question and decision.
-- Prefer an existing ticket/PR/ADR as the authoritative record. Follow modes.md for mode-specific persistence; do not invent a second state schema.
+- Every durable plugin-generated task record must be under `.sdlc/changes/<task-id>/` in one selected task-home root. External issues, tickets, PRs and ADRs are source references, not alternate stores for plugin state or stage artifacts.
+- Quick creates no task record by default. Standard creates one compact `task.md` when continuity is needed. Extended requires `state.json` and applicable stage artifacts before its first stage.
+- The Coordinator selects/creates the task directory and passes the same canonical path to every role. Roles must not choose alternate locations or create duplicate per-repository records.
 - Create no downstream artifact or dispatch until the selected workflow's prerequisites and approval gates pass.
 
 ## Authority
 
 - A bounded implement/fix request may authorize ordinary local edits only within its scope and host/project policy.
 - Evaluate, plan, research, Spike and review requests are read-only unless separate authority is given.
+- Creating/updating a task record requires the task home to be writable and authorized. This record permission does not grant source-edit permission; source edit permission does not authorize privileged operations.
 - Plan or artifact approval is not blanket edit authorization. A local edit grant does not authorize unrelated roots, destructive changes, installs, secrets, spending, commits, pushes, merges, cloud changes, production migrations or deployment.
 - Use host permissions, hooks, CI and protected environments where available. Markdown instructions are not a security boundary. Narrow or stop when scope cannot be enforced safely.
 
@@ -35,9 +38,9 @@ Do not copy stage checklists, artifact maps, TDD steps or host-specific dispatch
 - Before each handoff, verify the prior role's documented exit conditions, required evidence, scope and current source/snapshot. A role's READY is a proposal; the Coordinator validates it.
 - Recheck authority, excluded roots and material unknowns at every transition and after resume.
 - Any relevant code or source change invalidates affected verification. A change after review requires fresh verification and independent review.
-- If state cannot be persisted where the selected mode requires it, report HANDOFF: NOT DURABLE; never claim reliable resume.
+- If required task state cannot be persisted in the canonical task directory, report HANDOFF: NOT DURABLE; never silently fall back to a tracker, host state or another folder, and never claim reliable resume.
 - AI_PASS is evidence from a fresh independent Reviewer for the exact identified snapshot; it is not human acceptance, merge or deployment authorization.
 
 ## Completion
 
-Report the route/mode and reason, accepted expectation or Spike question, affected and excluded roots, actual work, snapshot-bound verification evidence, NOT RUN/unverified items, independent review status, residual risks and the next human action. Keep implementation, verification, review, merge and deployment as distinct states.
+Report the route/mode and reason, canonical task-record path when one exists, accepted expectation or Spike question, affected and excluded roots, actual work, snapshot-bound verification evidence, NOT RUN/unverified items, independent review status, residual risks and the next human action. Keep implementation, verification, review, merge and deployment as distinct states.

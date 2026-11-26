@@ -10,19 +10,15 @@
 | **Bug** | Architect → Developer → Reviewer | VERIFIED_FIX, PARTIAL or UNVERIFIED |
 | **Spike** | Researcher: scope → research → optional experiment → decision | PROCEED, CLARIFY or STOP |
 
-Upstream Feature roles run when needed in Quick and Standard. Extended runs every applicable stage.
-
 | Mode | Use it for | Human involvement |
 |---|---|---|
 | **Quick** | Clear, low-risk work using an established approach | Material questions and authority boundaries |
-| **Standard** | Normal engineering work with some analysis or coordination | Consequential WHAT, HOW and scope decisions |
+| **Standard** | Normal engineering work with analysis or coordination | Consequential WHAT, HOW and scope decisions |
 | **Extended** | Complex, high-risk or explicitly supervised work | Approval of each applicable artifact stage |
 
-Auto selects the smallest safe mode; it is a selector, not a fourth mode. Explicit Extended is never downgraded. See [mode policy](plugins/ai-sdlc/skills/sdlc-work/references/core/modes.md).
+Auto selects the smallest safe mode; it is a selector, not a fourth mode. Explicit Extended is never downgraded.
 
-## Role ownership
-
-Intent defines the problem and outcome; Spec defines observable behavior and acceptance criteria; Architect plans technical design, dependencies and test seams; Developer implements, applies TDD and verifies (parallelizing only independent AC slices); Reviewer independently checks code and evidence; Researcher owns Spikes. The Coordinator controls routing, permissions, state and handoffs.
+Start with the [human user guide](docs/USER_GUIDE.md), then use the [documentation index](docs/README.md) for installation, task records, host support and evaluation.
 
 ## Invoke locally
 
@@ -34,16 +30,18 @@ Intent defines the problem and outcome; Spec defines observable behavior and acc
 
 Optional skills: `sdlc-setup` inspects or configures an approved workspace; `sdlc-doctor` checks plugin and host readiness.
 
-See [local setup](docs/LOCAL_SETUP.md), [architecture](docs/ARCHITECTURE.md), [task routes](docs/TASK_ROUTES.md), [Extended guide](docs/EXTENDED.md), [task records](docs/TASK_RECORDS.md) and [migration](docs/MIGRATION.md).
+## Task records
 
-**Documentation boundary:** `docs/` contains human-facing guides and examples; it is not loaded as agent instructions. Normative runtime instructions live under `plugins/ai-sdlc/skills/` and are referenced by the installed skills.
+Quick normally returns a chat result. Standard creates a compact record when continuity is needed. Extended requires durable state and ordered stage artifacts.
 
-## Records and authority
+Every durable plugin-generated record lives under `.sdlc/changes/<task-id>/` in one selected task-home root. External issues, PRs and ADRs remain source references; they do not replace the local task record or become a second state store. Multi-repository work uses one task directory, not one copy per repository.
 
-Quick normally returns a chat result. Standard uses an existing ticket/PR or one compact record. Extended creates ordered stage artifacts and revisioned state in one authorized tracker or task directory.
+See [Task records](docs/TASK_RECORDS.md) for location, file layout, approval and resume behavior.
 
-A bounded implement/fix request may authorize ordinary local edits within its scope, subject to host and project policy. Planning, research and review are read-only. Destructive operations, secrets, installs, remote services, commits, pushes, merges, production migrations and deployment require separate authority.
+## Documentation boundary
 
-## Validate
+- `docs/` explains the plugin to people; it is not loaded as agent instructions.
+- `plugins/ai-sdlc/skills/` contains installed skills and normative runtime instructions.
+- `tests/` describes and evaluates expected behavior.
 
-Run `python3 tests/validate.py`, `python3 tests/evals/score.py --self-test` and `python3 tests/evals/test_grade.py`. These are offline checks, not proof of host behavior. Run opt-in host scenarios with `tests/evals/run.py`; see `tests/SCENARIOS.md` and `docs/SOURCES.md`.
+Start at [docs/README.md](docs/README.md). Maintainers can read [architecture](docs/ARCHITECTURE.md), [changelog](docs/CHANGELOG.md) and [migration](docs/MIGRATION.md).

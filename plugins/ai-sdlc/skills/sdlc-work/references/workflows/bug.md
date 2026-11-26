@@ -18,7 +18,7 @@ If reproduction is unavailable, report REPRODUCED, EVIDENCED_NOT_REPRODUCED or U
 2. Developer — 02-implementation.md (fix and verification)
 3. Reviewer — 03-review.md
 
-Use stage IDs diagnosis_plan, implementation and review. Create only the current stage.
+Use stage IDs diagnosis_plan, implementation and review. Persist these artifacts and `state.json` in the canonical `.sdlc/changes/<task-id>/` directory selected by the Coordinator. Link the issue or PR as a source reference; do not use it as an alternate artifact/state store. Create only the current stage.
 
 ## Bug-specific rules
 

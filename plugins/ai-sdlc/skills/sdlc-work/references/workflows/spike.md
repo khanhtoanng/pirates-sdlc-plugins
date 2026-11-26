@@ -22,7 +22,7 @@ Mode never grants permission to edit production code or run an experiment. Produ
 - 04-experiment.md (optional)
 - 05-decision.md
 
-Use stage IDs scope, research, experiment_plan, experiment and decision. Mark unused optional stages not_applicable in state with a reason; do not create placeholders.
+Use stage IDs scope, research, experiment_plan, experiment and decision. Persist `state.json` and applicable artifacts in the canonical `.sdlc/changes/<task-id>/` directory selected by the Coordinator. Link external issues or ADRs as source references rather than alternate plugin-state stores. Mark unused optional stages not_applicable in state with a reason; do not create placeholders.
 
 ## Researcher handoff
 
