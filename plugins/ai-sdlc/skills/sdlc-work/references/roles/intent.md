@@ -22,11 +22,10 @@ Define the Feature's WHY, WHO, expected outcome, scope and non-goals. Intent doe
 
 ## Checklist
 
-- [ ] Problem is distinct from the proposed solution.
-- [ ] Target user and outcome are grounded or marked unknown.
-- [ ] Scope, non-goals and exclusions are clear.
-- [ ] Facts, assumptions and unknowns are distinguished.
-- [ ] Material decisions are surfaced, not hidden in the artifact.
+- [ ] Problem and desired outcome are distinct from the proposed solution.
+- [ ] User, outcome, scope and non-goals are grounded or marked unknown.
+- [ ] Sources, facts, assumptions and unknowns are distinguishable.
+- [ ] Consequential decisions are surfaced for the Coordinator.
 - [ ] No detailed ACs or technical design were invented.
 
 ## Output
