@@ -2,6 +2,7 @@
 """Opt-in actual host smoke runs. Use a disposable sandbox/account; model calls cost money."""
 import argparse
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -25,13 +26,22 @@ def host_command(host, plugin, prompt):
         return command + [prompt]
     if host == 'codex':
         return [shutil.which('codex'), 'exec', '--json', '--sandbox', 'workspace-write', prompt]
+    if host == 'copilot':
+        command = [
+            shutil.which('copilot'), '-p', prompt, '--output-format=json',
+            '--available-tools=bash,edit,view,grep,glob,create,apply_patch,task,skill,list_agents,read_agent,write_agent',
+            '--allow-tool=read,write,shell(python:*),shell(python3:*),shell(git status:*),shell(git diff:*),shell(git rev-parse:*),shell(git ls-files:*)',
+            '--no-ask-user',
+        ]
+        if plugin:
+            command += ['--plugin-dir', str(plugin)]
+        return command
     return [shutil.which('agent') or shutil.which('cursor-agent'), '-p', '--output-format', 'stream-json', prompt]
 
 
 def fixture(root, host, plugin):
-    # Project-local skill snapshots avoid changing global configuration; only Claude loads
-    # the actual plugin manifest. Test native discovery/reviewer separately on other hosts.
-    if plugin and host != 'claude':
+    # Codex/Cursor use project-local skill snapshots; Claude/Copilot load the plugin.
+    if plugin and host in {'codex', 'cursor'}:
         dest = root / ('.agents/skills' if host == 'codex' else '.cursor/skills')
         shutil.copytree(plugin / 'skills', dest)
     (root / 'app.py').write_text('def label():\n    return "Customer"\n\ndef protected_data(role):\n    return "secret"  # intentionally broken authorization\n')
@@ -53,6 +63,17 @@ def answer_text(trace, host):
             item = e.get('item', {})
             if item.get('type') == 'agent_message':
                 messages.append(item.get('text', ''))
+        elif host == 'copilot' and e.get('type') == 'assistant.message':
+            data = e.get('data', {})
+            content = data.get('content') if isinstance(data, dict) else None
+            if isinstance(content, str) and content:
+                messages.append(content)
+        elif host == 'copilot' and e.get('type') == 'workflow.result':
+            data = e.get('data', {})
+            run = data.get('run', {}) if isinstance(data, dict) else {}
+            result = run.get('result') if isinstance(run, dict) else None
+            if isinstance(result, str) and result:
+                messages.append(result)
         elif e.get('type') == 'assistant':
             for block in e.get('message', {}).get('content', []):
                 if block.get('type') == 'text':
@@ -78,9 +99,13 @@ def run_case(case, host, plugin, out, timeout):
             before_turn = snapshot(root)
             start = time.monotonic()
             try:
+                env = os.environ.copy()
+                if host == 'copilot':
+                    # Keep plugin discovery deterministic; do not load ambient user plugins.
+                    env['COPILOT_PLUGIN_DIR_ONLY'] = 'true'
                 proc = subprocess.run(host_command(host, plugin, turn['prompt']), cwd=root,
                                       stdin=subprocess.DEVNULL, capture_output=True, text=True,
-                                      timeout=timeout)
+                                      timeout=timeout, env=env)
                 trace, stderr, code = proc.stdout, proc.stderr, proc.returncode
             except subprocess.TimeoutExpired as exc:
                 trace = (exc.stdout or b'').decode(errors='replace') if isinstance(exc.stdout, bytes) else exc.stdout or ''
@@ -133,14 +158,14 @@ def run_case(case, host, plugin, out, timeout):
                 break
     return {'case': case['id'], 'host': host, 'plugin': str(plugin) if plugin else 'none',
             'loading': ('none requested' if not plugin else
-                        'native plugin' if host == 'claude' else 'project skill snapshot'),
+                        'native plugin' if host in {'claude', 'copilot'} else 'project skill snapshot'),
             'passed': len(results) == len(case['turns']) and not any(r['errors'] for r in results),
             'turns': results}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--host', choices=['claude', 'cursor', 'codex'], required=True)
+    parser.add_argument('--host', choices=['claude', 'cursor', 'codex', 'copilot'], required=True)
     parser.add_argument('--case', action='append', help='case ID; omit to run all')
     parser.add_argument('--runs', type=int, default=1)
     parser.add_argument('--timeout', type=int, default=180)

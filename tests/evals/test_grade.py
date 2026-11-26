@@ -109,6 +109,13 @@ class GateTests(unittest.TestCase):
         trace = json.dumps({"type": "assistant", "message": {"content": [{"type": "text", "text": "ok"}]}})
         self.assertEqual(answer_text(trace, "claude"), "ok")
 
+    def test_copilot_jsonl_extracts_assistant_messages_only(self):
+        trace = "\n".join(json.dumps(event) for event in [
+            {"type": "tool.execution_complete", "data": {"result": {"content": "not assistant output"}}},
+            {"type": "assistant.message", "data": {"content": "Copilot final response"}},
+        ])
+        self.assertEqual(answer_text(trace, "copilot"), "Copilot final response")
+
 
 if __name__ == "__main__":
     unittest.main()

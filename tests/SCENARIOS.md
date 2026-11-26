@@ -25,10 +25,11 @@ Run opt-in host cases in a disposable environment:
     python3 tests/evals/run.py --host codex --case extended_feature_checkpoints --output eval-runs/codex-01
     python3 tests/evals/run.py --host claude --case extended_feature_checkpoints --output eval-runs/claude-01
     python3 tests/evals/run.py --host cursor --case extended_feature_checkpoints --output eval-runs/cursor-01
+    python3 tests/evals/run.py --host copilot --case extended_feature_checkpoints --output eval-runs/copilot-01
 
 Use a disposable OS sandbox/CI worker with authenticated host binaries, no production credentials/roots and a controlled budget. The fixture is not an OS security sandbox. A denied edit or unsupported capability is a failed/unverified run, never a reason to bypass restrictions.
 
-Claude loads the native plugin with --plugin-dir. Codex/Cursor runs exercise project-local skill snapshots; confirm native plugin/skill discovery and Reviewer dispatch separately. The runner does not install global plugins or invoke model graders automatically.
+Claude and Copilot CLI load the native plugin with --plugin-dir. Copilot CLI runs use `--output-format=json`, a scoped tool allow-list and `COPILOT_PLUGIN_DIR_ONLY=true`; the runner captures JSONL events. Codex/Cursor runs exercise project-local skill snapshots; confirm native plugin/skill discovery and Reviewer dispatch separately. VS Code Copilot plugin discovery and agent dispatch remain a manual host check. The runner does not install global plugins or invoke model graders automatically.
 
 Compare a candidate with a prior plugin using --plugin /path/to/previous/plugins/ai-sdlc. Use --no-plugin only with a clean host profile that has no other SDLC skill. Repeated runs incur model usage. Inspect actual traces, role loading, tool dispatch, approvals, worker isolation, test evidence, Reviewer context and file outputs; a routing header alone is not proof.
 
@@ -54,7 +55,7 @@ Parallel scenarios pass only when traces show actual supported dispatch/isolatio
 1. Static package validation: python3 tests/validate.py. This checks manifests, local Markdown links, reference ownership, role sections/checklists, mode policy, route/artifact maps and eval schemas. It does not prove host behavior.
 2. Scorer sanity: python3 tests/evals/score.py --self-test. Synthetic observations only; no coding agent is invoked.
 3. Offline grader tests: python3 tests/evals/test_grade.py. Validates fixture state transitions and artifact ordering.
-4. Host discovery: invoke Claude/Cursor/Codex sessions and confirm skill discovery, actual permissions, worker dispatch and fresh independent Reviewer dispatch where supported.
+4. Host discovery: invoke Claude/Cursor/Codex/Copilot CLI sessions and confirm skill discovery, actual permissions, worker dispatch and fresh independent Reviewer dispatch where supported. In VS Code, select the Copilot harness and verify the installed plugin, `sdlc-work` skill and `sdlc-reviewer` custom agent in Agent Customizations.
 5. Behavioral eval: run representative task scenarios on disposable fixture repositories. Save prompts, tool traces, Git snapshots, commands/results, approval references and worker/Reviewer context identity.
 
 CI static checks are not host-behavior proof. Treat observed approval/scope violations, fabricated evidence, premature artifacts, missing Developer verification, unsafe concurrent writes or false Reviewer independence as release-blocking.
@@ -69,4 +70,4 @@ The scorer validates required keys and evidence pointers. A human must still ins
 
 ## Minimum smoke matrix
 
-For each host, run one Quick Feature, one Standard Feature, one Extended Feature through all five stages, one reproduced Bug, one research-only Spike and one multi-repository read-only-boundary task. Add independent-AC parallel and dependent-AC serial tasks, high-risk escalation, unavailable Reviewer, stale snapshot, missing business rule, resume after source changes and Spike POC permission. Compare old/new plugin using the same prompts and host settings. Never use production systems for evals.
+For each CLI host, run one Quick Feature, one Standard Feature, one Extended Feature through all five stages, one reproduced Bug, one research-only Spike and one multi-repository read-only-boundary task. For VS Code Copilot, also run discovery and a representative workflow manually because the GUI harness is not driven by this CLI runner. Add independent-AC parallel and dependent-AC serial tasks, high-risk escalation, unavailable Reviewer, stale snapshot, missing business rule, resume after source changes and Spike POC permission. Compare old/new plugin using the same prompts and host settings. Never use production systems for evals.

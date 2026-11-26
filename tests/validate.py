@@ -65,9 +65,18 @@ for name in required_references:
 for removed in ("core/human-gates.md", "roles/shared.md", "roles/verifier.md"):
     check(not (REFS / removed).exists(), f"obsolete role/reference still exists: {removed}")
 
-for host in ("claude", "cursor", "codex"):
+for host in ("claude", "cursor", "codex", "copilot"):
     check((REFS / "hosts" / f"{host}.md").is_file(), f"missing host adapter {host}.md")
-check((PLUGIN / "agents/sdlc-reviewer.md").is_file(), "missing native reviewer")
+portable_manifest = read_json(PLUGIN / "plugin.json")
+check(portable_manifest.get("agents") == "com.github.copilot/agents/" and portable_manifest.get("skills") == ["skills/"],
+      "portable manifest must expose Copilot-native agents and shared skills")
+check((PLUGIN / "agents/sdlc-reviewer.md").is_file(), "missing Claude/Cursor reviewer")
+check((PLUGIN / "com.github.copilot/agents/sdlc-reviewer.agent.md").is_file(),
+      "missing VS Code Copilot-native Reviewer agent")
+copilot_agent = (PLUGIN / "com.github.copilot/agents/sdlc-reviewer.agent.md").read_text(encoding="utf-8")
+check('target: github-copilot' in copilot_agent and 'tools: ["read", "search"]' in copilot_agent
+      and "strict-tools-list: true" in copilot_agent,
+      "Copilot Reviewer must target Copilot with a strict read-only tool list")
 
 for marketplace, label in [
     (ROOT / ".claude-plugin/marketplace.json", "Claude"),

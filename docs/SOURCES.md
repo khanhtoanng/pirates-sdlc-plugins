@@ -10,6 +10,16 @@
 - Codex CLI developer commands (`codex plugin ...`): https://learn.chatgpt.com/docs/developer-commands
 - Codex local skills and AGENTS.md: https://learn.chatgpt.com/docs/build-skills
 - Codex subagents and inherited sandbox constraints: https://learn.chatgpt.com/docs/agent-configuration/subagents
+- GitHub Copilot CLI plugins and Agent Plugins 1.0: https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/plugins-creating
+- GitHub Copilot CLI skills: https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/add-skills
+- GitHub Copilot CLI custom agents and delegation: https://docs.github.com/en/copilot/how-tos/copilot-cli/customize-copilot/create-custom-agents-for-cli
+- GitHub Copilot custom agent tool aliases and configuration: https://docs.github.com/en/copilot/reference/custom-agents-configuration
+- GitHub Copilot CLI programmatic JSONL: https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-programmatic-reference
+- GitHub Copilot CLI plugin reference (component paths and plugin installation): https://docs.github.com/en/copilot/reference/copilot-cli-reference/cli-plugin-reference
+- GitHub Copilot CLI tool permissions and available tools: https://docs.github.com/en/copilot/how-tos/copilot-cli/use-copilot-cli/allowing-tools
+- VS Code Copilot Agent Plugins 1.0: https://code.visualstudio.com/docs/agent-customization/agent-plugins
+- VS Code Agent Plugins and Copilot harness compatibility: https://code.visualstudio.com/docs/agent-customization/agent-plugins and https://code.visualstudio.com/docs/agents/reference/agent-plugin-reference
+- VS Code Copilot skills and custom agents: https://code.visualstudio.com/docs/agent-customization/agent-skills and https://code.visualstudio.com/docs/agent-customization/custom-agents
 
 Product/host behavior changes; re-check actual installed version and host outcomes before treating a reference as enforcement.
 
