@@ -26,13 +26,6 @@ Use stage IDs scope, research, experiment_plan, experiment and decision. Persist
 
 ## Researcher handoff
 
-1. Bound the question, constraints, roots, success criteria and non-goals.
-2. Inspect current architecture, code contracts and prior decisions before asking questions.
-3. Compare realistic options, costs, trade-offs, dependencies, failure modes and contrary evidence.
-4. Label facts, assumptions and unknowns; cite current sources for fresh external claims.
-5. Propose a disposable scratch experiment only when it materially reduces uncertainty. Define hypothesis, scope, success criteria and cleanup.
-6. Obtain a separate grant before creating files, installing dependencies, running services or spending resources.
-7. Record actual experiment commands, results, limitations and cleanup.
-8. Return PROCEED, CLARIFY or STOP with confidence, evidence, residual unknowns and a possible next task.
+Researcher owns the investigation, evidence evaluation, optional experiment and decision procedures in `roles/researcher.md`. This workflow owns stage order, mode applicability and artifact names; it does not restate the role procedure.
 
-PROCEED is advisory. A Spike ends with a decision, not production delivery or an automatic Developer/Reviewer chain.
+Experiment planning and execution are optional. Both require a separate explicit grant before creating files, installing dependencies, running services or spending resources. A Spike ends with PROCEED, CLARIFY or STOP and never dispatches Developer/Reviewer for production delivery.
