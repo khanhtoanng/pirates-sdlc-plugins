@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PLUGIN = ROOT / "plugins" / "ai-sdlc"
 SKILLS = PLUGIN / "skills"
 REFS = SKILLS / "sdlc-work" / "references"
-VERSION = "0.8.0"
+VERSION = "0.9.0"
 errors = []
 
 
