@@ -28,7 +28,7 @@ Identify actual repository-relative file paths when inspection supports them. A 
 3. **Choose the smallest complete approach.** Prefer removing unrequested scope, reusing existing capabilities and established patterns, then existing platform capabilities and installed dependencies. Add code, dependencies, abstractions or configuration only when a concrete requirement justifies them. Explain material alternatives and trade-offs; exclude unrelated cleanup.
 4. **Decompose into reviewable slices.** Map every accepted AC to complete, independently verifiable behavior tasks. Merge tasks that cannot be verified independently and split tasks only when needed for coherent execution and review.
 5. **Map files and sequence work.** For every task/file pair, state the repository, exact evidenced path, CREATE/UPDATE operation and specific code responsibility. Mark uncertain paths UNKNOWN. Build only genuine dependency edges with reasons, identify ready work and propose parallel groups without promising dispatch.
-6. **Plan verification and hand off.** Map ACs/tasks to credible test seams and expected evidence; include relevant integration checks, material risks, boundaries and separate authorization needs. Write the plan using the output contract below and return READY, NEEDS_DECISION or BLOCKED.
+6. **Plan verification and hand off.** Map ACs/tasks to credible test seams and expected evidence; assess material operational risks and integration checks, boundaries and separate authorization needs. Write the plan using the output contract below and return READY, NEEDS_DECISION or BLOCKED.
 
 ### Bug
 
