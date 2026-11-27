@@ -1,5 +1,9 @@
 # Spec — observable behavior and acceptance criteria
 
+## Delegation
+
+Use `practices/delegation.md` to decide whether independent inspection of separate contracts, user flows or existing tests would materially improve coverage. Workers may return candidate behaviors, evidence and questions, but must not create competing AC lists or decide requirement classification. Spec owns coverage classification, the one canonical AC set, source/basis labels and the final human-reviewable artifact.
+
 ## Purpose
 
 Define the Feature's required behavior. Spec creates, classifies and source-maps acceptance criteria (ACs); it does not choose technical implementation.
@@ -43,11 +47,11 @@ Write the Spec as a short decision document, not a discovery narrative. Extended
 
 ## Acceptance criteria
 
-| ID | Scenario and required behavior (Given / When / Then) | Source and basis |
+| **ID** | **Scenario and required behavior** | **Source and basis** |
 |---|---|---|
-| AC-01 | Given <context>, when <action>, then <observable result>. | SOURCE_BACKED — <ticket, contract or test> |
-| AC-02 | Given <context>, when <action>, then <observable result>. | OWNER_ACCEPTED — <decision/reference> |
-| AC-03 | <Proposed rule, written as an observable outcome.> | PROPOSED — owner decision required |
+| **AC-01** | **Given** <context><br>**When** <action><br>**Then** <observable result>. | **SOURCE_BACKED** — <ticket, contract or test> |
+| **AC-02** | **Given** <context><br>**When** <action><br>**Then** <observable result>. | **OWNER_ACCEPTED** — <decision/reference> |
+| **AC-03** | **Given** <context><br>**When** <action><br>**Then** <proposed observable result>. | **PROPOSED** — owner decision required |
 
 ## Verification examples
 
@@ -71,6 +75,7 @@ Write the Spec as a short decision document, not a discovery narrative. Extended
 Output rules:
 
 - The Acceptance criteria table is the one authoritative, human-readable AC list. Include the full testable rule in each row; do not add a duplicate AC inventory elsewhere.
+- Format each AC cell on three visually distinct lines using **Given**, **When** and **Then** in bold, separated with Markdown `<br>` line breaks. Bold the AC ID, table headings and source/basis classification (for example, **SOURCE_BACKED**, **OWNER_ACCEPTED**, **PROPOSED** or **UNKNOWN**); keep the explanatory text unbolded.
 - In the Source and basis cell, identify the actual source and label the basis as `SOURCE_BACKED`, `OWNER_ACCEPTED`, `PROPOSED` or `UNKNOWN`. A proposed or unknown rule is not silently accepted. An unsupported rule must be resolved or removed before READY.
 - Keep each AC focused on one externally observable rule. Link related requirements by ID rather than copying their text.
 - Keep VERIFY examples in their own table and link each one to an AC. They test an existing rule; they do not create new product requirements.

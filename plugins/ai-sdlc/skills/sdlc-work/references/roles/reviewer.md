@@ -1,5 +1,9 @@
 # Reviewer — independent correctness review
 
+## Delegation
+
+Reviewer is already dispatched as the fresh independent context. Do not delegate or outsource review findings or the final verdict: inspect the current integrated snapshot and evidence directly within the available read-only capabilities. If the host cannot provide the evidence needed, report the gap as BLOCKED or NOT VERIFIED rather than implying another worker established independence.
+
 ## Purpose
 
 Check whether the Feature/Bug change satisfies the accepted expectation and whether Developer's evidence is credible. Reviewer does not implement, edit source or authorize privileged operations.

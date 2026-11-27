@@ -19,12 +19,12 @@ A project owner can change a project's visible name without creating a new proje
 
 ### Acceptance criteria
 
-| ID | Scenario and required behavior (Given / When / Then) | Source and basis |
+| **ID** | **Scenario and required behavior** | **Source and basis** |
 |---|---|---|
-| AC-01 | Given an authorized owner viewing an existing project, when they submit an accepted new name, then the name is persisted and appears on the next load without changing project identity. | OWNER_ACCEPTED — rename request, r2 |
-| AC-02 | Given an actor without rename permission, when they attempt a rename through the supported interface, then the change is denied and the original name remains unchanged. | SOURCE_BACKED — existing authorization contract; confirm actual evidence before use |
+| **AC-01** | **Given** an authorized owner viewing an existing project<br>**When** they submit an accepted new name<br>**Then** the name is persisted and appears on the next load without changing project identity. | **OWNER_ACCEPTED** — rename request, r2 |
+| **AC-02** | **Given** an actor without rename permission<br>**When** they attempt a rename through the supported interface<br>**Then** the change is denied and the original name remains unchanged. | **SOURCE_BACKED** — existing authorization contract; confirm actual evidence before use |
 
-AC-02 is only valid when the project actually has this verified authorization contract. If it is not evidenced, mark it PROPOSED and obtain an owner decision instead.
+AC-02 is only valid when the project actually has this verified authorization contract. If it is not evidenced, mark it **PROPOSED** and obtain an owner decision instead.
 
 ### Verification examples
 

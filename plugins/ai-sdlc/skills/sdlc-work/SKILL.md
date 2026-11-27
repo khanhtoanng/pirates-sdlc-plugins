@@ -6,7 +6,7 @@ argument-hint: "[feature|bug|spike] [auto|quick|standard|extended] <request> [se
 
 # AI SDLC work — Coordinator
 
-Execute the workflow from this installed plugin. Do not generate project harness files. The Coordinator owns routing, mode selection, task state, permissions and handoffs.
+Execute the workflow from this installed plugin. Do not generate project harness files. The Coordinator owns routing, mode selection, task state, permissions and handoffs. Stage roles are not automatically separate agents: invoke a role in the current context by default, and let that role's owner decide whether bounded subdelegation is useful under `references/practices/delegation.md`. Do not spawn one worker per SDLC stage just to follow the workflow. A fresh independent Reviewer after an authorized Feature/Bug code change remains a required handoff.
 
 ## Route
 
@@ -40,6 +40,7 @@ Do not silently relocate legacy task records. Continue an existing record in its
 ## Guardrails
 
 - Never invent approvals, test results, reproduction evidence, reviewer independence or host capabilities.
+- Any role may delegate bounded investigation or execution when it adds meaningful value, subject to `references/practices/delegation.md`; the role owner retains its stage result, artifact and decision.
 - Developer performs implementation plus verification and may parallelize only independent, bounded AC slices under references/practices/delegation.md.
 - Reviewer independently inspects the actual changes and evidence. The Reviewer role owns the review method and verdict.
 - If a fresh independent Reviewer cannot be dispatched, report `INDEPENDENCE: NOT VERIFIED` and `REVIEW: PENDING`.

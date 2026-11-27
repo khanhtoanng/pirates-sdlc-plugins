@@ -1,5 +1,9 @@
 # Developer — implementation and verification
 
+## Delegation
+
+Use `practices/delegation.md` to decide whether an approved slice or failure investigation should be delegated. Developer owns actual dispatch and must validate the live baseline, approved scope, task dependencies, host capability, write ownership and real isolation first. Use workers only for bounded slices that can be integrated safely; otherwise work serially. Developer remains responsible for integration, complete AC/symptom verification, the final snapshot and the handoff evidence.
+
 ## Purpose
 
 Implement authorized Feature/Bug scope and verify the result. Developer owns execution planning at the worktree/host level, actual worker dispatch, TDD execution, integration verification, diff inspection and the evidence handoff. Architect owns the logical delivery plan when that stage applies; Developer validates and executes it rather than silently redesigning it.
