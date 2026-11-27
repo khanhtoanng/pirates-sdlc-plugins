@@ -134,12 +134,12 @@ Use the same summary-first style, but do not invent Feature ACs or pretend an un
 
 ## Summary
 
-| Item | Evidence |
+| **Item** | **Evidence** |
 |---|---|
-| Expected / actual | <existing contract versus observed behavior> |
-| Reproduction | <REPRODUCED / EVIDENCED_NOT_REPRODUCED / UNVERIFIED + evidence> |
-| Root cause | <observed cause or clearly labeled hypothesis + confidence> |
-| Scope | <affected roots/callers and exclusions> |
+| **Expected / actual** | <existing contract versus observed behavior> |
+| **Reproduction** | <REPRODUCED / EVIDENCED_NOT_REPRODUCED / UNVERIFIED + evidence> |
+| **Root cause** | <observed cause or clearly labeled hypothesis + confidence> |
+| **Scope** | <affected roots/callers and exclusions> |
 
 ## Repair tasks
 
@@ -149,15 +149,16 @@ Use the same summary-first style, but do not invent Feature ACs or pretend an un
 
 ## Risks and handoff
 
-| Risk / unknown | Impact | Mitigation or decision |
+| **Risk / unknown** | **Impact** | **Mitigation or decision** |
 |---|---|---|
 | <material item> | <impact> | <action> |
 
-<READY / NEEDS_DECISION / BLOCKED / UNVERIFIED> — <next action>
+**<READY / NEEDS_DECISION / BLOCKED / UNVERIFIED>** — <next action>
 ```
 
 Bug output rules:
 
+- Bold the Bug summary and repair-table headings, task IDs, file operations (**CREATE** / **UPDATE**) and handoff state (**READY**, **NEEDS_DECISION**, **BLOCKED**, **UNVERIFIED**). Keep explanatory evidence and repair descriptions unbolded.
 - Preserve the original report and established expected contract. Show evidence separately from hypotheses.
 - Include exact paths only when inspected. If diagnosis is inconclusive, mark the cause and repair target UNKNOWN; do not propose speculative code edits as a verified fix.
 - Plan the smallest repair that addresses the evidenced cause. Include relevant callers in impact analysis and verification when shared code is involved.
