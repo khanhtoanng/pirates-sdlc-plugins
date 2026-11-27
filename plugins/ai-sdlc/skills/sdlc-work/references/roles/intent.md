@@ -1,5 +1,9 @@
 # Intent — problem and outcome
 
+## Delegation
+
+Use `practices/delegation.md` to decide whether bounded, read-only exploration would help—for example, inspecting distinct user flows, stakeholder evidence or source material. Delegate only separable investigations with useful independent results. Intent retains responsibility for reconciling the evidence and defining the single problem, target user, outcome, scope and non-goals; workers do not make product or scope decisions.
+
 ## Purpose
 
 Define the Feature's WHY, WHO, expected outcome, scope and non-goals. Intent does not define detailed behavior or technical design.

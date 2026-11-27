@@ -9,7 +9,7 @@ One installed plugin coordinates Feature, Bug and Spike work across Claude Code,
 - **Task type** chooses the workflow: Feature changes product behavior, Bug repairs a violated contract, and Spike answers a bounded research question.
 - **Mode** chooses execution depth and approval behavior: Quick, Standard or Extended. Auto selects a mode.
 - **Coordinator** owns routing, risk, task-record location, state, permissions, stage transitions and human handoffs.
-- **Roles** define responsibilities. Native subagent delegation is used when isolation or parallelism adds value, not as a requirement for every role.
+- **Roles** define responsibilities. Each role owner may delegate bounded investigation or execution when it adds meaningful value; native subagent dispatch is optional, not a requirement for every stage. The Coordinator owns workflow and approval gates, while each parent role owns synthesis and its final result.
 
 ## Role ownership
 
@@ -37,7 +37,7 @@ Workflow files define role applicability, order and Extended artifact names. Arc
 - `coverage.md` classifies accepted rules versus verification examples and consequential questions.
 - `smallest-change.md` owns the shared approach-selection and implementation-simplification method used by Architect and Developer.
 - `tdd.md` owns test-seam guidance, RED/GREEN/REFACTOR and TDD evidence.
-- `delegation.md` owns plan-to-dispatch boundaries, actual worker dispatch, safe parallel execution and independent Reviewer isolation.
+- `delegation.md` owns role-owned delegation decisions and worker contracts, plan-to-dispatch boundaries, actual worker dispatch, safe parallel execution and independent Reviewer isolation.
 - `review.md` owns human decision policy and review handoff cards, including Architect plan review.
 - Role files own role procedures and outputs; `runtime.md` owns Coordinator invariants; `modes.md` owns mode, task-record persistence and Extended state/approval policy.
 
